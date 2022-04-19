@@ -16,7 +16,7 @@ dependencies:
   flutter_riverpod: ^1.0.3
 
   # annotation
-  freezed_annotation: ^1.1.0
+  freezed_annotation: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +27,5 @@ dev_dependencies:
 
   # code generator
   build_runner: ^2.1.8
-  freezed: ^1.1.1
+  freezed: ^2.0.0
   json_serializable: ^6.1.6
