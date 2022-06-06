@@ -1,30 +1,5 @@
 part of 'amount.dart';
 
-enum MassUnit {
-  milligram,
-  gram,
-  kilogram,
-  ounce,
-  pound,
-}
-
-extension MassUnitExpression on MassUnit {
-  String get abbreviation {
-    switch (this) {
-      case MassUnit.milligram:
-        return 'mg';
-      case MassUnit.gram:
-        return 'g';
-      case MassUnit.kilogram:
-        return 'kg';
-      case MassUnit.ounce:
-        return 'oz';
-      case MassUnit.pound:
-        return 'lb';
-    }
-  }
-}
-
 const gramPerKilogram = 1000.0;
 const gramPerOunce = 28.349523125;
 const gramPerPound = 453.59237;
@@ -51,101 +26,202 @@ const milligramPerPound = milligramPerGram * gramPerPound;
 const kilogramPerPound = kilogramPerGram * gramPerPound;
 const ouncePerPound = ouncePerGram * gramPerPound;
 
+abstract class Mass implements Amount {
+  factory Mass.milligram(double value) = Milligram;
+
+  factory Mass.gram(double value) = Gram;
+
+  factory Mass.kilogram(double value) = Kilogram;
+
+  factory Mass.ounce(double value) = Ounce;
+
+  factory Mass.pound(double value) = Pound;
+
+  factory Mass.fromJson(Map<String, dynamic> json) {
+    final abbreviation = json['abbreviation'];
+
+    switch (abbreviation) {
+      case Milligram.abbr:
+        return Milligram.fromJson(json);
+      case Gram.abbr:
+        return Gram.fromJson(json);
+      case Kilogram.abbr:
+        return Kilogram.fromJson(json);
+      case Ounce.abbr:
+        return Ounce.fromJson(json);
+      case Pound.abbr:
+        return Pound.fromJson(json);
+    }
+
+    throw CheckedFromJsonException(
+      json,
+      'abbreviation',
+      'Mass',
+      'Unsupported mass unit: $abbreviation',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    if (this is Milligram) return (this as Milligram).toJson();
+    if (this is Gram) return (this as Gram).toJson();
+    if (this is Kilogram) return (this as Kilogram).toJson();
+    if (this is Ounce) return (this as Ounce).toJson();
+    if (this is Pound) return (this as Pound).toJson();
+
+    throw JsonUnsupportedObjectError(this);
+  }
+
+  String get abbreviation;
+
+  Mass toMilligram();
+
+  Mass toGram();
+
+  Mass toKilogram();
+
+  Mass toOunce();
+
+  Mass toPound();
+}
+
 @freezed
-class Mass with _$Mass implements Amount {
-  const Mass._();
+class Milligram with _$Milligram implements Mass {
+  static const abbr = 'mg';
 
-  factory Mass.__(double value, MassUnit unit) = _Mass;
+  const Milligram._();
 
-  factory Mass(double value, MassUnit unit) {
-    if (value.isNegative) throw NegativeValueException();
-    return Mass.__(value, unit);
-  }
+  const factory Milligram.__(double value, String abbreviation) = _Milligram;
 
-  factory Mass.milligram(double value) => Mass(value, MassUnit.milligram);
+  factory Milligram(double value) => Milligram.__(value, abbr);
 
-  factory Mass.gram(double value) => Mass(value, MassUnit.gram);
+  factory Milligram.fromJson(Map<String, dynamic> json) =>
+      _$MilligramFromJson(json);
 
-  factory Mass.kilogram(double value) => Mass(value, MassUnit.kilogram);
+  @override
+  Mass toGram() => Gram(gramPerMilligram * value);
 
-  factory Mass.ounce(double value) => Mass(value, MassUnit.ounce);
+  @override
+  Mass toKilogram() => Kilogram(kilogramPerMilligram * value);
 
-  factory Mass.pound(double value) => Mass(value, MassUnit.pound);
+  @override
+  Mass toMilligram() => Milligram(value);
 
-  factory Mass.fromJson(Map<String, dynamic> json) => _$MassFromJson(json);
+  @override
+  Mass toOunce() => Ounce(ouncePerMilligram * value);
 
-  Mass toMilligram() {
-    switch (unit) {
-      case MassUnit.milligram:
-        return this;
-      case MassUnit.gram:
-        return Mass.milligram(value * milligramPerGram);
-      case MassUnit.kilogram:
-        return Mass.milligram(value * milligramPerKilogram);
-      case MassUnit.ounce:
-        return Mass.milligram(value * milligramPerOunce);
-      case MassUnit.pound:
-        return Mass.milligram(value * milligramPerPound);
-    }
-  }
+  @override
+  Mass toPound() => Pound(poundPerMilligram * value);
+}
 
-  Mass toGram() {
-    switch (unit) {
-      case MassUnit.milligram:
-        return Mass.gram(value * gramPerMilligram);
-      case MassUnit.gram:
-        return this;
-      case MassUnit.kilogram:
-        return Mass.gram(value * gramPerKilogram);
-      case MassUnit.ounce:
-        return Mass.gram(value * gramPerOunce);
-      case MassUnit.pound:
-        return Mass.gram(value * gramPerPound);
-    }
-  }
+@freezed
+class Gram with _$Gram implements Mass {
+  static const abbr = 'g';
 
-  Mass toKilogram() {
-    switch (unit) {
-      case MassUnit.milligram:
-        return Mass.kilogram(value * kilogramPerMilligram);
-      case MassUnit.gram:
-        return Mass.kilogram(value * kilogramPerGram);
-      case MassUnit.kilogram:
-        return this;
-      case MassUnit.ounce:
-        return Mass.kilogram(value * kilogramPerOunce);
-      case MassUnit.pound:
-        return Mass.kilogram(value * kilogramPerPound);
-    }
-  }
+  const Gram._();
 
-  Mass toOunce() {
-    switch (unit) {
-      case MassUnit.milligram:
-        return Mass.ounce(value * ouncePerMilligram);
-      case MassUnit.gram:
-        return Mass.ounce(value * ouncePerGram);
-      case MassUnit.kilogram:
-        return Mass.ounce(value * ouncePerKilogram);
-      case MassUnit.ounce:
-        return this;
-      case MassUnit.pound:
-        return Mass.ounce(value * ouncePerPound);
-    }
-  }
+  const factory Gram.__(double value, String abbreviation) = _Gram;
 
-  Mass toPound() {
-    switch (unit) {
-      case MassUnit.milligram:
-        return Mass.pound(value * poundPerMilligram);
-      case MassUnit.gram:
-        return Mass.pound(value * poundPerGram);
-      case MassUnit.kilogram:
-        return Mass.pound(value * poundPerKilogram);
-      case MassUnit.ounce:
-        return Mass.pound(value * poundPerOunce);
-      case MassUnit.pound:
-        return this;
-    }
-  }
+  factory Gram(double value) => Gram.__(value, abbr);
+
+  factory Gram.fromJson(Map<String, dynamic> json) => _$GramFromJson(json);
+
+  @override
+  Mass toGram() => Gram(value);
+
+  @override
+  Mass toKilogram() => Kilogram(kilogramPerGram * value);
+
+  @override
+  Mass toMilligram() => Milligram(milligramPerGram * value);
+
+  @override
+  Mass toOunce() => Ounce(ouncePerGram * value);
+
+  @override
+  Mass toPound() => Pound(poundPerGram * value);
+}
+
+@freezed
+class Kilogram with _$Kilogram implements Mass {
+  static const abbr = 'kg';
+
+  const Kilogram._();
+
+  const factory Kilogram.__(double value, String abbreviation) = _Kilogram;
+
+  factory Kilogram(double value) => Kilogram.__(value, abbr);
+
+  factory Kilogram.fromJson(Map<String, dynamic> json) =>
+      _$KilogramFromJson(json);
+
+  @override
+  Mass toGram() => Gram(gramPerKilogram * value);
+
+  @override
+  Mass toKilogram() => Kilogram(value);
+
+  @override
+  Mass toMilligram() => Milligram(milligramPerKilogram * value);
+
+  @override
+  Mass toOunce() => Ounce(ouncePerKilogram * value);
+
+  @override
+  Mass toPound() => Pound(poundPerKilogram * value);
+}
+
+@freezed
+class Ounce with _$Ounce implements Mass {
+  static const abbr = 'oz';
+
+  const Ounce._();
+
+  const factory Ounce.__(double value, String abbreviation) = _Ounce;
+
+  factory Ounce(double value) => Ounce.__(value, abbr);
+
+  factory Ounce.fromJson(Map<String, dynamic> json) => _$OunceFromJson(json);
+
+  @override
+  Mass toGram() => Gram(gramPerOunce * value);
+
+  @override
+  Mass toKilogram() => Kilogram(kilogramPerOunce * value);
+
+  @override
+  Mass toMilligram() => Milligram(milligramPerOunce * value);
+
+  @override
+  Mass toOunce() => Ounce(value);
+
+  @override
+  Mass toPound() => Pound(poundPerOunce * value);
+}
+
+@freezed
+class Pound with _$Pound implements Mass {
+  static const abbr = 'lb';
+
+  const Pound._();
+
+  const factory Pound.__(double value, String abbreviation) = _Pound;
+
+  factory Pound(double value) => Pound.__(value, abbr);
+
+  factory Pound.fromJson(Map<String, dynamic> json) => _$PoundFromJson(json);
+
+  @override
+  Mass toGram() => Gram(gramPerPound * value);
+
+  @override
+  Mass toKilogram() => Kilogram(kilogramPerPound * value);
+
+  @override
+  Mass toMilligram() => Milligram(milligramPerPound * value);
+
+  @override
+  Mass toOunce() => Ounce(ouncePerPound * value);
+
+  @override
+  Mass toPound() => Pound(value);
 }

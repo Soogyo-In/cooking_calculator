@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'amount.freezed.dart';
@@ -20,20 +21,35 @@ class AmountJsonConverter
 
   @override
   Amount fromJson(Map<String, dynamic> json) {
-    final unit = json['unit'];
+    const massUnitSet = {
+      Milligram.abbr,
+      Gram.abbr,
+      Kilogram.abbr,
+      Ounce.abbr,
+      Pound.abbr,
+    };
+    const volumeUnitSet = {
+      CubicCentimeter.abbr,
+      Cup.abbr,
+      FluidOunce.abbr,
+      Liter.abbr,
+      Milliliter.abbr,
+      Tablespoon.abbr,
+      Teaspoon.abbr,
+    };
+    final abbreviation = json['abbreviation'];
 
-    final isMassUnit =
-        MassUnit.values.map((massUnit) => massUnit.name).contains(unit);
+    final isMassUnit = massUnitSet.contains(abbreviation);
     if (isMassUnit) return Mass.fromJson(json);
 
-    final isVolumeUnit =
-        VolumeUnit.values.map((volumeUnit) => volumeUnit.name).contains(unit);
+    final isVolumeUnit = volumeUnitSet.contains(abbreviation);
     if (isVolumeUnit) return Volume.fromJson(json);
 
-    throw ArgumentError.value(
-      unit,
-      'unit',
-      'No unit enum value with that name',
+    throw CheckedFromJsonException(
+      json,
+      'abbreviation',
+      'Amount',
+      'Unsupported amount unit: $abbreviation',
     );
   }
 
@@ -41,6 +57,7 @@ class AmountJsonConverter
   Map<String, dynamic> toJson(Amount object) {
     if (object is Mass) return object.toJson();
     if (object is Volume) return object.toJson();
-    throw TypeError();
+
+    throw JsonUnsupportedObjectError(object);
   }
 }
