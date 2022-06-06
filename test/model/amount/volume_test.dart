@@ -5,13 +5,21 @@ void main() {
   test(
     'Get abbreviation of volume unit',
     () {
-      expect(VolumeUnit.cubicCentimeter.abbreviation, 'cc');
-      expect(VolumeUnit.milliliter.abbreviation, 'mL');
-      expect(VolumeUnit.liter.abbreviation, 'L');
-      expect(VolumeUnit.teaspoon.abbreviation, 'tsp');
-      expect(VolumeUnit.tablespoon.abbreviation, 'Tbsp');
-      expect(VolumeUnit.fluidOunce.abbreviation, 'fl.oz');
-      expect(VolumeUnit.cup.abbreviation, 'cp');
+      expect(CubicCentimeter.abbr, 'cc');
+      expect(Milliliter.abbr, 'mL');
+      expect(Liter.abbr, 'L');
+      expect(Teaspoon.abbr, 'tsp');
+      expect(Tablespoon.abbr, 'Tbsp');
+      expect(FluidOunce.abbr, 'fl.oz');
+      expect(Cup.abbr, 'cp');
+
+      expect(CubicCentimeter(0.0).abbreviation, 'cc');
+      expect(Milliliter(0.0).abbreviation, 'mL');
+      expect(Liter(0.0).abbreviation, 'L');
+      expect(Teaspoon(0.0).abbreviation, 'tsp');
+      expect(Tablespoon(0.0).abbreviation, 'Tbsp');
+      expect(FluidOunce(0.0).abbreviation, 'fl.oz');
+      expect(Cup(0.0).abbreviation, 'cp');
     },
   );
 
@@ -189,7 +197,7 @@ void main() {
           );
           expect(
             teaspoon.toTablespoon(),
-            Volume.tablespoon(tableSpoonPerTeaspoon),
+            Volume.tablespoon(tablespoonPerTeaspoon),
           );
           expect(
             tablespoon.toTablespoon(),

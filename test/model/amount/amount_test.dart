@@ -1,10 +1,43 @@
 import 'package:cooking_calulator/model/amount/amount.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 void main() {
   group(
     '[Convert each other Amount and JSON]',
     () {
+      const massUnitSet = {
+        Milligram.abbr,
+        Gram.abbr,
+        Kilogram.abbr,
+        Ounce.abbr,
+        Pound.abbr,
+      };
+      const volumeUnitSet = {
+        CubicCentimeter.abbr,
+        Cup.abbr,
+        FluidOunce.abbr,
+        Liter.abbr,
+        Milliliter.abbr,
+        Tablespoon.abbr,
+        Teaspoon.abbr,
+      };
+      final masses = [
+        Milligram(0.0),
+        Gram(0.0),
+        Kilogram(0.0),
+        Ounce(0.0),
+        Pound(0.0),
+      ];
+      final volumes = [
+        CubicCentimeter(0.0),
+        Cup(0.0),
+        FluidOunce(0.0),
+        Liter(0.0),
+        Milliliter(0.0),
+        Tablespoon(0.0),
+        Teaspoon(0.0),
+      ];
       late AmountJsonConverter converter;
 
       setUp(() {
@@ -14,35 +47,29 @@ void main() {
       test(
         'Create Amount object from JSON',
         () {
-          final actualMasses = MassUnit.values.map(
+          final actualMasses = massUnitSet.map(
             (unit) => converter.fromJson({
-              'unit': unit.name,
-              'value': 1.0,
+              'abbreviation': unit,
+              'value': 0.0,
             }),
           );
-          final matcherMasses = MassUnit.values.map(
-            (unit) => Mass(1.0, unit),
-          );
-          expect(actualMasses, matcherMasses);
+          expect(actualMasses, masses);
 
-          final actualVolumes = VolumeUnit.values.map(
+          final actualVolumes = volumeUnitSet.map(
             (unit) => converter.fromJson({
-              'unit': unit.name,
-              'value': 1.0,
+              'abbreviation': unit,
+              'value': 0.0,
             }),
           );
-          final matcherVolumes = VolumeUnit.values.map(
-            (unit) => Volume(1.0, unit),
-          );
-          expect(actualVolumes, matcherVolumes);
+          expect(actualVolumes, volumes);
 
           final invalidJson = <String, dynamic>{
-            'unit': 'invalidUnit',
+            'abbreviation': 'invalidUnit',
             'value': 1.0,
           };
           expect(
             () => converter.fromJson(invalidJson),
-            throwsA(isA<ArgumentError>()),
+            throwsA(isA<CheckedFromJsonException>()),
           );
         },
       );
@@ -50,25 +77,15 @@ void main() {
       test(
         'Conver Amount to JSON',
         () {
-          final actualMassJsons = MassUnit.values.map(
-            (unit) => Mass(1.0, unit).toJson(),
-          );
-          final matcherMassJsons = MassUnit.values.map(
-            (unit) => {
-              'unit': unit.name,
-              'value': 1.0,
-            },
+          final actualMassJsons = masses.map((mass) => mass.toJson());
+          final matcherMassJsons = massUnitSet.map(
+            (unit) => {'abbreviation': unit, 'value': 0.0},
           );
           expect(actualMassJsons, matcherMassJsons);
 
-          final actualVolumeJsons = VolumeUnit.values.map(
-            (unit) => Volume(1.0, unit).toJson(),
-          );
-          final mathcerVolumeJsons = VolumeUnit.values.map(
-            (unit) => {
-              'unit': unit.name,
-              'value': 1.0,
-            },
+          final actualVolumeJsons = volumes.map((volume) => volume.toJson());
+          final mathcerVolumeJsons = volumeUnitSet.map(
+            (unit) => {'abbreviation': unit, 'value': 0.0},
           );
           expect(actualVolumeJsons, mathcerVolumeJsons);
         },

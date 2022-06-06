@@ -1,36 +1,5 @@
 part of 'amount.dart';
 
-enum VolumeUnit {
-  cubicCentimeter,
-  milliliter,
-  liter,
-  teaspoon,
-  tablespoon,
-  fluidOunce,
-  cup,
-}
-
-extension VolumeUnitExpression on VolumeUnit {
-  String get abbreviation {
-    switch (this) {
-      case VolumeUnit.cubicCentimeter:
-        return 'cc';
-      case VolumeUnit.milliliter:
-        return 'mL';
-      case VolumeUnit.liter:
-        return 'L';
-      case VolumeUnit.teaspoon:
-        return 'tsp';
-      case VolumeUnit.tablespoon:
-        return 'Tbsp';
-      case VolumeUnit.fluidOunce:
-        return 'fl.oz';
-      case VolumeUnit.cup:
-        return 'cp';
-    }
-  }
-}
-
 const milliliterPerLiter = 1000.0;
 const milliliterPerTeaspoon = 4.92892159375;
 const milliliterPerTablespoon = 14.78676478125;
@@ -65,7 +34,7 @@ const cupPerLiter = cupPerMilliliter * milliliterPerLiter;
 const cubicCentimeterPerTeaspoon =
     cubicCentimeterPerMilliliter * milliliterPerTeaspoon;
 const literPerTeaspoon = literPerMilliliter * milliliterPerTeaspoon;
-const tableSpoonPerTeaspoon = tablespoonPerMilliliter * milliliterPerTeaspoon;
+const tablespoonPerTeaspoon = tablespoonPerMilliliter * milliliterPerTeaspoon;
 const fluidOuncePerTeaspoon = fluidOuncePerMilliliter * milliliterPerTeaspoon;
 const cupPerTeaspoon = cupPerMilliliter * milliliterPerTeaspoon;
 
@@ -91,167 +60,323 @@ const teaspoonPerCup = teaspoonPerMilliliter * milliliterPerCup;
 const tablespoonPerCup = tablespoonPerMilliliter * milliliterPerCup;
 const fluidOuncePerCup = fluidOuncePerMilliliter * milliliterPerCup;
 
+abstract class Volume implements Amount {
+  factory Volume.cubicCentimeter(double value) = CubicCentimeter;
+
+  factory Volume.milliliter(double value) = Milliliter;
+
+  factory Volume.liter(double value) = Liter;
+
+  factory Volume.teaspoon(double value) = Teaspoon;
+
+  factory Volume.tablespoon(double value) = Tablespoon;
+
+  factory Volume.fluidOunce(double value) = FluidOunce;
+
+  factory Volume.cup(double value) = Cup;
+
+  factory Volume.fromJson(Map<String, dynamic> json) {
+    final abbreviation = json['abbreviation'];
+
+    switch (abbreviation) {
+      case CubicCentimeter.abbr:
+        return CubicCentimeter.fromJson(json);
+      case Cup.abbr:
+        return Cup.fromJson(json);
+      case FluidOunce.abbr:
+        return FluidOunce.fromJson(json);
+      case Liter.abbr:
+        return Liter.fromJson(json);
+      case Milliliter.abbr:
+        return Milliliter.fromJson(json);
+      case Tablespoon.abbr:
+        return Tablespoon.fromJson(json);
+      case Teaspoon.abbr:
+        return Teaspoon.fromJson(json);
+    }
+
+    throw CheckedFromJsonException(
+      json,
+      'abbreviation',
+      'Volume',
+      'Unsupported volume unit: $abbreviation',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    if (this is CubicCentimeter) return (this as CubicCentimeter).toJson();
+    if (this is Cup) return (this as Cup).toJson();
+    if (this is FluidOunce) return (this as FluidOunce).toJson();
+    if (this is Liter) return (this as Liter).toJson();
+    if (this is Milliliter) return (this as Milliliter).toJson();
+    if (this is Tablespoon) return (this as Tablespoon).toJson();
+    if (this is Teaspoon) return (this as Teaspoon).toJson();
+
+    throw JsonUnsupportedObjectError(this);
+  }
+
+  String get abbreviation;
+
+  Volume toCubicCentimeter();
+
+  Volume toMilliliter();
+
+  Volume toLiter();
+
+  Volume toTeaspoon();
+
+  Volume toTablespoon();
+
+  Volume toFluidOunce();
+
+  Volume toCup();
+}
+
 @freezed
-class Volume with _$Volume implements Amount {
-  const Volume._();
+class CubicCentimeter with _$CubicCentimeter implements Volume {
+  static const abbr = 'cc';
 
-  factory Volume.__(double value, VolumeUnit unit) = _Volume;
+  const CubicCentimeter._();
 
-  factory Volume(double value, VolumeUnit unit) {
-    if (value.isNegative) throw NegativeValueException();
-    return Volume.__(value, unit);
-  }
+  const factory CubicCentimeter.__(double value, String abbreviation) =
+      _CubicCentimeter;
 
-  factory Volume.cubicCentimeter(double value) =>
-      Volume(value, VolumeUnit.cubicCentimeter);
+  factory CubicCentimeter(double value) => CubicCentimeter.__(value, abbr);
 
-  factory Volume.milliliter(double value) =>
-      Volume(value, VolumeUnit.milliliter);
+  factory CubicCentimeter.fromJson(Map<String, dynamic> json) =>
+      _$CubicCentimeterFromJson(json);
 
-  factory Volume.liter(double value) => Volume(value, VolumeUnit.liter);
+  @override
+  Volume toCubicCentimeter() => CubicCentimeter(value);
 
-  factory Volume.teaspoon(double value) => Volume(value, VolumeUnit.teaspoon);
+  @override
+  Volume toCup() => Cup(value * cupPerCubicCentimeter);
 
-  factory Volume.tablespoon(double value) =>
-      Volume(value, VolumeUnit.tablespoon);
+  @override
+  Volume toFluidOunce() => FluidOunce(value * fluidOuncePerCubicCentimeter);
 
-  factory Volume.fluidOunce(double value) =>
-      Volume(value, VolumeUnit.fluidOunce);
+  @override
+  Volume toLiter() => Liter(value * literPerCubicCentimeter);
 
-  factory Volume.cup(double value) => Volume(value, VolumeUnit.cup);
+  @override
+  Volume toMilliliter() => Milliliter(value * milliliterPerCubicCentimeter);
 
-  factory Volume.fromJson(Map<String, dynamic> json) => _$VolumeFromJson(json);
+  @override
+  Volume toTablespoon() => Tablespoon(value * tablespoonPerCubicCentimeter);
 
-  Volume toCubicCentimeter() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return this;
-      case VolumeUnit.milliliter:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerMilliliter);
-      case VolumeUnit.liter:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerLiter);
-      case VolumeUnit.teaspoon:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerFluidOunce);
-      case VolumeUnit.cup:
-        return Volume.cubicCentimeter(value * cubicCentimeterPerCup);
-    }
-  }
+  @override
+  Volume toTeaspoon() => Teaspoon(value * teaspoonPerCubicCentimeter);
+}
 
-  Volume toMilliliter() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.milliliter(value * milliliterPerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return this;
-      case VolumeUnit.liter:
-        return Volume.milliliter(value * milliliterPerLiter);
-      case VolumeUnit.teaspoon:
-        return Volume.milliliter(value * milliliterPerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return Volume.milliliter(value * milliliterPerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return Volume.milliliter(value * milliliterPerFluidOunce);
-      case VolumeUnit.cup:
-        return Volume.milliliter(value * milliliterPerCup);
-    }
-  }
+@freezed
+class Milliliter with _$Milliliter implements Volume {
+  static const abbr = 'mL';
 
-  Volume toLiter() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.liter(value * literPerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return Volume.liter(value * literPerMilliliter);
-      case VolumeUnit.liter:
-        return this;
-      case VolumeUnit.teaspoon:
-        return Volume.liter(value * literPerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return Volume.liter(value * literPerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return Volume.liter(value * literPerFluidOunce);
-      case VolumeUnit.cup:
-        return Volume.liter(value * literPerCup);
-    }
-  }
+  const Milliliter._();
 
-  Volume toTeaspoon() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.teaspoon(value * teaspoonPerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return Volume.teaspoon(value * teaspoonPerMilliliter);
-      case VolumeUnit.liter:
-        return Volume.teaspoon(value * teaspoonPerLiter);
-      case VolumeUnit.teaspoon:
-        return this;
-      case VolumeUnit.tablespoon:
-        return Volume.teaspoon(value * teaspoonPerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return Volume.teaspoon(value * teaspoonPerFluidOunce);
-      case VolumeUnit.cup:
-        return Volume.teaspoon(value * teaspoonPerCup);
-    }
-  }
+  const factory Milliliter.__(double value, String abbreviation) = _Milliliter;
 
-  Volume toTablespoon() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.tablespoon(value * tablespoonPerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return Volume.tablespoon(value * tablespoonPerMilliliter);
-      case VolumeUnit.liter:
-        return Volume.tablespoon(value * tablespoonPerLiter);
-      case VolumeUnit.teaspoon:
-        return Volume.tablespoon(value * tableSpoonPerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return this;
-      case VolumeUnit.fluidOunce:
-        return Volume.tablespoon(value * tablespoonPerFluidOunce);
-      case VolumeUnit.cup:
-        return Volume.tablespoon(value * tablespoonPerCup);
-    }
-  }
+  factory Milliliter(double value) => Milliliter.__(value, abbr);
 
-  Volume toFluidOunce() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.fluidOunce(value * fluidOuncePerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return Volume.fluidOunce(value * fluidOuncePerMilliliter);
-      case VolumeUnit.liter:
-        return Volume.fluidOunce(value * fluidOuncePerLiter);
-      case VolumeUnit.teaspoon:
-        return Volume.fluidOunce(value * fluidOuncePerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return Volume.fluidOunce(value * fluidOuncePerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return this;
-      case VolumeUnit.cup:
-        return Volume.fluidOunce(value * fluidOuncePerCup);
-    }
-  }
+  factory Milliliter.fromJson(Map<String, dynamic> json) =>
+      _$MilliliterFromJson(json);
 
-  Volume toCup() {
-    switch (unit) {
-      case VolumeUnit.cubicCentimeter:
-        return Volume.cup(value * cupPerCubicCentimeter);
-      case VolumeUnit.milliliter:
-        return Volume.cup(value * cupPerMilliliter);
-      case VolumeUnit.liter:
-        return Volume.cup(value * cupPerLiter);
-      case VolumeUnit.teaspoon:
-        return Volume.cup(value * cupPerTeaspoon);
-      case VolumeUnit.tablespoon:
-        return Volume.cup(value * cupPerTablespoon);
-      case VolumeUnit.fluidOunce:
-        return Volume.cup(value * cupPerFluidOunce);
-      case VolumeUnit.cup:
-        return this;
-    }
-  }
+  @override
+  Volume toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerMilliliter * value);
+
+  @override
+  Volume toCup() => Cup(cupPerMilliliter * value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(fluidOuncePerMilliliter * value);
+
+  @override
+  Volume toLiter() => Liter(literPerMilliliter * value);
+
+  @override
+  Volume toMilliliter() => Milliliter(value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(tablespoonPerMilliliter * value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(teaspoonPerMilliliter * value);
+}
+
+@freezed
+class Liter with _$Liter implements Volume {
+  static const abbr = 'L';
+
+  const Liter._();
+
+  const factory Liter.__(double value, String abbreviation) = _Liter;
+
+  factory Liter(double value) => Liter.__(value, abbr);
+
+  factory Liter.fromJson(Map<String, dynamic> json) => _$LiterFromJson(json);
+
+  @override
+  Volume toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerLiter * value);
+
+  @override
+  Volume toCup() => Cup(cupPerLiter * value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(fluidOuncePerLiter * value);
+
+  @override
+  Volume toLiter() => Liter(value);
+
+  @override
+  Volume toMilliliter() => Milliliter(milliliterPerLiter * value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(tablespoonPerLiter * value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(teaspoonPerLiter * value);
+}
+
+@freezed
+class Teaspoon with _$Teaspoon implements Volume {
+  static const abbr = 'tsp';
+
+  const Teaspoon._();
+
+  const factory Teaspoon.__(double value, String abbreviation) = _Teaspoon;
+
+  factory Teaspoon(double value) => Teaspoon.__(value, abbr);
+
+  factory Teaspoon.fromJson(Map<String, dynamic> json) =>
+      _$TeaspoonFromJson(json);
+
+  @override
+  Volume toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerTeaspoon * value);
+
+  @override
+  Volume toCup() => Cup(cupPerTeaspoon * value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(fluidOuncePerTeaspoon * value);
+
+  @override
+  Volume toLiter() => Liter(literPerTeaspoon * value);
+
+  @override
+  Volume toMilliliter() => Milliliter(milliliterPerTeaspoon * value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(tablespoonPerTeaspoon * value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(value);
+}
+
+@freezed
+class Tablespoon with _$Tablespoon implements Volume {
+  static const abbr = 'Tbsp';
+
+  const Tablespoon._();
+
+  const factory Tablespoon.__(double value, String abbreviation) = _Tablespoon;
+
+  factory Tablespoon(double value) => Tablespoon.__(value, abbr);
+
+  factory Tablespoon.fromJson(Map<String, dynamic> json) =>
+      _$TablespoonFromJson(json);
+
+  @override
+  Volume toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerTablespoon * value);
+
+  @override
+  Volume toCup() => Cup(cupPerTablespoon * value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(fluidOuncePerTablespoon * value);
+
+  @override
+  Volume toLiter() => Liter(literPerTablespoon * value);
+
+  @override
+  Volume toMilliliter() => Milliliter(milliliterPerTablespoon * value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(teaspoonPerTablespoon * value);
+}
+
+@freezed
+class FluidOunce with _$FluidOunce implements Volume {
+  static const abbr = 'fl.oz';
+
+  const FluidOunce._();
+
+  const factory FluidOunce.__(double value, String abbreviation) = _FluidOunce;
+
+  factory FluidOunce(double value) => FluidOunce.__(value, abbr);
+
+  factory FluidOunce.fromJson(Map<String, dynamic> json) =>
+      _$FluidOunceFromJson(json);
+
+  @override
+  Volume toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerFluidOunce * value);
+
+  @override
+  Volume toCup() => Cup(cupPerFluidOunce * value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(value);
+
+  @override
+  Volume toLiter() => Liter(literPerFluidOunce * value);
+
+  @override
+  Volume toMilliliter() => Milliliter(milliliterPerFluidOunce * value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(tablespoonPerFluidOunce * value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(teaspoonPerFluidOunce * value);
+}
+
+@freezed
+class Cup with _$Cup implements Volume {
+  static const abbr = 'cp';
+
+  const Cup._();
+
+  const factory Cup.__(double value, String abbreviation) = _Cup;
+
+  factory Cup(double value) => Cup.__(value, abbr);
+
+  factory Cup.fromJson(Map<String, dynamic> json) => _$CupFromJson(json);
+
+  @override
+  Volume toCubicCentimeter() => CubicCentimeter(cubicCentimeterPerCup * value);
+
+  @override
+  Volume toCup() => Cup(value);
+
+  @override
+  Volume toFluidOunce() => FluidOunce(fluidOuncePerCup * value);
+
+  @override
+  Volume toLiter() => Liter(literPerCup * value);
+
+  @override
+  Volume toMilliliter() => Milliliter(milliliterPerCup * value);
+
+  @override
+  Volume toTablespoon() => Tablespoon(tablespoonPerCup * value);
+
+  @override
+  Volume toTeaspoon() => Teaspoon(teaspoonPerCup * value);
 }
