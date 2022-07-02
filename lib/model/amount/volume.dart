@@ -75,61 +75,21 @@ abstract class Volume implements Amount {
 
   factory Volume.cup(double value) = Cup;
 
-  factory Volume.fromJson(Map<String, dynamic> json) {
-    final abbreviation = json['abbreviation'];
-
-    switch (abbreviation) {
-      case CubicCentimeter.abbr:
-        return CubicCentimeter.fromJson(json);
-      case Cup.abbr:
-        return Cup.fromJson(json);
-      case FluidOunce.abbr:
-        return FluidOunce.fromJson(json);
-      case Liter.abbr:
-        return Liter.fromJson(json);
-      case Milliliter.abbr:
-        return Milliliter.fromJson(json);
-      case Tablespoon.abbr:
-        return Tablespoon.fromJson(json);
-      case Teaspoon.abbr:
-        return Teaspoon.fromJson(json);
-    }
-
-    throw CheckedFromJsonException(
-      json,
-      'abbreviation',
-      'Volume',
-      'Unsupported volume unit: $abbreviation',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    if (this is CubicCentimeter) return (this as CubicCentimeter).toJson();
-    if (this is Cup) return (this as Cup).toJson();
-    if (this is FluidOunce) return (this as FluidOunce).toJson();
-    if (this is Liter) return (this as Liter).toJson();
-    if (this is Milliliter) return (this as Milliliter).toJson();
-    if (this is Tablespoon) return (this as Tablespoon).toJson();
-    if (this is Teaspoon) return (this as Teaspoon).toJson();
-
-    throw JsonUnsupportedObjectError(this);
-  }
-
   String get abbreviation;
 
-  Volume toCubicCentimeter();
+  CubicCentimeter toCubicCentimeter();
 
-  Volume toMilliliter();
+  Milliliter toMilliliter();
 
-  Volume toLiter();
+  Liter toLiter();
 
-  Volume toTeaspoon();
+  Teaspoon toTeaspoon();
 
-  Volume toTablespoon();
+  Tablespoon toTablespoon();
 
-  Volume toFluidOunce();
+  FluidOunce toFluidOunce();
 
-  Volume toCup();
+  Cup toCup();
 }
 
 @freezed
@@ -143,29 +103,41 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
 
   factory CubicCentimeter(double value) => CubicCentimeter.__(value, abbr);
 
-  factory CubicCentimeter.fromJson(Map<String, dynamic> json) =>
-      _$CubicCentimeterFromJson(json);
+  @override
+  CubicCentimeter toCubicCentimeter() => CubicCentimeter(value);
 
   @override
-  Volume toCubicCentimeter() => CubicCentimeter(value);
+  Cup toCup() => Cup(value * cupPerCubicCentimeter);
 
   @override
-  Volume toCup() => Cup(value * cupPerCubicCentimeter);
+  FluidOunce toFluidOunce() => FluidOunce(value * fluidOuncePerCubicCentimeter);
 
   @override
-  Volume toFluidOunce() => FluidOunce(value * fluidOuncePerCubicCentimeter);
+  Liter toLiter() => Liter(value * literPerCubicCentimeter);
 
   @override
-  Volume toLiter() => Liter(value * literPerCubicCentimeter);
+  Milliliter toMilliliter() => Milliliter(value * milliliterPerCubicCentimeter);
 
   @override
-  Volume toMilliliter() => Milliliter(value * milliliterPerCubicCentimeter);
+  Tablespoon toTablespoon() => Tablespoon(value * tablespoonPerCubicCentimeter);
 
   @override
-  Volume toTablespoon() => Tablespoon(value * tablespoonPerCubicCentimeter);
+  Teaspoon toTeaspoon() => Teaspoon(value * teaspoonPerCubicCentimeter);
 
   @override
-  Volume toTeaspoon() => Teaspoon(value * teaspoonPerCubicCentimeter);
+  CubicCentimeter operator +(Volume other) =>
+      CubicCentimeter(value + other.toCubicCentimeter().value);
+
+  @override
+  CubicCentimeter operator -(Volume other) =>
+      CubicCentimeter(value - other.toCubicCentimeter().value);
+
+  @override
+  CubicCentimeter operator *(num factors) =>
+      CubicCentimeter(value * factors.toDouble());
+
+  @override
+  CubicCentimeter operator /(num divisor) => CubicCentimeter(value / divisor);
 }
 
 @freezed
@@ -178,30 +150,41 @@ class Milliliter with _$Milliliter implements Volume {
 
   factory Milliliter(double value) => Milliliter.__(value, abbr);
 
-  factory Milliliter.fromJson(Map<String, dynamic> json) =>
-      _$MilliliterFromJson(json);
-
   @override
-  Volume toCubicCentimeter() =>
+  CubicCentimeter toCubicCentimeter() =>
       CubicCentimeter(cubicCentimeterPerMilliliter * value);
 
   @override
-  Volume toCup() => Cup(cupPerMilliliter * value);
+  Cup toCup() => Cup(cupPerMilliliter * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(fluidOuncePerMilliliter * value);
+  FluidOunce toFluidOunce() => FluidOunce(fluidOuncePerMilliliter * value);
 
   @override
-  Volume toLiter() => Liter(literPerMilliliter * value);
+  Liter toLiter() => Liter(literPerMilliliter * value);
 
   @override
-  Volume toMilliliter() => Milliliter(value);
+  Milliliter toMilliliter() => Milliliter(value);
 
   @override
-  Volume toTablespoon() => Tablespoon(tablespoonPerMilliliter * value);
+  Tablespoon toTablespoon() => Tablespoon(tablespoonPerMilliliter * value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(teaspoonPerMilliliter * value);
+  Teaspoon toTeaspoon() => Teaspoon(teaspoonPerMilliliter * value);
+
+  @override
+  Milliliter operator +(Volume other) =>
+      Milliliter(value + other.toMilliliter().value);
+
+  @override
+  Milliliter operator -(Volume other) =>
+      Milliliter(value - other.toMilliliter().value);
+
+  @override
+  Milliliter operator *(num factors) => Milliliter(value * factors.toDouble());
+
+  @override
+  Milliliter operator /(num divisor) => Milliliter(value / divisor);
 }
 
 @freezed
@@ -214,29 +197,39 @@ class Liter with _$Liter implements Volume {
 
   factory Liter(double value) => Liter.__(value, abbr);
 
-  factory Liter.fromJson(Map<String, dynamic> json) => _$LiterFromJson(json);
-
   @override
-  Volume toCubicCentimeter() =>
+  CubicCentimeter toCubicCentimeter() =>
       CubicCentimeter(cubicCentimeterPerLiter * value);
 
   @override
-  Volume toCup() => Cup(cupPerLiter * value);
+  Cup toCup() => Cup(cupPerLiter * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(fluidOuncePerLiter * value);
+  FluidOunce toFluidOunce() => FluidOunce(fluidOuncePerLiter * value);
 
   @override
-  Volume toLiter() => Liter(value);
+  Liter toLiter() => Liter(value);
 
   @override
-  Volume toMilliliter() => Milliliter(milliliterPerLiter * value);
+  Milliliter toMilliliter() => Milliliter(milliliterPerLiter * value);
 
   @override
-  Volume toTablespoon() => Tablespoon(tablespoonPerLiter * value);
+  Tablespoon toTablespoon() => Tablespoon(tablespoonPerLiter * value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(teaspoonPerLiter * value);
+  Teaspoon toTeaspoon() => Teaspoon(teaspoonPerLiter * value);
+
+  @override
+  Liter operator +(Volume other) => Liter(value + other.toLiter().value);
+
+  @override
+  Liter operator -(Volume other) => Liter(value - other.toLiter().value);
+
+  @override
+  Liter operator *(num factors) => Liter(value * factors.toDouble());
+
+  @override
+  Liter operator /(num divisor) => Liter(value / divisor);
 }
 
 @freezed
@@ -249,30 +242,41 @@ class Teaspoon with _$Teaspoon implements Volume {
 
   factory Teaspoon(double value) => Teaspoon.__(value, abbr);
 
-  factory Teaspoon.fromJson(Map<String, dynamic> json) =>
-      _$TeaspoonFromJson(json);
-
   @override
-  Volume toCubicCentimeter() =>
+  CubicCentimeter toCubicCentimeter() =>
       CubicCentimeter(cubicCentimeterPerTeaspoon * value);
 
   @override
-  Volume toCup() => Cup(cupPerTeaspoon * value);
+  Cup toCup() => Cup(cupPerTeaspoon * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(fluidOuncePerTeaspoon * value);
+  FluidOunce toFluidOunce() => FluidOunce(fluidOuncePerTeaspoon * value);
 
   @override
-  Volume toLiter() => Liter(literPerTeaspoon * value);
+  Liter toLiter() => Liter(literPerTeaspoon * value);
 
   @override
-  Volume toMilliliter() => Milliliter(milliliterPerTeaspoon * value);
+  Milliliter toMilliliter() => Milliliter(milliliterPerTeaspoon * value);
 
   @override
-  Volume toTablespoon() => Tablespoon(tablespoonPerTeaspoon * value);
+  Tablespoon toTablespoon() => Tablespoon(tablespoonPerTeaspoon * value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(value);
+  Teaspoon toTeaspoon() => Teaspoon(value);
+
+  @override
+  Teaspoon operator +(Volume other) =>
+      Teaspoon(value + other.toTeaspoon().value);
+
+  @override
+  Teaspoon operator -(Volume other) =>
+      Teaspoon(value - other.toTeaspoon().value);
+
+  @override
+  Teaspoon operator *(num factors) => Teaspoon(value * factors.toDouble());
+
+  @override
+  Teaspoon operator /(num divisor) => Teaspoon(value / divisor);
 }
 
 @freezed
@@ -285,30 +289,41 @@ class Tablespoon with _$Tablespoon implements Volume {
 
   factory Tablespoon(double value) => Tablespoon.__(value, abbr);
 
-  factory Tablespoon.fromJson(Map<String, dynamic> json) =>
-      _$TablespoonFromJson(json);
-
   @override
-  Volume toCubicCentimeter() =>
+  CubicCentimeter toCubicCentimeter() =>
       CubicCentimeter(cubicCentimeterPerTablespoon * value);
 
   @override
-  Volume toCup() => Cup(cupPerTablespoon * value);
+  Cup toCup() => Cup(cupPerTablespoon * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(fluidOuncePerTablespoon * value);
+  FluidOunce toFluidOunce() => FluidOunce(fluidOuncePerTablespoon * value);
 
   @override
-  Volume toLiter() => Liter(literPerTablespoon * value);
+  Liter toLiter() => Liter(literPerTablespoon * value);
 
   @override
-  Volume toMilliliter() => Milliliter(milliliterPerTablespoon * value);
+  Milliliter toMilliliter() => Milliliter(milliliterPerTablespoon * value);
 
   @override
-  Volume toTablespoon() => Tablespoon(value);
+  Tablespoon toTablespoon() => Tablespoon(value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(teaspoonPerTablespoon * value);
+  Teaspoon toTeaspoon() => Teaspoon(teaspoonPerTablespoon * value);
+
+  @override
+  Tablespoon operator +(Volume other) =>
+      Tablespoon(value + other.toTablespoon().value);
+
+  @override
+  Tablespoon operator -(Volume other) =>
+      Tablespoon(value - other.toTablespoon().value);
+
+  @override
+  Tablespoon operator *(num factors) => Tablespoon(value * factors.toDouble());
+
+  @override
+  Tablespoon operator /(num divisor) => Tablespoon(value / divisor);
 }
 
 @freezed
@@ -321,30 +336,41 @@ class FluidOunce with _$FluidOunce implements Volume {
 
   factory FluidOunce(double value) => FluidOunce.__(value, abbr);
 
-  factory FluidOunce.fromJson(Map<String, dynamic> json) =>
-      _$FluidOunceFromJson(json);
-
   @override
-  Volume toCubicCentimeter() =>
+  CubicCentimeter toCubicCentimeter() =>
       CubicCentimeter(cubicCentimeterPerFluidOunce * value);
 
   @override
-  Volume toCup() => Cup(cupPerFluidOunce * value);
+  Cup toCup() => Cup(cupPerFluidOunce * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(value);
+  FluidOunce toFluidOunce() => FluidOunce(value);
 
   @override
-  Volume toLiter() => Liter(literPerFluidOunce * value);
+  Liter toLiter() => Liter(literPerFluidOunce * value);
 
   @override
-  Volume toMilliliter() => Milliliter(milliliterPerFluidOunce * value);
+  Milliliter toMilliliter() => Milliliter(milliliterPerFluidOunce * value);
 
   @override
-  Volume toTablespoon() => Tablespoon(tablespoonPerFluidOunce * value);
+  Tablespoon toTablespoon() => Tablespoon(tablespoonPerFluidOunce * value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(teaspoonPerFluidOunce * value);
+  Teaspoon toTeaspoon() => Teaspoon(teaspoonPerFluidOunce * value);
+
+  @override
+  FluidOunce operator +(Volume other) =>
+      FluidOunce(value + other.toFluidOunce().value);
+
+  @override
+  FluidOunce operator -(Volume other) =>
+      FluidOunce(value - other.toFluidOunce().value);
+
+  @override
+  FluidOunce operator *(num factors) => FluidOunce(value * factors.toDouble());
+
+  @override
+  FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
 }
 
 @freezed
@@ -357,26 +383,37 @@ class Cup with _$Cup implements Volume {
 
   factory Cup(double value) => Cup.__(value, abbr);
 
-  factory Cup.fromJson(Map<String, dynamic> json) => _$CupFromJson(json);
+  @override
+  CubicCentimeter toCubicCentimeter() =>
+      CubicCentimeter(cubicCentimeterPerCup * value);
 
   @override
-  Volume toCubicCentimeter() => CubicCentimeter(cubicCentimeterPerCup * value);
+  Cup toCup() => Cup(value);
 
   @override
-  Volume toCup() => Cup(value);
+  FluidOunce toFluidOunce() => FluidOunce(fluidOuncePerCup * value);
 
   @override
-  Volume toFluidOunce() => FluidOunce(fluidOuncePerCup * value);
+  Liter toLiter() => Liter(literPerCup * value);
 
   @override
-  Volume toLiter() => Liter(literPerCup * value);
+  Milliliter toMilliliter() => Milliliter(milliliterPerCup * value);
 
   @override
-  Volume toMilliliter() => Milliliter(milliliterPerCup * value);
+  Tablespoon toTablespoon() => Tablespoon(tablespoonPerCup * value);
 
   @override
-  Volume toTablespoon() => Tablespoon(tablespoonPerCup * value);
+  Teaspoon toTeaspoon() => Teaspoon(teaspoonPerCup * value);
 
   @override
-  Volume toTeaspoon() => Teaspoon(teaspoonPerCup * value);
+  Cup operator +(Volume other) => Cup(value + other.toCup().value);
+
+  @override
+  Cup operator -(Volume other) => Cup(value - other.toCup().value);
+
+  @override
+  Cup operator *(num factors) => Cup(value * factors.toDouble());
+
+  @override
+  Cup operator /(num divisor) => Cup(value / divisor);
 }

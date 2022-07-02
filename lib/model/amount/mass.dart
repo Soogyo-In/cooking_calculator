@@ -37,51 +37,17 @@ abstract class Mass implements Amount {
 
   factory Mass.pound(double value) = Pound;
 
-  factory Mass.fromJson(Map<String, dynamic> json) {
-    final abbreviation = json['abbreviation'];
-
-    switch (abbreviation) {
-      case Milligram.abbr:
-        return Milligram.fromJson(json);
-      case Gram.abbr:
-        return Gram.fromJson(json);
-      case Kilogram.abbr:
-        return Kilogram.fromJson(json);
-      case Ounce.abbr:
-        return Ounce.fromJson(json);
-      case Pound.abbr:
-        return Pound.fromJson(json);
-    }
-
-    throw CheckedFromJsonException(
-      json,
-      'abbreviation',
-      'Mass',
-      'Unsupported mass unit: $abbreviation',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    if (this is Milligram) return (this as Milligram).toJson();
-    if (this is Gram) return (this as Gram).toJson();
-    if (this is Kilogram) return (this as Kilogram).toJson();
-    if (this is Ounce) return (this as Ounce).toJson();
-    if (this is Pound) return (this as Pound).toJson();
-
-    throw JsonUnsupportedObjectError(this);
-  }
-
   String get abbreviation;
 
-  Mass toMilligram();
+  Milligram toMilligram();
 
-  Mass toGram();
+  Gram toGram();
 
-  Mass toKilogram();
+  Kilogram toKilogram();
 
-  Mass toOunce();
+  Ounce toOunce();
 
-  Mass toPound();
+  Pound toPound();
 }
 
 @freezed
@@ -94,23 +60,34 @@ class Milligram with _$Milligram implements Mass {
 
   factory Milligram(double value) => Milligram.__(value, abbr);
 
-  factory Milligram.fromJson(Map<String, dynamic> json) =>
-      _$MilligramFromJson(json);
+  @override
+  Gram toGram() => Gram(gramPerMilligram * value);
 
   @override
-  Mass toGram() => Gram(gramPerMilligram * value);
+  Kilogram toKilogram() => Kilogram(kilogramPerMilligram * value);
 
   @override
-  Mass toKilogram() => Kilogram(kilogramPerMilligram * value);
+  Milligram toMilligram() => Milligram(value);
 
   @override
-  Mass toMilligram() => Milligram(value);
+  Ounce toOunce() => Ounce(ouncePerMilligram * value);
 
   @override
-  Mass toOunce() => Ounce(ouncePerMilligram * value);
+  Pound toPound() => Pound(poundPerMilligram * value);
 
   @override
-  Mass toPound() => Pound(poundPerMilligram * value);
+  Milligram operator +(Mass other) =>
+      Milligram(value + other.toMilligram().value);
+
+  @override
+  Milligram operator -(Mass other) =>
+      Milligram(value - other.toMilligram().value);
+
+  @override
+  Milligram operator *(num factors) => Milligram(value * factors.toDouble());
+
+  @override
+  Milligram operator /(num divisor) => Milligram(value / divisor);
 }
 
 @freezed
@@ -123,22 +100,32 @@ class Gram with _$Gram implements Mass {
 
   factory Gram(double value) => Gram.__(value, abbr);
 
-  factory Gram.fromJson(Map<String, dynamic> json) => _$GramFromJson(json);
+  @override
+  Gram toGram() => Gram(value);
 
   @override
-  Mass toGram() => Gram(value);
+  Kilogram toKilogram() => Kilogram(kilogramPerGram * value);
 
   @override
-  Mass toKilogram() => Kilogram(kilogramPerGram * value);
+  Milligram toMilligram() => Milligram(milligramPerGram * value);
 
   @override
-  Mass toMilligram() => Milligram(milligramPerGram * value);
+  Ounce toOunce() => Ounce(ouncePerGram * value);
 
   @override
-  Mass toOunce() => Ounce(ouncePerGram * value);
+  Pound toPound() => Pound(poundPerGram * value);
 
   @override
-  Mass toPound() => Pound(poundPerGram * value);
+  Gram operator +(Mass other) => Gram(value + other.toGram().value);
+
+  @override
+  Gram operator -(Mass other) => Gram(value - other.toGram().value);
+
+  @override
+  Gram operator *(num factors) => Gram(value * factors.toDouble());
+
+  @override
+  Gram operator /(num divisor) => Gram(value / divisor);
 }
 
 @freezed
@@ -151,23 +138,32 @@ class Kilogram with _$Kilogram implements Mass {
 
   factory Kilogram(double value) => Kilogram.__(value, abbr);
 
-  factory Kilogram.fromJson(Map<String, dynamic> json) =>
-      _$KilogramFromJson(json);
+  @override
+  Gram toGram() => Gram(gramPerKilogram * value);
 
   @override
-  Mass toGram() => Gram(gramPerKilogram * value);
+  Kilogram toKilogram() => Kilogram(value);
 
   @override
-  Mass toKilogram() => Kilogram(value);
+  Milligram toMilligram() => Milligram(milligramPerKilogram * value);
 
   @override
-  Mass toMilligram() => Milligram(milligramPerKilogram * value);
+  Ounce toOunce() => Ounce(ouncePerKilogram * value);
 
   @override
-  Mass toOunce() => Ounce(ouncePerKilogram * value);
+  Pound toPound() => Pound(poundPerKilogram * value);
 
   @override
-  Mass toPound() => Pound(poundPerKilogram * value);
+  Kilogram operator +(Mass other) => Kilogram(value + other.toKilogram().value);
+
+  @override
+  Kilogram operator -(Mass other) => Kilogram(value - other.toKilogram().value);
+
+  @override
+  Kilogram operator *(num factors) => Kilogram(value * factors.toDouble());
+
+  @override
+  Kilogram operator /(num divisor) => Kilogram(value / divisor);
 }
 
 @freezed
@@ -180,22 +176,32 @@ class Ounce with _$Ounce implements Mass {
 
   factory Ounce(double value) => Ounce.__(value, abbr);
 
-  factory Ounce.fromJson(Map<String, dynamic> json) => _$OunceFromJson(json);
+  @override
+  Gram toGram() => Gram(gramPerOunce * value);
 
   @override
-  Mass toGram() => Gram(gramPerOunce * value);
+  Kilogram toKilogram() => Kilogram(kilogramPerOunce * value);
 
   @override
-  Mass toKilogram() => Kilogram(kilogramPerOunce * value);
+  Milligram toMilligram() => Milligram(milligramPerOunce * value);
 
   @override
-  Mass toMilligram() => Milligram(milligramPerOunce * value);
+  Ounce toOunce() => Ounce(value);
 
   @override
-  Mass toOunce() => Ounce(value);
+  Pound toPound() => Pound(poundPerOunce * value);
 
   @override
-  Mass toPound() => Pound(poundPerOunce * value);
+  Ounce operator +(Mass other) => Ounce(value + other.toOunce().value);
+
+  @override
+  Ounce operator -(Mass other) => Ounce(value - other.toOunce().value);
+
+  @override
+  Ounce operator *(num factors) => Ounce(value * factors.toDouble());
+
+  @override
+  Ounce operator /(num divisor) => Ounce(value / divisor);
 }
 
 @freezed
@@ -208,20 +214,30 @@ class Pound with _$Pound implements Mass {
 
   factory Pound(double value) => Pound.__(value, abbr);
 
-  factory Pound.fromJson(Map<String, dynamic> json) => _$PoundFromJson(json);
+  @override
+  Gram toGram() => Gram(gramPerPound * value);
 
   @override
-  Mass toGram() => Gram(gramPerPound * value);
+  Kilogram toKilogram() => Kilogram(kilogramPerPound * value);
 
   @override
-  Mass toKilogram() => Kilogram(kilogramPerPound * value);
+  Milligram toMilligram() => Milligram(milligramPerPound * value);
 
   @override
-  Mass toMilligram() => Milligram(milligramPerPound * value);
+  Ounce toOunce() => Ounce(ouncePerPound * value);
 
   @override
-  Mass toOunce() => Ounce(ouncePerPound * value);
+  Pound toPound() => Pound(value);
 
   @override
-  Mass toPound() => Pound(value);
+  Pound operator +(Mass other) => Pound(value + other.toPound().value);
+
+  @override
+  Pound operator -(Mass other) => Pound(value - other.toPound().value);
+
+  @override
+  Pound operator *(num factors) => Pound(value * factors.toDouble());
+
+  @override
+  Pound operator /(num divisor) => Pound(value / divisor);
 }

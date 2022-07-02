@@ -20,6 +20,263 @@ void main() {
   );
 
   group(
+    '[Arithmetic operation]',
+    () {
+      test(
+        'Addition',
+        () {
+          // Milligram
+          expect(
+            Milligram(1.0) + Milligram(1.0),
+            Milligram(2.0),
+          );
+          expect(
+            Milligram(1.0) + Gram(1.0),
+            Milligram(1.0 + milligramPerGram),
+          );
+          expect(
+            Milligram(1.0) + Kilogram(1.0),
+            Milligram(1.0 + milligramPerKilogram),
+          );
+          expect(
+            Milligram(1.0) + Ounce(1.0),
+            Milligram(1.0 + milligramPerOunce),
+          );
+          expect(
+            Milligram(1.0) + Pound(1.0),
+            Milligram(1.0 + milligramPerPound),
+          );
+
+          // Gram
+          expect(
+            Gram(1.0) + Milligram(1.0),
+            Gram(1.0 + gramPerMilligram),
+          );
+          expect(
+            Gram(1.0) + Gram(1.0),
+            Gram(2.0),
+          );
+          expect(
+            Gram(1.0) + Kilogram(1.0),
+            Gram(1.0 + gramPerKilogram),
+          );
+          expect(
+            Gram(1.0) + Ounce(1.0),
+            Gram(1.0 + gramPerOunce),
+          );
+          expect(
+            Gram(1.0) + Pound(1.0),
+            Gram(1.0 + gramPerPound),
+          );
+
+          // Kilogram
+          expect(
+            Kilogram(1.0) + Milligram(1.0),
+            Kilogram(1.0 + kilogramPerMilligram),
+          );
+          expect(
+            Kilogram(1.0) + Gram(1.0),
+            Kilogram(1.0 + kilogramPerGram),
+          );
+          expect(
+            Kilogram(1.0) + Kilogram(1.0),
+            Kilogram(2.0),
+          );
+          expect(
+            Kilogram(1.0) + Ounce(1.0),
+            Kilogram(1.0 + kilogramPerOunce),
+          );
+          expect(
+            Kilogram(1.0) + Pound(1.0),
+            Kilogram(1.0 + kilogramPerPound),
+          );
+
+          // Ounce
+          expect(
+            Ounce(1.0) + Milligram(1.0),
+            Ounce(1.0 + ouncePerMilligram),
+          );
+          expect(
+            Ounce(1.0) + Gram(1.0),
+            Ounce(1.0 + ouncePerGram),
+          );
+          expect(
+            Ounce(1.0) + Kilogram(1.0),
+            Ounce(1.0 + ouncePerKilogram),
+          );
+          expect(
+            Ounce(1.0) + Ounce(1.0),
+            Ounce(2.0),
+          );
+          expect(
+            Ounce(1.0) + Pound(1.0),
+            Ounce(1.0 + ouncePerPound),
+          );
+
+          // Pound
+          expect(
+            Pound(1.0) + Milligram(1.0),
+            Pound(1.0 + poundPerMilligram),
+          );
+          expect(
+            Pound(1.0) + Gram(1.0),
+            Pound(1.0 + poundPerGram),
+          );
+          expect(
+            Pound(1.0) + Kilogram(1.0),
+            Pound(1.0 + poundPerKilogram),
+          );
+          expect(
+            Pound(1.0) + Ounce(1.0),
+            Pound(1.0 + poundPerOunce),
+          );
+          expect(
+            Pound(1.0) + Pound(1.0),
+            Pound(2.0),
+          );
+        },
+      );
+
+      test(
+        'Subtraction',
+        () {
+          // Milligram
+          expect(
+            Milligram(1.0) - Milligram(1.0),
+            Milligram(0.0),
+          );
+          expect(
+            Milligram(1.0) - Gram(1.0),
+            Milligram(1.0 - milligramPerGram),
+          );
+          expect(
+            Milligram(1.0) - Kilogram(1.0),
+            Milligram(1.0 - milligramPerKilogram),
+          );
+          expect(
+            Milligram(1.0) - Ounce(1.0),
+            Milligram(1.0 - milligramPerOunce),
+          );
+          expect(
+            Milligram(1.0) - Pound(1.0),
+            Milligram(1.0 - milligramPerPound),
+          );
+
+          // Gram
+          expect(
+            Gram(1.0) - Milligram(1.0),
+            Gram(1.0 - gramPerMilligram),
+          );
+          expect(
+            Gram(1.0) - Gram(1.0),
+            Gram(0.0),
+          );
+          expect(
+            Gram(1.0) - Kilogram(1.0),
+            Gram(1.0 - gramPerKilogram),
+          );
+          expect(
+            Gram(1.0) - Ounce(1.0),
+            Gram(1.0 - gramPerOunce),
+          );
+          expect(
+            Gram(1.0) - Pound(1.0),
+            Gram(1.0 - gramPerPound),
+          );
+
+          // Kilogram
+          expect(
+            Kilogram(1.0) - Milligram(1.0),
+            Kilogram(1.0 - kilogramPerMilligram),
+          );
+          expect(
+            Kilogram(1.0) - Gram(1.0),
+            Kilogram(1.0 - kilogramPerGram),
+          );
+          expect(
+            Kilogram(1.0) - Kilogram(1.0),
+            Kilogram(0.0),
+          );
+          expect(
+            Kilogram(1.0) - Ounce(1.0),
+            Kilogram(1.0 - kilogramPerOunce),
+          );
+          expect(
+            Kilogram(1.0) - Pound(1.0),
+            Kilogram(1.0 - kilogramPerPound),
+          );
+
+          // Ounce
+          expect(
+            Ounce(1.0) - Milligram(1.0),
+            Ounce(1.0 - ouncePerMilligram),
+          );
+          expect(
+            Ounce(1.0) - Gram(1.0),
+            Ounce(1.0 - ouncePerGram),
+          );
+          expect(
+            Ounce(1.0) - Kilogram(1.0),
+            Ounce(1.0 - ouncePerKilogram),
+          );
+          expect(
+            Ounce(1.0) - Ounce(1.0),
+            Ounce(0.0),
+          );
+          expect(
+            Ounce(1.0) - Pound(1.0),
+            Ounce(1.0 - ouncePerPound),
+          );
+
+          // Pound
+          expect(
+            Pound(1.0) - Milligram(1.0),
+            Pound(1.0 - poundPerMilligram),
+          );
+          expect(
+            Pound(1.0) - Gram(1.0),
+            Pound(1.0 - poundPerGram),
+          );
+          expect(
+            Pound(1.0) - Kilogram(1.0),
+            Pound(1.0 - poundPerKilogram),
+          );
+          expect(
+            Pound(1.0) - Ounce(1.0),
+            Pound(1.0 - poundPerOunce),
+          );
+          expect(
+            Pound(1.0) - Pound(1.0),
+            Pound(0.0),
+          );
+        },
+      );
+
+      test(
+        'Multiblication',
+        () {
+          expect(Milligram(1.0) * 2, Milligram(2.0));
+          expect(Gram(1.0) * 2, Gram(2.0));
+          expect(Kilogram(1.0) * 2, Kilogram(2.0));
+          expect(Ounce(1.0) * 2, Ounce(2.0));
+          expect(Pound(1.0) * 2, Pound(2.0));
+        },
+      );
+
+      test(
+        'Division',
+        () {
+          expect(Milligram(2.0) / 2, Milligram(1.0));
+          expect(Gram(2.0) / 2, Gram(1.0));
+          expect(Kilogram(2.0) / 2, Kilogram(1.0));
+          expect(Ounce(2.0) / 2, Ounce(1.0));
+          expect(Pound(2.0) / 2, Pound(1.0));
+        },
+      );
+    },
+  );
+
+  group(
     '[Convert mass unit]',
     () {
       late Mass milligram;

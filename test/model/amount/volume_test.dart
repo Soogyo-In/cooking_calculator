@@ -24,6 +24,467 @@ void main() {
   );
 
   group(
+    '[Arithmetic operation]',
+    () {
+      test(
+        'Addition',
+        () {
+          // CubicCentimeter
+          expect(
+            CubicCentimeter(1.0) + CubicCentimeter(1.0),
+            CubicCentimeter(2.0),
+          );
+          expect(
+            CubicCentimeter(1.0) + Milliliter(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerMilliliter),
+          );
+          expect(
+            CubicCentimeter(1.0) + Liter(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerLiter),
+          );
+          expect(
+            CubicCentimeter(1.0) + Teaspoon(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerTeaspoon),
+          );
+          expect(
+            CubicCentimeter(1.0) + Tablespoon(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerTablespoon),
+          );
+          expect(
+            CubicCentimeter(1.0) + FluidOunce(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerFluidOunce),
+          );
+          expect(
+            CubicCentimeter(1.0) + Cup(1.0),
+            CubicCentimeter(1.0 + cubicCentimeterPerCup),
+          );
+
+          // Milliliter
+          expect(
+            Milliliter(1.0) + CubicCentimeter(1.0),
+            Milliliter(1.0 + milliliterPerCubicCentimeter),
+          );
+          expect(
+            Milliliter(1.0) + Milliliter(1.0),
+            Milliliter(2.0),
+          );
+          expect(
+            Milliliter(1.0) + Liter(1.0),
+            Milliliter(1.0 + milliliterPerLiter),
+          );
+          expect(
+            Milliliter(1.0) + Teaspoon(1.0),
+            Milliliter(1.0 + milliliterPerTeaspoon),
+          );
+          expect(
+            Milliliter(1.0) + Tablespoon(1.0),
+            Milliliter(1.0 + milliliterPerTablespoon),
+          );
+          expect(
+            Milliliter(1.0) + FluidOunce(1.0),
+            Milliliter(1.0 + milliliterPerFluidOunce),
+          );
+          expect(
+            Milliliter(1.0) + Cup(1.0),
+            Milliliter(1.0 + milliliterPerCup),
+          );
+
+          // Liter
+          expect(
+            Liter(1.0) + CubicCentimeter(1.0),
+            Liter(1.0 + literPerCubicCentimeter),
+          );
+          expect(
+            Liter(1.0) + Milliliter(1.0),
+            Liter(1.0 + literPerMilliliter),
+          );
+          expect(
+            Liter(1.0) + Liter(1.0),
+            Liter(2.0),
+          );
+          expect(
+            Liter(1.0) + Teaspoon(1.0),
+            Liter(1.0 + literPerTeaspoon),
+          );
+          expect(
+            Liter(1.0) + Tablespoon(1.0),
+            Liter(1.0 + literPerTablespoon),
+          );
+          expect(
+            Liter(1.0) + FluidOunce(1.0),
+            Liter(1.0 + literPerFluidOunce),
+          );
+          expect(
+            Liter(1.0) + Cup(1.0),
+            Liter(1.0 + literPerCup),
+          );
+
+          // Teaspoon
+          expect(
+            Teaspoon(1.0) + CubicCentimeter(1.0),
+            Teaspoon(1.0 + teaspoonPerCubicCentimeter),
+          );
+          expect(
+            Teaspoon(1.0) + Milliliter(1.0),
+            Teaspoon(1.0 + teaspoonPerMilliliter),
+          );
+          expect(
+            Teaspoon(1.0) + Liter(1.0),
+            Teaspoon(1.0 + teaspoonPerLiter),
+          );
+          expect(
+            Teaspoon(1.0) + Teaspoon(1.0),
+            Teaspoon(2.0),
+          );
+          expect(
+            Teaspoon(1.0) + Tablespoon(1.0),
+            Teaspoon(1.0 + teaspoonPerTablespoon),
+          );
+          expect(
+            Teaspoon(1.0) + FluidOunce(1.0),
+            Teaspoon(1.0 + teaspoonPerFluidOunce),
+          );
+          expect(
+            Teaspoon(1.0) + Cup(1.0),
+            Teaspoon(1.0 + teaspoonPerCup),
+          );
+
+          // Tablespoon
+          expect(
+            Tablespoon(1.0) + CubicCentimeter(1.0),
+            Tablespoon(1.0 + tablespoonPerCubicCentimeter),
+          );
+          expect(
+            Tablespoon(1.0) + Milliliter(1.0),
+            Tablespoon(1.0 + tablespoonPerMilliliter),
+          );
+          expect(
+            Tablespoon(1.0) + Liter(1.0),
+            Tablespoon(1.0 + tablespoonPerLiter),
+          );
+          expect(
+            Tablespoon(1.0) + Teaspoon(1.0),
+            Tablespoon(1.0 + tablespoonPerTeaspoon),
+          );
+          expect(
+            Tablespoon(1.0) + Tablespoon(1.0),
+            Tablespoon(2.0),
+          );
+          expect(
+            Tablespoon(1.0) + FluidOunce(1.0),
+            Tablespoon(1.0 + tablespoonPerFluidOunce),
+          );
+          expect(
+            Tablespoon(1.0) + Cup(1.0),
+            Tablespoon(1.0 + tablespoonPerCup),
+          );
+
+          // FluidOunce
+          expect(
+            FluidOunce(1.0) + CubicCentimeter(1.0),
+            FluidOunce(1.0 + fluidOuncePerCubicCentimeter),
+          );
+          expect(
+            FluidOunce(1.0) + Milliliter(1.0),
+            FluidOunce(1.0 + fluidOuncePerMilliliter),
+          );
+          expect(
+            FluidOunce(1.0) + Liter(1.0),
+            FluidOunce(1.0 + fluidOuncePerLiter),
+          );
+          expect(
+            FluidOunce(1.0) + Teaspoon(1.0),
+            FluidOunce(1.0 + fluidOuncePerTeaspoon),
+          );
+          expect(
+            FluidOunce(1.0) + Tablespoon(1.0),
+            FluidOunce(1.0 + fluidOuncePerTablespoon),
+          );
+          expect(
+            FluidOunce(1.0) + FluidOunce(1.0),
+            FluidOunce(2.0),
+          );
+          expect(
+            FluidOunce(1.0) + Cup(1.0),
+            FluidOunce(1.0 + fluidOuncePerCup),
+          );
+
+          // Cup
+          expect(
+            Cup(1.0) + CubicCentimeter(1.0),
+            Cup(1.0 + cupPerCubicCentimeter),
+          );
+          expect(
+            Cup(1.0) + Milliliter(1.0),
+            Cup(1.0 + cupPerMilliliter),
+          );
+          expect(
+            Cup(1.0) + Liter(1.0),
+            Cup(1.0 + cupPerLiter),
+          );
+          expect(
+            Cup(1.0) + Teaspoon(1.0),
+            Cup(1.0 + cupPerTeaspoon),
+          );
+          expect(
+            Cup(1.0) + Tablespoon(1.0),
+            Cup(1.0 + cupPerTablespoon),
+          );
+          expect(
+            Cup(1.0) + FluidOunce(1.0),
+            Cup(1.0 + cupPerFluidOunce),
+          );
+          expect(
+            Cup(1.0) + Cup(1.0),
+            Cup(2.0),
+          );
+        },
+      );
+
+      test(
+        'Subtraction',
+        () {
+          // CubicCentimeter
+          expect(
+            CubicCentimeter(1.0) - CubicCentimeter(1.0),
+            CubicCentimeter(0.0),
+          );
+          expect(
+            CubicCentimeter(1.0) - Milliliter(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerMilliliter),
+          );
+          expect(
+            CubicCentimeter(1.0) - Liter(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerLiter),
+          );
+          expect(
+            CubicCentimeter(1.0) - Teaspoon(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerTeaspoon),
+          );
+          expect(
+            CubicCentimeter(1.0) - Tablespoon(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerTablespoon),
+          );
+          expect(
+            CubicCentimeter(1.0) - FluidOunce(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerFluidOunce),
+          );
+          expect(
+            CubicCentimeter(1.0) - Cup(1.0),
+            CubicCentimeter(1.0 - cubicCentimeterPerCup),
+          );
+
+          // Milliliter
+          expect(
+            Milliliter(1.0) - CubicCentimeter(1.0),
+            Milliliter(1.0 - milliliterPerCubicCentimeter),
+          );
+          expect(
+            Milliliter(1.0) - Milliliter(1.0),
+            Milliliter(0.0),
+          );
+          expect(
+            Milliliter(1.0) - Liter(1.0),
+            Milliliter(1.0 - milliliterPerLiter),
+          );
+          expect(
+            Milliliter(1.0) - Teaspoon(1.0),
+            Milliliter(1.0 - milliliterPerTeaspoon),
+          );
+          expect(
+            Milliliter(1.0) - Tablespoon(1.0),
+            Milliliter(1.0 - milliliterPerTablespoon),
+          );
+          expect(
+            Milliliter(1.0) - FluidOunce(1.0),
+            Milliliter(1.0 - milliliterPerFluidOunce),
+          );
+          expect(
+            Milliliter(1.0) - Cup(1.0),
+            Milliliter(1.0 - milliliterPerCup),
+          );
+
+          // Liter
+          expect(
+            Liter(1.0) - CubicCentimeter(1.0),
+            Liter(1.0 - literPerCubicCentimeter),
+          );
+          expect(
+            Liter(1.0) - Milliliter(1.0),
+            Liter(1.0 - literPerMilliliter),
+          );
+          expect(
+            Liter(1.0) - Liter(1.0),
+            Liter(0.0),
+          );
+          expect(
+            Liter(1.0) - Teaspoon(1.0),
+            Liter(1.0 - literPerTeaspoon),
+          );
+          expect(
+            Liter(1.0) - Tablespoon(1.0),
+            Liter(1.0 - literPerTablespoon),
+          );
+          expect(
+            Liter(1.0) - FluidOunce(1.0),
+            Liter(1.0 - literPerFluidOunce),
+          );
+          expect(
+            Liter(1.0) - Cup(1.0),
+            Liter(1.0 - literPerCup),
+          );
+
+          // Teaspoon
+          expect(
+            Teaspoon(1.0) - CubicCentimeter(1.0),
+            Teaspoon(1.0 - teaspoonPerCubicCentimeter),
+          );
+          expect(
+            Teaspoon(1.0) - Milliliter(1.0),
+            Teaspoon(1.0 - teaspoonPerMilliliter),
+          );
+          expect(
+            Teaspoon(1.0) - Liter(1.0),
+            Teaspoon(1.0 - teaspoonPerLiter),
+          );
+          expect(
+            Teaspoon(1.0) - Teaspoon(1.0),
+            Teaspoon(0.0),
+          );
+          expect(
+            Teaspoon(1.0) - Tablespoon(1.0),
+            Teaspoon(1.0 - teaspoonPerTablespoon),
+          );
+          expect(
+            Teaspoon(1.0) - FluidOunce(1.0),
+            Teaspoon(1.0 - teaspoonPerFluidOunce),
+          );
+          expect(
+            Teaspoon(1.0) - Cup(1.0),
+            Teaspoon(1.0 - teaspoonPerCup),
+          );
+
+          // Tablespoon
+          expect(
+            Tablespoon(1.0) - CubicCentimeter(1.0),
+            Tablespoon(1.0 - tablespoonPerCubicCentimeter),
+          );
+          expect(
+            Tablespoon(1.0) - Milliliter(1.0),
+            Tablespoon(1.0 - tablespoonPerMilliliter),
+          );
+          expect(
+            Tablespoon(1.0) - Liter(1.0),
+            Tablespoon(1.0 - tablespoonPerLiter),
+          );
+          expect(
+            Tablespoon(1.0) - Teaspoon(1.0),
+            Tablespoon(1.0 - tablespoonPerTeaspoon),
+          );
+          expect(
+            Tablespoon(1.0) - Tablespoon(1.0),
+            Tablespoon(0.0),
+          );
+          expect(
+            Tablespoon(1.0) - FluidOunce(1.0),
+            Tablespoon(1.0 - tablespoonPerFluidOunce),
+          );
+          expect(
+            Tablespoon(1.0) - Cup(1.0),
+            Tablespoon(1.0 - tablespoonPerCup),
+          );
+
+          // FluidOunce
+          expect(
+            FluidOunce(1.0) - CubicCentimeter(1.0),
+            FluidOunce(1.0 - fluidOuncePerCubicCentimeter),
+          );
+          expect(
+            FluidOunce(1.0) - Milliliter(1.0),
+            FluidOunce(1.0 - fluidOuncePerMilliliter),
+          );
+          expect(
+            FluidOunce(1.0) - Liter(1.0),
+            FluidOunce(1.0 - fluidOuncePerLiter),
+          );
+          expect(
+            FluidOunce(1.0) - Teaspoon(1.0),
+            FluidOunce(1.0 - fluidOuncePerTeaspoon),
+          );
+          expect(
+            FluidOunce(1.0) - Tablespoon(1.0),
+            FluidOunce(1.0 - fluidOuncePerTablespoon),
+          );
+          expect(
+            FluidOunce(1.0) - FluidOunce(1.0),
+            FluidOunce(0.0),
+          );
+          expect(
+            FluidOunce(1.0) - Cup(1.0),
+            FluidOunce(1.0 - fluidOuncePerCup),
+          );
+
+          // Cup
+          expect(
+            Cup(1.0) - CubicCentimeter(1.0),
+            Cup(1.0 - cupPerCubicCentimeter),
+          );
+          expect(
+            Cup(1.0) - Milliliter(1.0),
+            Cup(1.0 - cupPerMilliliter),
+          );
+          expect(
+            Cup(1.0) - Liter(1.0),
+            Cup(1.0 - cupPerLiter),
+          );
+          expect(
+            Cup(1.0) - Teaspoon(1.0),
+            Cup(1.0 - cupPerTeaspoon),
+          );
+          expect(
+            Cup(1.0) - Tablespoon(1.0),
+            Cup(1.0 - cupPerTablespoon),
+          );
+          expect(
+            Cup(1.0) - FluidOunce(1.0),
+            Cup(1.0 - cupPerFluidOunce),
+          );
+          expect(
+            Cup(1.0) - Cup(1.0),
+            Cup(0.0),
+          );
+        },
+      );
+
+      test(
+        'Multiblication',
+        () {
+          expect(CubicCentimeter(1.0) * 2, CubicCentimeter(2.0));
+          expect(Milliliter(1.0) * 2, Milliliter(2.0));
+          expect(Liter(1.0) * 2, Liter(2.0));
+          expect(Teaspoon(1.0) * 2, Teaspoon(2.0));
+          expect(Tablespoon(1.0) * 2, Tablespoon(2.0));
+          expect(FluidOunce(1.0) * 2, FluidOunce(2.0));
+          expect(Cup(1.0) * 2, Cup(2.0));
+        },
+      );
+
+      test(
+        'Division',
+        () {
+          expect(CubicCentimeter(2.0) / 2, CubicCentimeter(1.0));
+          expect(Milliliter(2.0) / 2, Milliliter(1.0));
+          expect(Liter(2.0) / 2, Liter(1.0));
+          expect(Teaspoon(2.0) / 2, Teaspoon(1.0));
+          expect(Tablespoon(2.0) / 2, Tablespoon(1.0));
+          expect(FluidOunce(2.0) / 2, FluidOunce(1.0));
+          expect(Cup(2.0) / 2, Cup(1.0));
+        },
+      );
+    },
+  );
+
+  group(
     '[Convert volume unit]',
     () {
       late Volume cubicCentimeter;
