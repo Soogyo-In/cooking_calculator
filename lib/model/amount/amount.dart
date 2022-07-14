@@ -1,8 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'amount.freezed.dart';
-part 'mass.dart';
-part 'volume.dart';
+export 'mass/mass.dart';
+export 'volume/volume.dart';
 
 class NegativeValueException implements Exception {}
 
