@@ -5,21 +5,487 @@ void main() {
   test(
     'Get abbreviation of volume unit',
     () {
-      expect(CubicCentimeter.abbr, 'cc');
-      expect(Milliliter.abbr, 'mL');
-      expect(Liter.abbr, 'L');
-      expect(Teaspoon.abbr, 'tsp');
-      expect(Tablespoon.abbr, 'Tbsp');
-      expect(FluidOunce.abbr, 'fl.oz');
-      expect(Cup.abbr, 'cp');
+      expect(CubicCentimeter.abbreviation, 'cc');
+      expect(Milliliter.abbreviation, 'mL');
+      expect(Liter.abbreviation, 'L');
+      expect(Teaspoon.abbreviation, 'tsp');
+      expect(Tablespoon.abbreviation, 'Tbsp');
+      expect(FluidOunce.abbreviation, 'fl.oz');
+      expect(Cup.abbreviation, 'cp');
+    },
+  );
 
-      expect(CubicCentimeter(0.0).abbreviation, 'cc');
-      expect(Milliliter(0.0).abbreviation, 'mL');
-      expect(Liter(0.0).abbreviation, 'L');
-      expect(Teaspoon(0.0).abbreviation, 'tsp');
-      expect(Tablespoon(0.0).abbreviation, 'Tbsp');
-      expect(FluidOunce(0.0).abbreviation, 'fl.oz');
-      expect(Cup(0.0).abbreviation, 'cp');
+  test(
+    'String expression',
+    () {
+      expect(const CubicCentimeter(1.5).toString(), '1.5 cc');
+      expect(const Milliliter(1.5).toString(), '1.5 mL');
+      expect(const Liter(1.5).toString(), '1.5 L');
+      expect(const Teaspoon(1.5).toString(), '1.5 tsp');
+      expect(const Tablespoon(1.5).toString(), '1.5 Tbsp');
+      expect(const FluidOunce(1.5).toString(), '1.5 fl.oz');
+      expect(const Cup(1.5).toString(), '1.5 cp');
+    },
+  );
+
+  group(
+    '[Arithmetic operation]',
+    () {
+      test(
+        'Addition',
+        () {
+          // CubicCentimeter
+          expect(
+            const CubicCentimeter(1.0) + const CubicCentimeter(1.0),
+            const CubicCentimeter(2.0),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const Milliliter(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerMilliliter),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const Liter(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerLiter),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const Teaspoon(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerTeaspoon),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const Tablespoon(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerTablespoon),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const FluidOunce(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerFluidOunce),
+          );
+          expect(
+            const CubicCentimeter(1.0) + const Cup(1.0),
+            const CubicCentimeter(1.0 + cubicCentimeterPerCup),
+          );
+
+          // Milliliter
+          expect(
+            const Milliliter(1.0) + const CubicCentimeter(1.0),
+            const Milliliter(1.0 + milliliterPerCubicCentimeter),
+          );
+          expect(
+            const Milliliter(1.0) + const Milliliter(1.0),
+            const Milliliter(2.0),
+          );
+          expect(
+            const Milliliter(1.0) + const Liter(1.0),
+            const Milliliter(1.0 + milliliterPerLiter),
+          );
+          expect(
+            const Milliliter(1.0) + const Teaspoon(1.0),
+            const Milliliter(1.0 + milliliterPerTeaspoon),
+          );
+          expect(
+            const Milliliter(1.0) + const Tablespoon(1.0),
+            const Milliliter(1.0 + milliliterPerTablespoon),
+          );
+          expect(
+            const Milliliter(1.0) + const FluidOunce(1.0),
+            const Milliliter(1.0 + milliliterPerFluidOunce),
+          );
+          expect(
+            const Milliliter(1.0) + const Cup(1.0),
+            const Milliliter(1.0 + milliliterPerCup),
+          );
+
+          // Liter
+          expect(
+            const Liter(1.0) + const CubicCentimeter(1.0),
+            const Liter(1.0 + literPerCubicCentimeter),
+          );
+          expect(
+            const Liter(1.0) + const Milliliter(1.0),
+            const Liter(1.0 + literPerMilliliter),
+          );
+          expect(
+            const Liter(1.0) + const Liter(1.0),
+            const Liter(2.0),
+          );
+          expect(
+            const Liter(1.0) + const Teaspoon(1.0),
+            const Liter(1.0 + literPerTeaspoon),
+          );
+          expect(
+            const Liter(1.0) + const Tablespoon(1.0),
+            const Liter(1.0 + literPerTablespoon),
+          );
+          expect(
+            const Liter(1.0) + const FluidOunce(1.0),
+            const Liter(1.0 + literPerFluidOunce),
+          );
+          expect(
+            const Liter(1.0) + const Cup(1.0),
+            const Liter(1.0 + literPerCup),
+          );
+
+          // Teaspoon
+          expect(
+            const Teaspoon(1.0) + const CubicCentimeter(1.0),
+            const Teaspoon(1.0 + teaspoonPerCubicCentimeter),
+          );
+          expect(
+            const Teaspoon(1.0) + const Milliliter(1.0),
+            const Teaspoon(1.0 + teaspoonPerMilliliter),
+          );
+          expect(
+            const Teaspoon(1.0) + const Liter(1.0),
+            const Teaspoon(1.0 + teaspoonPerLiter),
+          );
+          expect(
+            const Teaspoon(1.0) + const Teaspoon(1.0),
+            const Teaspoon(2.0),
+          );
+          expect(
+            const Teaspoon(1.0) + const Tablespoon(1.0),
+            const Teaspoon(1.0 + teaspoonPerTablespoon),
+          );
+          expect(
+            const Teaspoon(1.0) + const FluidOunce(1.0),
+            const Teaspoon(1.0 + teaspoonPerFluidOunce),
+          );
+          expect(
+            const Teaspoon(1.0) + const Cup(1.0),
+            const Teaspoon(1.0 + teaspoonPerCup),
+          );
+
+          // Tablespoon
+          expect(
+            const Tablespoon(1.0) + const CubicCentimeter(1.0),
+            const Tablespoon(1.0 + tablespoonPerCubicCentimeter),
+          );
+          expect(
+            const Tablespoon(1.0) + const Milliliter(1.0),
+            const Tablespoon(1.0 + tablespoonPerMilliliter),
+          );
+          expect(
+            const Tablespoon(1.0) + const Liter(1.0),
+            const Tablespoon(1.0 + tablespoonPerLiter),
+          );
+          expect(
+            const Tablespoon(1.0) + const Teaspoon(1.0),
+            const Tablespoon(1.0 + tablespoonPerTeaspoon),
+          );
+          expect(
+            const Tablespoon(1.0) + const Tablespoon(1.0),
+            const Tablespoon(2.0),
+          );
+          expect(
+            const Tablespoon(1.0) + const FluidOunce(1.0),
+            const Tablespoon(1.0 + tablespoonPerFluidOunce),
+          );
+          expect(
+            const Tablespoon(1.0) + const Cup(1.0),
+            const Tablespoon(1.0 + tablespoonPerCup),
+          );
+
+          // FluidOunce
+          expect(
+            const FluidOunce(1.0) + const CubicCentimeter(1.0),
+            const FluidOunce(1.0 + fluidOuncePerCubicCentimeter),
+          );
+          expect(
+            const FluidOunce(1.0) + const Milliliter(1.0),
+            const FluidOunce(1.0 + fluidOuncePerMilliliter),
+          );
+          expect(
+            const FluidOunce(1.0) + const Liter(1.0),
+            const FluidOunce(1.0 + fluidOuncePerLiter),
+          );
+          expect(
+            const FluidOunce(1.0) + const Teaspoon(1.0),
+            const FluidOunce(1.0 + fluidOuncePerTeaspoon),
+          );
+          expect(
+            const FluidOunce(1.0) + const Tablespoon(1.0),
+            const FluidOunce(1.0 + fluidOuncePerTablespoon),
+          );
+          expect(
+            const FluidOunce(1.0) + const FluidOunce(1.0),
+            const FluidOunce(2.0),
+          );
+          expect(
+            const FluidOunce(1.0) + const Cup(1.0),
+            const FluidOunce(1.0 + fluidOuncePerCup),
+          );
+
+          // Cup
+          expect(
+            const Cup(1.0) + const CubicCentimeter(1.0),
+            const Cup(1.0 + cupPerCubicCentimeter),
+          );
+          expect(
+            const Cup(1.0) + const Milliliter(1.0),
+            const Cup(1.0 + cupPerMilliliter),
+          );
+          expect(
+            const Cup(1.0) + const Liter(1.0),
+            const Cup(1.0 + cupPerLiter),
+          );
+          expect(
+            const Cup(1.0) + const Teaspoon(1.0),
+            const Cup(1.0 + cupPerTeaspoon),
+          );
+          expect(
+            const Cup(1.0) + const Tablespoon(1.0),
+            const Cup(1.0 + cupPerTablespoon),
+          );
+          expect(
+            const Cup(1.0) + const FluidOunce(1.0),
+            const Cup(1.0 + cupPerFluidOunce),
+          );
+          expect(
+            const Cup(1.0) + const Cup(1.0),
+            const Cup(2.0),
+          );
+        },
+      );
+
+      test(
+        'Subtraction',
+        () {
+          // CubicCentimeter
+          expect(
+            const CubicCentimeter(1.0) - const CubicCentimeter(1.0),
+            const CubicCentimeter(0.0),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const Milliliter(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerMilliliter),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const Liter(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerLiter),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const Teaspoon(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerTeaspoon),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const Tablespoon(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerTablespoon),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const FluidOunce(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerFluidOunce),
+          );
+          expect(
+            const CubicCentimeter(1.0) - const Cup(1.0),
+            const CubicCentimeter(1.0 - cubicCentimeterPerCup),
+          );
+
+          // Milliliter
+          expect(
+            const Milliliter(1.0) - const CubicCentimeter(1.0),
+            const Milliliter(1.0 - milliliterPerCubicCentimeter),
+          );
+          expect(
+            const Milliliter(1.0) - const Milliliter(1.0),
+            const Milliliter(0.0),
+          );
+          expect(
+            const Milliliter(1.0) - const Liter(1.0),
+            const Milliliter(1.0 - milliliterPerLiter),
+          );
+          expect(
+            const Milliliter(1.0) - const Teaspoon(1.0),
+            const Milliliter(1.0 - milliliterPerTeaspoon),
+          );
+          expect(
+            const Milliliter(1.0) - const Tablespoon(1.0),
+            const Milliliter(1.0 - milliliterPerTablespoon),
+          );
+          expect(
+            const Milliliter(1.0) - const FluidOunce(1.0),
+            const Milliliter(1.0 - milliliterPerFluidOunce),
+          );
+          expect(
+            const Milliliter(1.0) - const Cup(1.0),
+            const Milliliter(1.0 - milliliterPerCup),
+          );
+
+          // Liter
+          expect(
+            const Liter(1.0) - const CubicCentimeter(1.0),
+            const Liter(1.0 - literPerCubicCentimeter),
+          );
+          expect(
+            const Liter(1.0) - const Milliliter(1.0),
+            const Liter(1.0 - literPerMilliliter),
+          );
+          expect(
+            const Liter(1.0) - const Liter(1.0),
+            const Liter(0.0),
+          );
+          expect(
+            const Liter(1.0) - const Teaspoon(1.0),
+            const Liter(1.0 - literPerTeaspoon),
+          );
+          expect(
+            const Liter(1.0) - const Tablespoon(1.0),
+            const Liter(1.0 - literPerTablespoon),
+          );
+          expect(
+            const Liter(1.0) - const FluidOunce(1.0),
+            const Liter(1.0 - literPerFluidOunce),
+          );
+          expect(
+            const Liter(1.0) - const Cup(1.0),
+            const Liter(1.0 - literPerCup),
+          );
+
+          // Teaspoon
+          expect(
+            const Teaspoon(1.0) - const CubicCentimeter(1.0),
+            const Teaspoon(1.0 - teaspoonPerCubicCentimeter),
+          );
+          expect(
+            const Teaspoon(1.0) - const Milliliter(1.0),
+            const Teaspoon(1.0 - teaspoonPerMilliliter),
+          );
+          expect(
+            const Teaspoon(1.0) - const Liter(1.0),
+            const Teaspoon(1.0 - teaspoonPerLiter),
+          );
+          expect(
+            const Teaspoon(1.0) - const Teaspoon(1.0),
+            const Teaspoon(0.0),
+          );
+          expect(
+            const Teaspoon(1.0) - const Tablespoon(1.0),
+            const Teaspoon(1.0 - teaspoonPerTablespoon),
+          );
+          expect(
+            const Teaspoon(1.0) - const FluidOunce(1.0),
+            const Teaspoon(1.0 - teaspoonPerFluidOunce),
+          );
+          expect(
+            const Teaspoon(1.0) - const Cup(1.0),
+            const Teaspoon(1.0 - teaspoonPerCup),
+          );
+
+          // Tablespoon
+          expect(
+            const Tablespoon(1.0) - const CubicCentimeter(1.0),
+            const Tablespoon(1.0 - tablespoonPerCubicCentimeter),
+          );
+          expect(
+            const Tablespoon(1.0) - const Milliliter(1.0),
+            const Tablespoon(1.0 - tablespoonPerMilliliter),
+          );
+          expect(
+            const Tablespoon(1.0) - const Liter(1.0),
+            const Tablespoon(1.0 - tablespoonPerLiter),
+          );
+          expect(
+            const Tablespoon(1.0) - const Teaspoon(1.0),
+            const Tablespoon(1.0 - tablespoonPerTeaspoon),
+          );
+          expect(
+            const Tablespoon(1.0) - const Tablespoon(1.0),
+            const Tablespoon(0.0),
+          );
+          expect(
+            const Tablespoon(1.0) - const FluidOunce(1.0),
+            const Tablespoon(1.0 - tablespoonPerFluidOunce),
+          );
+          expect(
+            const Tablespoon(1.0) - const Cup(1.0),
+            const Tablespoon(1.0 - tablespoonPerCup),
+          );
+
+          // FluidOunce
+          expect(
+            const FluidOunce(1.0) - const CubicCentimeter(1.0),
+            const FluidOunce(1.0 - fluidOuncePerCubicCentimeter),
+          );
+          expect(
+            const FluidOunce(1.0) - const Milliliter(1.0),
+            const FluidOunce(1.0 - fluidOuncePerMilliliter),
+          );
+          expect(
+            const FluidOunce(1.0) - const Liter(1.0),
+            const FluidOunce(1.0 - fluidOuncePerLiter),
+          );
+          expect(
+            const FluidOunce(1.0) - const Teaspoon(1.0),
+            const FluidOunce(1.0 - fluidOuncePerTeaspoon),
+          );
+          expect(
+            const FluidOunce(1.0) - const Tablespoon(1.0),
+            const FluidOunce(1.0 - fluidOuncePerTablespoon),
+          );
+          expect(
+            const FluidOunce(1.0) - const FluidOunce(1.0),
+            const FluidOunce(0.0),
+          );
+          expect(
+            const FluidOunce(1.0) - const Cup(1.0),
+            const FluidOunce(1.0 - fluidOuncePerCup),
+          );
+
+          // Cup
+          expect(
+            const Cup(1.0) - const CubicCentimeter(1.0),
+            const Cup(1.0 - cupPerCubicCentimeter),
+          );
+          expect(
+            const Cup(1.0) - const Milliliter(1.0),
+            const Cup(1.0 - cupPerMilliliter),
+          );
+          expect(
+            const Cup(1.0) - const Liter(1.0),
+            const Cup(1.0 - cupPerLiter),
+          );
+          expect(
+            const Cup(1.0) - const Teaspoon(1.0),
+            const Cup(1.0 - cupPerTeaspoon),
+          );
+          expect(
+            const Cup(1.0) - const Tablespoon(1.0),
+            const Cup(1.0 - cupPerTablespoon),
+          );
+          expect(
+            const Cup(1.0) - const FluidOunce(1.0),
+            const Cup(1.0 - cupPerFluidOunce),
+          );
+          expect(
+            const Cup(1.0) - const Cup(1.0),
+            const Cup(0.0),
+          );
+        },
+      );
+
+      test(
+        'Multiblication',
+        () {
+          expect(const CubicCentimeter(1.0) * 2, const CubicCentimeter(2.0));
+          expect(const Milliliter(1.0) * 2, const Milliliter(2.0));
+          expect(const Liter(1.0) * 2, const Liter(2.0));
+          expect(const Teaspoon(1.0) * 2, const Teaspoon(2.0));
+          expect(const Tablespoon(1.0) * 2, const Tablespoon(2.0));
+          expect(const FluidOunce(1.0) * 2, const FluidOunce(2.0));
+          expect(const Cup(1.0) * 2, const Cup(2.0));
+        },
+      );
+
+      test(
+        'Division',
+        () {
+          expect(const CubicCentimeter(2.0) / 2, const CubicCentimeter(1.0));
+          expect(const Milliliter(2.0) / 2, const Milliliter(1.0));
+          expect(const Liter(2.0) / 2, const Liter(1.0));
+          expect(const Teaspoon(2.0) / 2, const Teaspoon(1.0));
+          expect(const Tablespoon(2.0) / 2, const Tablespoon(1.0));
+          expect(const FluidOunce(2.0) / 2, const FluidOunce(1.0));
+          expect(const Cup(2.0) / 2, const Cup(1.0));
+        },
+      );
     },
   );
 

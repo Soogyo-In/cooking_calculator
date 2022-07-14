@@ -5,17 +5,279 @@ void main() {
   test(
     'Get abbreviation of mass unit',
     () {
-      expect(Milligram.abbr, 'mg');
-      expect(Gram.abbr, 'g');
-      expect(Kilogram.abbr, 'kg');
-      expect(Ounce.abbr, 'oz');
-      expect(Pound.abbr, 'lb');
+      expect(Milligram.abbreviation, 'mg');
+      expect(Gram.abbreviation, 'g');
+      expect(Kilogram.abbreviation, 'kg');
+      expect(Ounce.abbreviation, 'oz');
+      expect(Pound.abbreviation, 'lb');
+    },
+  );
 
-      expect(Milligram(0.0).abbreviation, 'mg');
-      expect(Gram(0.0).abbreviation, 'g');
-      expect(Kilogram(0.0).abbreviation, 'kg');
-      expect(Ounce(0.0).abbreviation, 'oz');
-      expect(Pound(0.0).abbreviation, 'lb');
+  test(
+    'String expression',
+    () {
+      expect(const Milligram(1.5).toString(), '1.5 mg');
+      expect(const Gram(1.5).toString(), '1.5 g');
+      expect(const Kilogram(1.5).toString(), '1.5 kg');
+      expect(const Ounce(1.5).toString(), '1.5 oz');
+      expect(const Pound(1.5).toString(), '1.5 lb');
+    },
+  );
+
+  group(
+    '[Arithmetic operation]',
+    () {
+      test(
+        'Addition',
+        () {
+          // Milligram
+          expect(
+            const Milligram(1.0) + const Milligram(1.0),
+            const Milligram(2.0),
+          );
+          expect(
+            const Milligram(1.0) + const Gram(1.0),
+            const Milligram(1.0 + milligramPerGram),
+          );
+          expect(
+            const Milligram(1.0) + const Kilogram(1.0),
+            const Milligram(1.0 + milligramPerKilogram),
+          );
+          expect(
+            const Milligram(1.0) + const Ounce(1.0),
+            const Milligram(1.0 + milligramPerOunce),
+          );
+          expect(
+            const Milligram(1.0) + const Pound(1.0),
+            const Milligram(1.0 + milligramPerPound),
+          );
+
+          // Gram
+          expect(
+            const Gram(1.0) + const Milligram(1.0),
+            const Gram(1.0 + gramPerMilligram),
+          );
+          expect(
+            const Gram(1.0) + const Gram(1.0),
+            const Gram(2.0),
+          );
+          expect(
+            const Gram(1.0) + const Kilogram(1.0),
+            const Gram(1.0 + gramPerKilogram),
+          );
+          expect(
+            const Gram(1.0) + const Ounce(1.0),
+            const Gram(1.0 + gramPerOunce),
+          );
+          expect(
+            const Gram(1.0) + const Pound(1.0),
+            const Gram(1.0 + gramPerPound),
+          );
+
+          // Kilogram
+          expect(
+            const Kilogram(1.0) + const Milligram(1.0),
+            const Kilogram(1.0 + kilogramPerMilligram),
+          );
+          expect(
+            const Kilogram(1.0) + const Gram(1.0),
+            const Kilogram(1.0 + kilogramPerGram),
+          );
+          expect(
+            const Kilogram(1.0) + const Kilogram(1.0),
+            const Kilogram(2.0),
+          );
+          expect(
+            const Kilogram(1.0) + const Ounce(1.0),
+            const Kilogram(1.0 + kilogramPerOunce),
+          );
+          expect(
+            const Kilogram(1.0) + const Pound(1.0),
+            const Kilogram(1.0 + kilogramPerPound),
+          );
+
+          // Ounce
+          expect(
+            const Ounce(1.0) + const Milligram(1.0),
+            const Ounce(1.0 + ouncePerMilligram),
+          );
+          expect(
+            const Ounce(1.0) + const Gram(1.0),
+            const Ounce(1.0 + ouncePerGram),
+          );
+          expect(
+            const Ounce(1.0) + const Kilogram(1.0),
+            const Ounce(1.0 + ouncePerKilogram),
+          );
+          expect(
+            const Ounce(1.0) + const Ounce(1.0),
+            const Ounce(2.0),
+          );
+          expect(
+            const Ounce(1.0) + const Pound(1.0),
+            const Ounce(1.0 + ouncePerPound),
+          );
+
+          // Pound
+          expect(
+            const Pound(1.0) + const Milligram(1.0),
+            const Pound(1.0 + poundPerMilligram),
+          );
+          expect(
+            const Pound(1.0) + const Gram(1.0),
+            const Pound(1.0 + poundPerGram),
+          );
+          expect(
+            const Pound(1.0) + const Kilogram(1.0),
+            const Pound(1.0 + poundPerKilogram),
+          );
+          expect(
+            const Pound(1.0) + const Ounce(1.0),
+            const Pound(1.0 + poundPerOunce),
+          );
+          expect(
+            const Pound(1.0) + const Pound(1.0),
+            const Pound(2.0),
+          );
+        },
+      );
+
+      test(
+        'Subtraction',
+        () {
+          // Milligram
+          expect(
+            const Milligram(1.0) - const Milligram(1.0),
+            const Milligram(0.0),
+          );
+          expect(
+            const Milligram(1.0) - const Gram(1.0),
+            const Milligram(1.0 - milligramPerGram),
+          );
+          expect(
+            const Milligram(1.0) - const Kilogram(1.0),
+            const Milligram(1.0 - milligramPerKilogram),
+          );
+          expect(
+            const Milligram(1.0) - const Ounce(1.0),
+            const Milligram(1.0 - milligramPerOunce),
+          );
+          expect(
+            const Milligram(1.0) - const Pound(1.0),
+            const Milligram(1.0 - milligramPerPound),
+          );
+
+          // Gram
+          expect(
+            const Gram(1.0) - const Milligram(1.0),
+            const Gram(1.0 - gramPerMilligram),
+          );
+          expect(
+            const Gram(1.0) - const Gram(1.0),
+            const Gram(0.0),
+          );
+          expect(
+            const Gram(1.0) - const Kilogram(1.0),
+            const Gram(1.0 - gramPerKilogram),
+          );
+          expect(
+            const Gram(1.0) - const Ounce(1.0),
+            const Gram(1.0 - gramPerOunce),
+          );
+          expect(
+            const Gram(1.0) - const Pound(1.0),
+            const Gram(1.0 - gramPerPound),
+          );
+
+          // Kilogram
+          expect(
+            const Kilogram(1.0) - const Milligram(1.0),
+            const Kilogram(1.0 - kilogramPerMilligram),
+          );
+          expect(
+            const Kilogram(1.0) - const Gram(1.0),
+            const Kilogram(1.0 - kilogramPerGram),
+          );
+          expect(
+            const Kilogram(1.0) - const Kilogram(1.0),
+            const Kilogram(0.0),
+          );
+          expect(
+            const Kilogram(1.0) - const Ounce(1.0),
+            const Kilogram(1.0 - kilogramPerOunce),
+          );
+          expect(
+            const Kilogram(1.0) - const Pound(1.0),
+            const Kilogram(1.0 - kilogramPerPound),
+          );
+
+          // Ounce
+          expect(
+            const Ounce(1.0) - const Milligram(1.0),
+            const Ounce(1.0 - ouncePerMilligram),
+          );
+          expect(
+            const Ounce(1.0) - const Gram(1.0),
+            const Ounce(1.0 - ouncePerGram),
+          );
+          expect(
+            const Ounce(1.0) - const Kilogram(1.0),
+            const Ounce(1.0 - ouncePerKilogram),
+          );
+          expect(
+            const Ounce(1.0) - const Ounce(1.0),
+            const Ounce(0.0),
+          );
+          expect(
+            const Ounce(1.0) - const Pound(1.0),
+            const Ounce(1.0 - ouncePerPound),
+          );
+
+          // Pound
+          expect(
+            const Pound(1.0) - const Milligram(1.0),
+            const Pound(1.0 - poundPerMilligram),
+          );
+          expect(
+            const Pound(1.0) - const Gram(1.0),
+            const Pound(1.0 - poundPerGram),
+          );
+          expect(
+            const Pound(1.0) - const Kilogram(1.0),
+            const Pound(1.0 - poundPerKilogram),
+          );
+          expect(
+            const Pound(1.0) - const Ounce(1.0),
+            const Pound(1.0 - poundPerOunce),
+          );
+          expect(
+            const Pound(1.0) - const Pound(1.0),
+            const Pound(0.0),
+          );
+        },
+      );
+
+      test(
+        'Multiblication',
+        () {
+          expect(const Milligram(1.0) * 2, const Milligram(2.0));
+          expect(const Gram(1.0) * 2, const Gram(2.0));
+          expect(const Kilogram(1.0) * 2, const Kilogram(2.0));
+          expect(const Ounce(1.0) * 2, const Ounce(2.0));
+          expect(const Pound(1.0) * 2, const Pound(2.0));
+        },
+      );
+
+      test(
+        'Division',
+        () {
+          expect(const Milligram(2.0) / 2, const Milligram(1.0));
+          expect(const Gram(2.0) / 2, const Gram(1.0));
+          expect(const Kilogram(2.0) / 2, const Kilogram(1.0));
+          expect(const Ounce(2.0) / 2, const Ounce(1.0));
+          expect(const Pound(2.0) / 2, const Pound(1.0));
+        },
+      );
     },
   );
 
