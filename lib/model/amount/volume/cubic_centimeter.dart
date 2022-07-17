@@ -45,5 +45,6 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
   CubicCentimeter operator /(num divisor) => CubicCentimeter(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }

@@ -15,4 +15,6 @@ abstract class Amount {
   Amount operator *(num value);
 
   Amount operator /(num divisor);
+
+  String toStringAsFixed(int fractionDigits);
 }

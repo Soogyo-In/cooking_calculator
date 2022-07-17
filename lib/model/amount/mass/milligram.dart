@@ -38,5 +38,6 @@ class Milligram with _$Milligram implements Mass {
   Milligram operator /(num divisor) => Milligram(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }
