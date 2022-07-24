@@ -18,13 +18,13 @@ void main() {
   test(
     'String expression',
     () {
-      expect(const CubicCentimeter(1.5).toString(), '1.5 cc');
-      expect(const Milliliter(1.5).toString(), '1.5 mL');
-      expect(const Liter(1.5).toString(), '1.5 L');
-      expect(const Teaspoon(1.5).toString(), '1.5 tsp');
-      expect(const Tablespoon(1.5).toString(), '1.5 Tbsp');
-      expect(const FluidOunce(1.5).toString(), '1.5 fl.oz');
-      expect(const Cup(1.5).toString(), '1.5 cp');
+      expect(const CubicCentimeter(1.555).toStringAsFixed(2), '1.55 cc');
+      expect(const Milliliter(1.555).toStringAsFixed(2), '1.55 mL');
+      expect(const Liter(1.555).toStringAsFixed(2), '1.55 L');
+      expect(const Teaspoon(1.555).toStringAsFixed(2), '1.55 tsp');
+      expect(const Tablespoon(1.555).toStringAsFixed(2), '1.55 Tbsp');
+      expect(const FluidOunce(1.555).toStringAsFixed(2), '1.55 fl.oz');
+      expect(const Cup(1.555).toStringAsFixed(2), '1.55 cp');
     },
   );
 

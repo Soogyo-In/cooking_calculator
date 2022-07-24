@@ -36,5 +36,6 @@ class Pound with _$Pound implements Mass {
   Pound operator /(num divisor) => Pound(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }

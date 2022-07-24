@@ -16,11 +16,11 @@ void main() {
   test(
     'String expression',
     () {
-      expect(const Milligram(1.5).toString(), '1.5 mg');
-      expect(const Gram(1.5).toString(), '1.5 g');
-      expect(const Kilogram(1.5).toString(), '1.5 kg');
-      expect(const Ounce(1.5).toString(), '1.5 oz');
-      expect(const Pound(1.5).toString(), '1.5 lb');
+      expect(const Milligram(1.555).toStringAsFixed(2), '1.55 mg');
+      expect(const Gram(1.555).toStringAsFixed(2), '1.55 g');
+      expect(const Kilogram(1.555).toStringAsFixed(2), '1.55 kg');
+      expect(const Ounce(1.555).toStringAsFixed(2), '1.55 oz');
+      expect(const Pound(1.555).toStringAsFixed(2), '1.55 lb');
     },
   );
 

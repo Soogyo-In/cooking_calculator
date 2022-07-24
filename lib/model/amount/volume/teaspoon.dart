@@ -45,5 +45,6 @@ class Teaspoon with _$Teaspoon implements Volume {
   Teaspoon operator /(num divisor) => Teaspoon(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }

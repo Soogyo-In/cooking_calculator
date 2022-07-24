@@ -36,5 +36,6 @@ class Gram with _$Gram implements Mass {
   Gram operator /(num divisor) => Gram(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }
