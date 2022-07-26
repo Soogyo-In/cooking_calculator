@@ -126,7 +126,7 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
     super.key,
   });
 
-  static mass({
+  static UnitConverter<MassUnit> mass({
     required StateProvider<MassUnit> fromUnitProvider,
     required StateProvider<MassUnit> toUnitProvider,
     required StateProvider<double?> valueProvider,
@@ -139,7 +139,7 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
         key: key,
       );
 
-  static volume({
+  static UnitConverter<VolumeUnit> volume({
     required StateProvider<VolumeUnit> fromUnitProvider,
     required StateProvider<VolumeUnit> toUnitProvider,
     required StateProvider<double?> valueProvider,
