@@ -43,5 +43,6 @@ class Cup with _$Cup implements Volume {
   Cup operator /(num divisor) => Cup(value / divisor);
 
   @override
-  String toString() => '$value $abbreviation';
+  String toStringAsFixed(int fractionDigits) =>
+      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
 }
