@@ -7,6 +7,10 @@ export 'fahrenheit.dart';
 abstract class Temperature {
   const Temperature();
 
+  const factory Temperature.celsius(double degree) = Celsius;
+
+  const factory Temperature.fahrenheit(double degree) = Fahrenheit;
+
   double get degree;
 
   Temperature operator +(covariant Temperature other);
