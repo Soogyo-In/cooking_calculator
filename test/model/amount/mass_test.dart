@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'Get abbreviation of mass unit',
+    'Get symbol of mass unit',
     () {
       expect(Milligram.symbol, 'mg');
       expect(Gram.symbol, 'g');
@@ -291,11 +291,11 @@ void main() {
       late Mass pound;
 
       setUp(() {
-        milligram = Mass.milligram(1.0);
-        gram = Mass.gram(1.0);
-        kilogram = Mass.kilogram(1.0);
-        ounce = Mass.ounce(1.0);
-        pound = Mass.pound(1.0);
+        milligram = const Mass.milligram(1.0);
+        gram = const Mass.gram(1.0);
+        kilogram = const Mass.kilogram(1.0);
+        ounce = const Mass.ounce(1.0);
+        pound = const Mass.pound(1.0);
       });
 
       test(
@@ -303,23 +303,23 @@ void main() {
         () {
           expect(
             milligram.toMilligram(),
-            Mass.milligram(1.0),
+            const Mass.milligram(1.0),
           );
           expect(
             gram.toMilligram(),
-            Mass.milligram(milligramPerGram),
+            const Mass.milligram(milligramPerGram),
           );
           expect(
             kilogram.toMilligram(),
-            Mass.milligram(milligramPerKilogram),
+            const Mass.milligram(milligramPerKilogram),
           );
           expect(
             ounce.toMilligram(),
-            Mass.milligram(milligramPerOunce),
+            const Mass.milligram(milligramPerOunce),
           );
           expect(
             pound.toMilligram(),
-            Mass.milligram(milligramPerPound),
+            const Mass.milligram(milligramPerPound),
           );
         },
       );
@@ -329,23 +329,23 @@ void main() {
         () {
           expect(
             milligram.toGram(),
-            Mass.gram(gramPerMilligram),
+            const Mass.gram(gramPerMilligram),
           );
           expect(
             gram.toGram(),
-            Mass.gram(1.0),
+            const Mass.gram(1.0),
           );
           expect(
             kilogram.toGram(),
-            Mass.gram(gramPerKilogram),
+            const Mass.gram(gramPerKilogram),
           );
           expect(
             ounce.toGram(),
-            Mass.gram(gramPerOunce),
+            const Mass.gram(gramPerOunce),
           );
           expect(
             pound.toGram(),
-            Mass.gram(gramPerPound),
+            const Mass.gram(gramPerPound),
           );
         },
       );
@@ -355,23 +355,23 @@ void main() {
         () {
           expect(
             milligram.toKilogram(),
-            Mass.kilogram(kilogramPerMilligram),
+            const Mass.kilogram(kilogramPerMilligram),
           );
           expect(
             gram.toKilogram(),
-            Mass.kilogram(kilogramPerGram),
+            const Mass.kilogram(kilogramPerGram),
           );
           expect(
             kilogram.toKilogram(),
-            Mass.kilogram(1.0),
+            const Mass.kilogram(1.0),
           );
           expect(
             ounce.toKilogram(),
-            Mass.kilogram(kilogramPerOunce),
+            const Mass.kilogram(kilogramPerOunce),
           );
           expect(
             pound.toKilogram(),
-            Mass.kilogram(kilogramPerPound),
+            const Mass.kilogram(kilogramPerPound),
           );
         },
       );
@@ -381,23 +381,23 @@ void main() {
         () {
           expect(
             milligram.toOunce(),
-            Mass.ounce(ouncePerMilligram),
+            const Mass.ounce(ouncePerMilligram),
           );
           expect(
             gram.toOunce(),
-            Mass.ounce(ouncePerGram),
+            const Mass.ounce(ouncePerGram),
           );
           expect(
             kilogram.toOunce(),
-            Mass.ounce(ouncePerKilogram),
+            const Mass.ounce(ouncePerKilogram),
           );
           expect(
             ounce.toOunce(),
-            Mass.ounce(1.0),
+            const Mass.ounce(1.0),
           );
           expect(
             pound.toOunce(),
-            Mass.ounce(ouncePerPound),
+            const Mass.ounce(ouncePerPound),
           );
         },
       );
@@ -407,23 +407,23 @@ void main() {
         () {
           expect(
             milligram.toPound(),
-            Mass.pound(poundPerMilligram),
+            const Mass.pound(poundPerMilligram),
           );
           expect(
             gram.toPound(),
-            Mass.pound(poundPerGram),
+            const Mass.pound(poundPerGram),
           );
           expect(
             kilogram.toPound(),
-            Mass.pound(poundPerKilogram),
+            const Mass.pound(poundPerKilogram),
           );
           expect(
             ounce.toPound(),
-            Mass.pound(poundPerOunce),
+            const Mass.pound(poundPerOunce),
           );
           expect(
             pound.toPound(),
-            Mass.pound(1.0),
+            const Mass.pound(1.0),
           );
         },
       );

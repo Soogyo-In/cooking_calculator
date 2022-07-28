@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'Get abbreviation of volume unit',
+    'Get symbol of volume unit',
     () {
       expect(CubicCentimeter.symbol, 'cc');
       expect(Milliliter.symbol, 'mL');
@@ -501,13 +501,13 @@ void main() {
       late Volume cup;
 
       setUp(() {
-        cubicCentimeter = Volume.cubicCentimeter(1.0);
-        milliliter = Volume.milliliter(1.0);
-        liter = Volume.liter(1.0);
-        teaspoon = Volume.teaspoon(1.0);
-        tablespoon = Volume.tablespoon(1.0);
-        fluidOunce = Volume.fluidOunce(1.0);
-        cup = Volume.cup(1.0);
+        cubicCentimeter = const Volume.cubicCentimeter(1.0);
+        milliliter = const Volume.milliliter(1.0);
+        liter = const Volume.liter(1.0);
+        teaspoon = const Volume.teaspoon(1.0);
+        tablespoon = const Volume.tablespoon(1.0);
+        fluidOunce = const Volume.fluidOunce(1.0);
+        cup = const Volume.cup(1.0);
       });
 
       test(
@@ -515,31 +515,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toCubicCentimeter(),
-            Volume.cubicCentimeter(1.0),
+            const Volume.cubicCentimeter(1.0),
           );
           expect(
             milliliter.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerMilliliter),
+            const Volume.cubicCentimeter(cubicCentimeterPerMilliliter),
           );
           expect(
             liter.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerLiter),
+            const Volume.cubicCentimeter(cubicCentimeterPerLiter),
           );
           expect(
             teaspoon.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerTeaspoon),
+            const Volume.cubicCentimeter(cubicCentimeterPerTeaspoon),
           );
           expect(
             tablespoon.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerTablespoon),
+            const Volume.cubicCentimeter(cubicCentimeterPerTablespoon),
           );
           expect(
             fluidOunce.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerFluidOunce),
+            const Volume.cubicCentimeter(cubicCentimeterPerFluidOunce),
           );
           expect(
             cup.toCubicCentimeter(),
-            Volume.cubicCentimeter(cubicCentimeterPerCup),
+            const Volume.cubicCentimeter(cubicCentimeterPerCup),
           );
         },
       );
@@ -549,31 +549,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toMilliliter(),
-            Volume.milliliter(milliliterPerCubicCentimeter),
+            const Volume.milliliter(milliliterPerCubicCentimeter),
           );
           expect(
             milliliter.toMilliliter(),
-            Volume.milliliter(1.0),
+            const Volume.milliliter(1.0),
           );
           expect(
             liter.toMilliliter(),
-            Volume.milliliter(milliliterPerLiter),
+            const Volume.milliliter(milliliterPerLiter),
           );
           expect(
             teaspoon.toMilliliter(),
-            Volume.milliliter(milliliterPerTeaspoon),
+            const Volume.milliliter(milliliterPerTeaspoon),
           );
           expect(
             tablespoon.toMilliliter(),
-            Volume.milliliter(milliliterPerTablespoon),
+            const Volume.milliliter(milliliterPerTablespoon),
           );
           expect(
             fluidOunce.toMilliliter(),
-            Volume.milliliter(milliliterPerFluidOunce),
+            const Volume.milliliter(milliliterPerFluidOunce),
           );
           expect(
             cup.toMilliliter(),
-            Volume.milliliter(milliliterPerCup),
+            const Volume.milliliter(milliliterPerCup),
           );
         },
       );
@@ -583,31 +583,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toLiter(),
-            Volume.liter(literPerCubicCentimeter),
+            const Volume.liter(literPerCubicCentimeter),
           );
           expect(
             milliliter.toLiter(),
-            Volume.liter(literPerMilliliter),
+            const Volume.liter(literPerMilliliter),
           );
           expect(
             liter.toLiter(),
-            Volume.liter(1.0),
+            const Volume.liter(1.0),
           );
           expect(
             teaspoon.toLiter(),
-            Volume.liter(literPerTeaspoon),
+            const Volume.liter(literPerTeaspoon),
           );
           expect(
             tablespoon.toLiter(),
-            Volume.liter(literPerTablespoon),
+            const Volume.liter(literPerTablespoon),
           );
           expect(
             fluidOunce.toLiter(),
-            Volume.liter(literPerFluidOunce),
+            const Volume.liter(literPerFluidOunce),
           );
           expect(
             cup.toLiter(),
-            Volume.liter(literPerCup),
+            const Volume.liter(literPerCup),
           );
         },
       );
@@ -617,31 +617,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerCubicCentimeter),
+            const Volume.teaspoon(teaspoonPerCubicCentimeter),
           );
           expect(
             milliliter.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerMilliliter),
+            const Volume.teaspoon(teaspoonPerMilliliter),
           );
           expect(
             liter.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerLiter),
+            const Volume.teaspoon(teaspoonPerLiter),
           );
           expect(
             teaspoon.toTeaspoon(),
-            Volume.teaspoon(1.0),
+            const Volume.teaspoon(1.0),
           );
           expect(
             tablespoon.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerTablespoon),
+            const Volume.teaspoon(teaspoonPerTablespoon),
           );
           expect(
             fluidOunce.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerFluidOunce),
+            const Volume.teaspoon(teaspoonPerFluidOunce),
           );
           expect(
             cup.toTeaspoon(),
-            Volume.teaspoon(teaspoonPerCup),
+            const Volume.teaspoon(teaspoonPerCup),
           );
         },
       );
@@ -651,31 +651,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toTablespoon(),
-            Volume.tablespoon(tablespoonPerCubicCentimeter),
+            const Volume.tablespoon(tablespoonPerCubicCentimeter),
           );
           expect(
             milliliter.toTablespoon(),
-            Volume.tablespoon(tablespoonPerMilliliter),
+            const Volume.tablespoon(tablespoonPerMilliliter),
           );
           expect(
             liter.toTablespoon(),
-            Volume.tablespoon(tablespoonPerLiter),
+            const Volume.tablespoon(tablespoonPerLiter),
           );
           expect(
             teaspoon.toTablespoon(),
-            Volume.tablespoon(tablespoonPerTeaspoon),
+            const Volume.tablespoon(tablespoonPerTeaspoon),
           );
           expect(
             tablespoon.toTablespoon(),
-            Volume.tablespoon(1.0),
+            const Volume.tablespoon(1.0),
           );
           expect(
             fluidOunce.toTablespoon(),
-            Volume.tablespoon(tablespoonPerFluidOunce),
+            const Volume.tablespoon(tablespoonPerFluidOunce),
           );
           expect(
             cup.toTablespoon(),
-            Volume.tablespoon(tablespoonPerCup),
+            const Volume.tablespoon(tablespoonPerCup),
           );
         },
       );
@@ -685,31 +685,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerCubicCentimeter),
+            const Volume.fluidOunce(fluidOuncePerCubicCentimeter),
           );
           expect(
             milliliter.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerMilliliter),
+            const Volume.fluidOunce(fluidOuncePerMilliliter),
           );
           expect(
             liter.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerLiter),
+            const Volume.fluidOunce(fluidOuncePerLiter),
           );
           expect(
             teaspoon.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerTeaspoon),
+            const Volume.fluidOunce(fluidOuncePerTeaspoon),
           );
           expect(
             tablespoon.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerTablespoon),
+            const Volume.fluidOunce(fluidOuncePerTablespoon),
           );
           expect(
             fluidOunce.toFluidOunce(),
-            Volume.fluidOunce(1.0),
+            const Volume.fluidOunce(1.0),
           );
           expect(
             cup.toFluidOunce(),
-            Volume.fluidOunce(fluidOuncePerCup),
+            const Volume.fluidOunce(fluidOuncePerCup),
           );
         },
       );
@@ -719,31 +719,31 @@ void main() {
         () {
           expect(
             cubicCentimeter.toCup(),
-            Volume.cup(cupPerCubicCentimeter),
+            const Volume.cup(cupPerCubicCentimeter),
           );
           expect(
             milliliter.toCup(),
-            Volume.cup(cupPerMilliliter),
+            const Volume.cup(cupPerMilliliter),
           );
           expect(
             liter.toCup(),
-            Volume.cup(cupPerLiter),
+            const Volume.cup(cupPerLiter),
           );
           expect(
             teaspoon.toCup(),
-            Volume.cup(cupPerTeaspoon),
+            const Volume.cup(cupPerTeaspoon),
           );
           expect(
             tablespoon.toCup(),
-            Volume.cup(cupPerTablespoon),
+            const Volume.cup(cupPerTablespoon),
           );
           expect(
             fluidOunce.toCup(),
-            Volume.cup(cupPerFluidOunce),
+            const Volume.cup(cupPerFluidOunce),
           );
           expect(
             cup.toCup(),
-            Volume.cup(1.0),
+            const Volume.cup(1.0),
           );
         },
       );
