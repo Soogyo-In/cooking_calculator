@@ -5,13 +5,13 @@ void main() {
   test(
     'Get abbreviation of volume unit',
     () {
-      expect(CubicCentimeter.abbreviation, 'cc');
-      expect(Milliliter.abbreviation, 'mL');
-      expect(Liter.abbreviation, 'L');
-      expect(Teaspoon.abbreviation, 'tsp');
-      expect(Tablespoon.abbreviation, 'Tbsp');
-      expect(FluidOunce.abbreviation, 'fl.oz');
-      expect(Cup.abbreviation, 'cp');
+      expect(CubicCentimeter.symbol, 'cc');
+      expect(Milliliter.symbol, 'mL');
+      expect(Liter.symbol, 'L');
+      expect(Teaspoon.symbol, 'tsp');
+      expect(Tablespoon.symbol, 'Tbsp');
+      expect(FluidOunce.symbol, 'fl.oz');
+      expect(Cup.symbol, 'cp');
     },
   );
 

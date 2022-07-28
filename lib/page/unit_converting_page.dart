@@ -9,11 +9,11 @@ abstract class AmountUnit<T extends Amount> {
 }
 
 enum MassUnit implements AmountUnit {
-  milligram(Milligram.abbreviation),
-  gram(Gram.abbreviation),
-  kilogram(Kilogram.abbreviation),
-  ounce(Ounce.abbreviation),
-  pound(Pound.abbreviation);
+  milligram(Milligram.symbol),
+  gram(Gram.symbol),
+  kilogram(Kilogram.symbol),
+  ounce(Ounce.symbol),
+  pound(Pound.symbol);
 
   @override
   final String abbreviation;
@@ -38,13 +38,13 @@ enum MassUnit implements AmountUnit {
 }
 
 enum VolumeUnit implements AmountUnit {
-  cubicCentimeter(CubicCentimeter.abbreviation),
-  milliliter(Milliliter.abbreviation),
-  liter(Liter.abbreviation),
-  teaspoon(Teaspoon.abbreviation),
-  tablespoon(Tablespoon.abbreviation),
-  fluidOunce(FluidOunce.abbreviation),
-  cup(Cup.abbreviation);
+  cubicCentimeter(CubicCentimeter.symbol),
+  milliliter(Milliliter.symbol),
+  liter(Liter.symbol),
+  teaspoon(Teaspoon.symbol),
+  tablespoon(Tablespoon.symbol),
+  fluidOunce(FluidOunce.symbol),
+  cup(Cup.symbol);
 
   @override
   final String abbreviation;

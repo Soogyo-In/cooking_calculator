@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class Liter with _$Liter implements Volume {
-  static const abbreviation = 'L';
+  static const symbol = 'L';
 
   const Liter._();
 
@@ -44,5 +44,5 @@ class Liter with _$Liter implements Volume {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }

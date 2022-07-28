@@ -2,7 +2,7 @@ part of 'mass.dart';
 
 @freezed
 class Gram with _$Gram implements Mass {
-  static const abbreviation = 'g';
+  static const symbol = 'g';
 
   const Gram._();
 
@@ -37,5 +37,5 @@ class Gram with _$Gram implements Mass {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }

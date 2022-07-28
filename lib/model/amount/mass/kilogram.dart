@@ -2,7 +2,7 @@ part of 'mass.dart';
 
 @freezed
 class Kilogram with _$Kilogram implements Mass {
-  static const abbreviation = 'kg';
+  static const symbol = 'kg';
 
   const Kilogram._();
 
@@ -37,5 +37,5 @@ class Kilogram with _$Kilogram implements Mass {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }

@@ -1,8 +1,6 @@
 export 'mass/mass.dart';
 export 'volume/volume.dart';
 
-class NegativeValueException implements Exception {}
-
 abstract class Amount {
   const Amount();
 

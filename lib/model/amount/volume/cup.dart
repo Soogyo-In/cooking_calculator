@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class Cup with _$Cup implements Volume {
-  static const abbreviation = 'cp';
+  static const symbol = 'cp';
 
   const Cup._();
 
@@ -44,5 +44,5 @@ class Cup with _$Cup implements Volume {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }

@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class Tablespoon with _$Tablespoon implements Volume {
-  static const abbreviation = 'Tbsp';
+  static const symbol = 'Tbsp';
 
   const Tablespoon._();
 
@@ -46,5 +46,5 @@ class Tablespoon with _$Tablespoon implements Volume {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }

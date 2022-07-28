@@ -36,15 +36,15 @@ const kilogramPerPound = kilogramPerGram * gramPerPound;
 const ouncePerPound = ouncePerGram * gramPerPound;
 
 abstract class Mass implements Amount {
-  factory Mass.milligram(double value) = Milligram;
+  const factory Mass.milligram(double value) = Milligram;
 
-  factory Mass.gram(double value) = Gram;
+  const factory Mass.gram(double value) = Gram;
 
-  factory Mass.kilogram(double value) = Kilogram;
+  const factory Mass.kilogram(double value) = Kilogram;
 
-  factory Mass.ounce(double value) = Ounce;
+  const factory Mass.ounce(double value) = Ounce;
 
-  factory Mass.pound(double value) = Pound;
+  const factory Mass.pound(double value) = Pound;
 
   Milligram toMilligram();
 

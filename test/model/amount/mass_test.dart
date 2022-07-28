@@ -5,11 +5,11 @@ void main() {
   test(
     'Get abbreviation of mass unit',
     () {
-      expect(Milligram.abbreviation, 'mg');
-      expect(Gram.abbreviation, 'g');
-      expect(Kilogram.abbreviation, 'kg');
-      expect(Ounce.abbreviation, 'oz');
-      expect(Pound.abbreviation, 'lb');
+      expect(Milligram.symbol, 'mg');
+      expect(Gram.symbol, 'g');
+      expect(Kilogram.symbol, 'kg');
+      expect(Ounce.symbol, 'oz');
+      expect(Pound.symbol, 'lb');
     },
   );
 

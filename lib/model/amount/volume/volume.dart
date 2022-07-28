@@ -72,19 +72,19 @@ const tablespoonPerCup = tablespoonPerMilliliter * milliliterPerCup;
 const fluidOuncePerCup = fluidOuncePerMilliliter * milliliterPerCup;
 
 abstract class Volume implements Amount {
-  factory Volume.cubicCentimeter(double value) = CubicCentimeter;
+  const factory Volume.cubicCentimeter(double value) = CubicCentimeter;
 
-  factory Volume.milliliter(double value) = Milliliter;
+  const factory Volume.milliliter(double value) = Milliliter;
 
-  factory Volume.liter(double value) = Liter;
+  const factory Volume.liter(double value) = Liter;
 
-  factory Volume.teaspoon(double value) = Teaspoon;
+  const factory Volume.teaspoon(double value) = Teaspoon;
 
-  factory Volume.tablespoon(double value) = Tablespoon;
+  const factory Volume.tablespoon(double value) = Tablespoon;
 
-  factory Volume.fluidOunce(double value) = FluidOunce;
+  const factory Volume.fluidOunce(double value) = FluidOunce;
 
-  factory Volume.cup(double value) = Cup;
+  const factory Volume.cup(double value) = Cup;
 
   CubicCentimeter toCubicCentimeter();
 

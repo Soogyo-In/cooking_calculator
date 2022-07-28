@@ -2,7 +2,7 @@ part of 'mass.dart';
 
 @freezed
 class Ounce with _$Ounce implements Mass {
-  static const abbreviation = 'oz';
+  static const symbol = 'oz';
 
   const Ounce._();
 
@@ -37,5 +37,5 @@ class Ounce with _$Ounce implements Mass {
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }
