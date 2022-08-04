@@ -1,3 +1,4 @@
+import 'package:cooking_calulator/model/util/util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../amount.dart';

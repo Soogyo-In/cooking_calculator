@@ -36,6 +36,6 @@ class Kilogram with _$Kilogram implements Mass {
   Kilogram operator /(num divisor) => Kilogram(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $symbol';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

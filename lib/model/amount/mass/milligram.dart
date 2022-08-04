@@ -38,6 +38,6 @@ class Milligram with _$Milligram implements Mass {
   Milligram operator /(num divisor) => Milligram(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $symbol';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

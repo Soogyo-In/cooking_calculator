@@ -45,6 +45,6 @@ class Tablespoon with _$Tablespoon implements Volume {
   Tablespoon operator /(num divisor) => Tablespoon(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $symbol';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

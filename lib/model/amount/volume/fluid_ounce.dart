@@ -45,6 +45,6 @@ class FluidOunce with _$FluidOunce implements Volume {
   FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $symbol';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }
