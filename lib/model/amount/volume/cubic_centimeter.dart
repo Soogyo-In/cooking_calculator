@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class CubicCentimeter with _$CubicCentimeter implements Volume {
-  static const abbreviation = 'cc';
+  static const symbol = 'cc';
 
   const CubicCentimeter._();
 
@@ -45,6 +45,6 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
   CubicCentimeter operator /(num divisor) => CubicCentimeter(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

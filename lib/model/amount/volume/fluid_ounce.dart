@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class FluidOunce with _$FluidOunce implements Volume {
-  static const abbreviation = 'fl.oz';
+  static const symbol = 'fl.oz';
 
   const FluidOunce._();
 
@@ -45,6 +45,6 @@ class FluidOunce with _$FluidOunce implements Volume {
   FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

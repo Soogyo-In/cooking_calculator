@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class Milliliter with _$Milliliter implements Volume {
-  static const abbreviation = 'mL';
+  static const symbol = 'mL';
 
   const Milliliter._();
 
@@ -45,6 +45,6 @@ class Milliliter with _$Milliliter implements Volume {
   Milliliter operator /(num divisor) => Milliliter(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }
