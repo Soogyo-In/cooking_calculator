@@ -2,7 +2,7 @@ part of 'volume.dart';
 
 @freezed
 class Teaspoon with _$Teaspoon implements Volume {
-  static const abbreviation = 'tsp';
+  static const symbol = 'tsp';
 
   const Teaspoon._();
 
@@ -45,6 +45,6 @@ class Teaspoon with _$Teaspoon implements Volume {
   Teaspoon operator /(num divisor) => Teaspoon(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

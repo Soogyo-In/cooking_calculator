@@ -2,7 +2,7 @@ part of 'mass.dart';
 
 @freezed
 class Milligram with _$Milligram implements Mass {
-  static const abbreviation = 'mg';
+  static const symbol = 'mg';
 
   const Milligram._();
 
@@ -38,6 +38,6 @@ class Milligram with _$Milligram implements Mass {
   Milligram operator /(num divisor) => Milligram(value / divisor);
 
   @override
-  String toStringAsFixed(int fractionDigits) =>
-      '${value.toStringAsFixed(fractionDigits)} $abbreviation';
+  String toZeroBoundedStringAsFixed(int fractionDigits) =>
+      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

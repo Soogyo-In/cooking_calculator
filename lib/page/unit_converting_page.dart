@@ -9,11 +9,11 @@ abstract class AmountUnit<T extends Amount> {
 }
 
 enum MassUnit implements AmountUnit {
-  milligram(Milligram.abbreviation),
-  gram(Gram.abbreviation),
-  kilogram(Kilogram.abbreviation),
-  ounce(Ounce.abbreviation),
-  pound(Pound.abbreviation);
+  milligram(Milligram.symbol),
+  gram(Gram.symbol),
+  kilogram(Kilogram.symbol),
+  ounce(Ounce.symbol),
+  pound(Pound.symbol);
 
   @override
   final String abbreviation;
@@ -38,13 +38,13 @@ enum MassUnit implements AmountUnit {
 }
 
 enum VolumeUnit implements AmountUnit {
-  cubicCentimeter(CubicCentimeter.abbreviation),
-  milliliter(Milliliter.abbreviation),
-  liter(Liter.abbreviation),
-  teaspoon(Teaspoon.abbreviation),
-  tablespoon(Tablespoon.abbreviation),
-  fluidOunce(FluidOunce.abbreviation),
-  cup(Cup.abbreviation);
+  cubicCentimeter(CubicCentimeter.symbol),
+  milliliter(Milliliter.symbol),
+  liter(Liter.symbol),
+  teaspoon(Teaspoon.symbol),
+  tablespoon(Tablespoon.symbol),
+  fluidOunce(FluidOunce.symbol),
+  cup(Cup.symbol);
 
   @override
   final String abbreviation;
@@ -126,7 +126,7 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
     super.key,
   });
 
-  static mass({
+  static UnitConverter<MassUnit> mass({
     required StateProvider<MassUnit> fromUnitProvider,
     required StateProvider<MassUnit> toUnitProvider,
     required StateProvider<double?> valueProvider,
@@ -139,7 +139,7 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
         key: key,
       );
 
-  static volume({
+  static UnitConverter<VolumeUnit> volume({
     required StateProvider<VolumeUnit> fromUnitProvider,
     required StateProvider<VolumeUnit> toUnitProvider,
     required StateProvider<double?> valueProvider,
@@ -229,15 +229,15 @@ class _MassUnitConverter extends UnitConverter<MassUnit> {
 
     switch (ref.watch(toUnitProvider)) {
       case MassUnit.milligram:
-        return fromValue.toMilligram().toStringAsFixed(2);
+        return fromValue.toMilligram().toZeroBoundedStringAsFixed(2);
       case MassUnit.gram:
-        return fromValue.toGram().toStringAsFixed(2);
+        return fromValue.toGram().toZeroBoundedStringAsFixed(2);
       case MassUnit.kilogram:
-        return fromValue.toKilogram().toStringAsFixed(2);
+        return fromValue.toKilogram().toZeroBoundedStringAsFixed(2);
       case MassUnit.ounce:
-        return fromValue.toOunce().toStringAsFixed(2);
+        return fromValue.toOunce().toZeroBoundedStringAsFixed(2);
       case MassUnit.pound:
-        return fromValue.toPound().toStringAsFixed(2);
+        return fromValue.toPound().toZeroBoundedStringAsFixed(2);
     }
   }
 }
@@ -259,19 +259,19 @@ class _VolumeUnitConverter extends UnitConverter<VolumeUnit> {
 
     switch (ref.watch(toUnitProvider)) {
       case VolumeUnit.cubicCentimeter:
-        return fromValue.toCubicCentimeter().toStringAsFixed(2);
+        return fromValue.toCubicCentimeter().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.milliliter:
-        return fromValue.toMilliliter().toStringAsFixed(2);
+        return fromValue.toMilliliter().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.liter:
-        return fromValue.toLiter().toStringAsFixed(2);
+        return fromValue.toLiter().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.teaspoon:
-        return fromValue.toTeaspoon().toStringAsFixed(2);
+        return fromValue.toTeaspoon().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.tablespoon:
-        return fromValue.toTablespoon().toStringAsFixed(2);
+        return fromValue.toTablespoon().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.fluidOunce:
-        return fromValue.toFluidOunce().toStringAsFixed(2);
+        return fromValue.toFluidOunce().toZeroBoundedStringAsFixed(2);
       case VolumeUnit.cup:
-        return fromValue.toCup().toStringAsFixed(2);
+        return fromValue.toCup().toZeroBoundedStringAsFixed(2);
     }
   }
 }
