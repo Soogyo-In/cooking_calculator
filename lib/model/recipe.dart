@@ -7,7 +7,7 @@ import 'ingredient.dart';
 part 'recipe.freezed.dart';
 
 @freezed
-class Recipe<T extends Amount> with _$Recipe {
+class Recipe<T extends Amount> with _$Recipe<T> {
   const Recipe._();
 
   const factory Recipe({

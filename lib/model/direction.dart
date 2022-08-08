@@ -7,7 +7,7 @@ import 'temperature/temperature.dart';
 part 'direction.freezed.dart';
 
 @freezed
-class Direction<T extends Amount> with _$Direction {
+class Direction<T extends Amount> with _$Direction<T> {
   const factory Direction({
     required String description,
     @Default({}) Map<Ingredient, T> amountByIngredient,
