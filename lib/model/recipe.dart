@@ -42,11 +42,7 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     final calculated = <Ingredient, Amount>{};
 
     amountByIngredient.forEach((ingredient, amount) {
-      calculated.update(
-        ingredient,
-        (value) => value + (amount * (servings / this.servings)),
-        ifAbsent: () => amount * (servings / this.servings),
-      );
+      calculated[ingredient] = amount * (servings / this.servings);
     });
 
     return calculated;
