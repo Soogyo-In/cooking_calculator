@@ -33,6 +33,22 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     return merged;
   }
 
+  Map<Ingredient, double> get countByIngredient {
+    final merged = <Ingredient, double>{};
+
+    for (final direction in directions) {
+      direction.countByIngredient.forEach((ingredient, amount) {
+        merged.update(
+          ingredient,
+          (value) => value + amount,
+          ifAbsent: () => amount,
+        );
+      });
+    }
+
+    return merged;
+  }
+
   Duration get time => directions.fold(
         const Duration(),
         (time, direction) => time + direction.time,
@@ -42,6 +58,16 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     final calculated = <Ingredient, Amount>{};
 
     amountByIngredient.forEach((ingredient, amount) {
+      calculated[ingredient] = amount * (servings / this.servings);
+    });
+
+    return calculated;
+  }
+
+  Map<Ingredient, double> getCountByIngredientServingsFor(int servings) {
+    final calculated = <Ingredient, double>{};
+
+    countByIngredient.forEach((ingredient, amount) {
       calculated[ingredient] = amount * (servings / this.servings);
     });
 
