@@ -1,3 +1,4 @@
+import 'package:cooking_calulator/page/recipe_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,9 +13,33 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Cooking Calculator',
-      home: UnitConvertingPage(),
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Menu'),
+            ),
+            body: Column(
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const UnitConvertingPage(),
+                  )),
+                  child: const Text('Unit converter'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const RecipeEditPage(),
+                  )),
+                  child: const Text('Recipe editor'),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
