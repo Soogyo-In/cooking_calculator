@@ -11,6 +11,7 @@ class Direction<T extends Amount> with _$Direction<T> {
   const factory Direction({
     required String description,
     @Default({}) Map<Ingredient, T> amountByIngredient,
+    @Default({}) Map<Ingredient, double> countByIngredient,
     @Default(Duration()) Duration time,
     Temperature? temperature,
   }) = _Direction;
