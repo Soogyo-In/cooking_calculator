@@ -2,7 +2,7 @@ import 'package:cooking_calulator/model/model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  late Recipe<Mass> recipe;
+  late Recipe recipe;
 
   setUp(() {
     recipe = Recipe(
@@ -11,45 +11,63 @@ void main() {
       directions: [
         Direction(
           description: 'step 1',
-          amountByIngredient: {
-            const Ingredient(name: 'ingredient 1'): const Mass.gram(200.0),
-            const Ingredient(name: 'ingredient 2'): const Mass.ounce(2.0),
+          massByIngredient: {
+            const Ingredient(name: 'mass 1'): const Mass.gram(200.0),
+            const Ingredient(name: 'mass 2'): const Mass.ounce(2.0),
+          },
+          volumeByIngredient: {
+            const Ingredient(name: 'volume 1'): const Volume.liter(200.0),
+            const Ingredient(name: 'volume 2'): const Volume.teaspoon(2.0),
           },
           countByIngredient: {
-            const Ingredient(name: 'ingredient 4'): const Count(1.0),
+            const Ingredient(name: 'count 1'): const Count(1.0),
+            const Ingredient(name: 'count 2'): const Count(2.0),
           },
           time: const Duration(minutes: 1),
         ),
         Direction(
           description: 'step 2',
-          amountByIngredient: {
-            const Ingredient(name: 'ingredient 1'): const Mass.milligram(200.0),
+          massByIngredient: {
+            const Ingredient(name: 'mass 1'): const Mass.milligram(200.0),
+          },
+          volumeByIngredient: {
+            const Ingredient(name: 'volume 1'): const Volume.milliliter(200.0),
           },
           countByIngredient: {
-            const Ingredient(name: 'ingredient 3'): const Count(1.0),
+            const Ingredient(name: 'count 1'): const Count(1.0),
           },
           time: const Duration(days: 1),
         ),
-        Direction(
+        const Direction(
           description: 'step 3',
-          countByIngredient: {
-            const Ingredient(name: 'ingredient 3'): const Count(1.0),
-          },
-          time: const Duration(minutes: 25),
-          temperature: const Temperature.celsius(170.0),
+          time: Duration(minutes: 25),
+          temperature: Temperature.celsius(170.0),
         ),
       ],
     );
   });
 
   test(
-    'Recipe provides whole amounts of each ingredients',
+    'Recipe provides whole masses of each ingredients',
     () {
       expect(
-        recipe.amountByIngredient,
+        recipe.massByIngredient,
         {
-          const Ingredient(name: 'ingredient 1'): const Mass.gram(200.2),
-          const Ingredient(name: 'ingredient 2'): const Mass.ounce(2.0),
+          const Ingredient(name: 'mass 1'): const Mass.gram(200.2),
+          const Ingredient(name: 'mass 2'): const Mass.ounce(2.0),
+        },
+      );
+    },
+  );
+
+  test(
+    'Recipe provides whole volumes of each ingredients',
+    () {
+      expect(
+        recipe.volumeByIngredient,
+        {
+          const Ingredient(name: 'volume 1'): const Volume.liter(200.2),
+          const Ingredient(name: 'volume 2'): const Volume.teaspoon(2.0),
         },
       );
     },
@@ -61,8 +79,8 @@ void main() {
       expect(
         recipe.countByIngredient,
         {
-          const Ingredient(name: 'ingredient 3'): const Count(2.0),
-          const Ingredient(name: 'ingredient 4'): const Count(1.0),
+          const Ingredient(name: 'count 1'): const Count(2.0),
+          const Ingredient(name: 'count 2'): const Count(2.0),
         },
       );
     },
@@ -79,20 +97,40 @@ void main() {
   );
 
   test(
-    'Recipe provides amounts of each ingredients for servings',
+    'Recipe provides masses of each ingredients for servings',
     () {
       expect(
-        recipe.getAmountByIngredientServingsFor(1),
+        recipe.getMassByIngredientServingsFor(1),
         {
-          const Ingredient(name: 'ingredient 1'): const Mass.gram(50.05),
-          const Ingredient(name: 'ingredient 2'): const Mass.ounce(0.5),
+          const Ingredient(name: 'mass 1'): const Mass.gram(50.05),
+          const Ingredient(name: 'mass 2'): const Mass.ounce(0.5),
         },
       );
       expect(
-        recipe.getAmountByIngredientServingsFor(8),
+        recipe.getMassByIngredientServingsFor(8),
         {
-          const Ingredient(name: 'ingredient 1'): const Mass.gram(400.4),
-          const Ingredient(name: 'ingredient 2'): const Mass.ounce(4.0),
+          const Ingredient(name: 'mass 1'): const Mass.gram(400.4),
+          const Ingredient(name: 'mass 2'): const Mass.ounce(4.0),
+        },
+      );
+    },
+  );
+
+  test(
+    'Recipe provides volumes of each ingredients for servings',
+    () {
+      expect(
+        recipe.getVolumeByIngredientServingsFor(1),
+        {
+          const Ingredient(name: 'volume 1'): const Volume.liter(50.05),
+          const Ingredient(name: 'volume 2'): const Volume.teaspoon(0.5),
+        },
+      );
+      expect(
+        recipe.getVolumeByIngredientServingsFor(8),
+        {
+          const Ingredient(name: 'volume 1'): const Volume.liter(400.4),
+          const Ingredient(name: 'volume 2'): const Volume.teaspoon(4.0),
         },
       );
     },
@@ -104,15 +142,15 @@ void main() {
       expect(
         recipe.getCountByIngredientServingsFor(1),
         {
-          const Ingredient(name: 'ingredient 3'): const Count(0.5),
-          const Ingredient(name: 'ingredient 4'): const Count(0.25),
+          const Ingredient(name: 'count 1'): const Count(0.5),
+          const Ingredient(name: 'count 2'): const Count(0.5),
         },
       );
       expect(
         recipe.getCountByIngredientServingsFor(8),
         {
-          const Ingredient(name: 'ingredient 3'): const Count(4.0),
-          const Ingredient(name: 'ingredient 4'): const Count(2.0),
+          const Ingredient(name: 'count 1'): const Count(4.0),
+          const Ingredient(name: 'count 2'): const Count(4.0),
         },
       );
     },

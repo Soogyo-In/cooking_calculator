@@ -7,25 +7,41 @@ import 'ingredient.dart';
 part 'recipe.freezed.dart';
 
 @freezed
-class Recipe<T extends Amount> with _$Recipe<T> {
+class Recipe with _$Recipe {
   const Recipe._();
 
   const factory Recipe({
     required String name,
-    required List<Direction<T>> directions,
+    required List<Direction> directions,
     @Default(1) int servings,
     @Default('') String description,
   }) = _Recipe;
 
-  Map<Ingredient, Amount> get amountByIngredient {
-    final merged = <Ingredient, Amount>{};
+  Map<Ingredient, Mass> get massByIngredient {
+    final merged = <Ingredient, Mass>{};
 
     for (final direction in directions) {
-      direction.amountByIngredient.forEach((ingredient, amount) {
+      direction.massByIngredient.forEach((ingredient, mass) {
         merged.update(
           ingredient,
-          (value) => value + amount,
-          ifAbsent: () => amount,
+          (value) => (value + mass) as Mass,
+          ifAbsent: () => mass,
+        );
+      });
+    }
+
+    return merged;
+  }
+
+  Map<Ingredient, Volume> get volumeByIngredient {
+    final merged = <Ingredient, Volume>{};
+
+    for (final direction in directions) {
+      direction.volumeByIngredient.forEach((ingredient, volume) {
+        merged.update(
+          ingredient,
+          (value) => (value + volume) as Volume,
+          ifAbsent: () => volume,
         );
       });
     }
@@ -37,11 +53,11 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     final merged = <Ingredient, Count>{};
 
     for (final direction in directions) {
-      direction.countByIngredient.forEach((ingredient, amount) {
+      direction.countByIngredient.forEach((ingredient, count) {
         merged.update(
           ingredient,
-          (value) => value + amount,
-          ifAbsent: () => amount,
+          (value) => value + count,
+          ifAbsent: () => count,
         );
       });
     }
@@ -54,11 +70,21 @@ class Recipe<T extends Amount> with _$Recipe<T> {
         (time, direction) => time + direction.time,
       );
 
-  Map<Ingredient, Amount> getAmountByIngredientServingsFor(int servings) {
-    final calculated = <Ingredient, Amount>{};
+  Map<Ingredient, Mass> getMassByIngredientServingsFor(int servings) {
+    final calculated = <Ingredient, Mass>{};
 
-    amountByIngredient.forEach((ingredient, amount) {
-      calculated[ingredient] = amount * (servings / this.servings);
+    massByIngredient.forEach((ingredient, mass) {
+      calculated[ingredient] = (mass * (servings / this.servings)) as Mass;
+    });
+
+    return calculated;
+  }
+
+  Map<Ingredient, Volume> getVolumeByIngredientServingsFor(int servings) {
+    final calculated = <Ingredient, Volume>{};
+
+    volumeByIngredient.forEach((ingredient, volume) {
+      calculated[ingredient] = (volume * (servings / this.servings)) as Volume;
     });
 
     return calculated;
