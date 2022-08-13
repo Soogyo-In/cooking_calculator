@@ -33,8 +33,8 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     return merged;
   }
 
-  Map<Ingredient, double> get countByIngredient {
-    final merged = <Ingredient, double>{};
+  Map<Ingredient, Count> get countByIngredient {
+    final merged = <Ingredient, Count>{};
 
     for (final direction in directions) {
       direction.countByIngredient.forEach((ingredient, amount) {
@@ -64,8 +64,8 @@ class Recipe<T extends Amount> with _$Recipe<T> {
     return calculated;
   }
 
-  Map<Ingredient, double> getCountByIngredientServingsFor(int servings) {
-    final calculated = <Ingredient, double>{};
+  Map<Ingredient, Count> getCountByIngredientServingsFor(int servings) {
+    final calculated = <Ingredient, Count>{};
 
     countByIngredient.forEach((ingredient, amount) {
       calculated[ingredient] = amount * (servings / this.servings);
