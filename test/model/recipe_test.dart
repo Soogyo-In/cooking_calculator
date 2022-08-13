@@ -16,7 +16,7 @@ void main() {
             const Ingredient(name: 'ingredient 2'): const Mass.ounce(2.0),
           },
           countByIngredient: {
-            const Ingredient(name: 'ingredient 4'): 1,
+            const Ingredient(name: 'ingredient 4'): const Count(1.0),
           },
           time: const Duration(minutes: 1),
         ),
@@ -26,14 +26,14 @@ void main() {
             const Ingredient(name: 'ingredient 1'): const Mass.milligram(200.0),
           },
           countByIngredient: {
-            const Ingredient(name: 'ingredient 3'): 1,
+            const Ingredient(name: 'ingredient 3'): const Count(1.0),
           },
           time: const Duration(days: 1),
         ),
         Direction(
           description: 'step 3',
           countByIngredient: {
-            const Ingredient(name: 'ingredient 3'): 1,
+            const Ingredient(name: 'ingredient 3'): const Count(1.0),
           },
           time: const Duration(minutes: 25),
           temperature: const Temperature.celsius(170.0),
@@ -61,8 +61,8 @@ void main() {
       expect(
         recipe.countByIngredient,
         {
-          const Ingredient(name: 'ingredient 3'): 2.0,
-          const Ingredient(name: 'ingredient 4'): 1.0,
+          const Ingredient(name: 'ingredient 3'): const Count(2.0),
+          const Ingredient(name: 'ingredient 4'): const Count(1.0),
         },
       );
     },
@@ -104,15 +104,15 @@ void main() {
       expect(
         recipe.getCountByIngredientServingsFor(1),
         {
-          const Ingredient(name: 'ingredient 3'): 0.5,
-          const Ingredient(name: 'ingredient 4'): 0.25,
+          const Ingredient(name: 'ingredient 3'): const Count(0.5),
+          const Ingredient(name: 'ingredient 4'): const Count(0.25),
         },
       );
       expect(
         recipe.getCountByIngredientServingsFor(8),
         {
-          const Ingredient(name: 'ingredient 3'): 4,
-          const Ingredient(name: 'ingredient 4'): 2,
+          const Ingredient(name: 'ingredient 3'): const Count(4.0),
+          const Ingredient(name: 'ingredient 4'): const Count(2.0),
         },
       );
     },
