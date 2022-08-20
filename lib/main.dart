@@ -1,3 +1,4 @@
+import 'package:cooking_calulator/recipe_resource.dart';
 import 'package:cooking_calulator/page/recipe_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +32,9 @@ class App extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const RecipeEditPage(),
+                    builder: (context) => RecipeEditPage(
+                      recipe: slowRoasetedPorkBellyRecipe,
+                    ),
                   )),
                   child: const Text('Recipe editor'),
                 ),

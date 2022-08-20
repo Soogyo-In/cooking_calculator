@@ -1,3 +1,5 @@
+export 'portionizer.dart';
+
 extension DoubleExtension on double {
   double roundAt(int fractionDigits) {
     var result = this;
