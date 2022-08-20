@@ -98,9 +98,138 @@ class RecipeEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Recipe editor')),
-      body: Column(
-        children: [],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            Text(_recipe.name),
+            const SizedBox(height: 8.0),
+            Text(_recipe.description),
+            const SizedBox(height: 8.0),
+            Text('servings: ${_recipe.servings.toString()}'),
+            if (_recipe.time != Duration.zero) ...[
+              const SizedBox(height: 8.0),
+              _TimeText(_recipe.time),
+            ],
+            const SizedBox(height: 8.0),
+            _IngredientList(
+              countByIngredient: _recipe.countByIngredient,
+              massByIngredient: _recipe.massByIngredient,
+              volumeByIngredient: _recipe.volumeByIngredient,
+            ),
+            const SizedBox(height: 8.0),
+            ..._recipe.directions.map(
+              (direction) => Container(
+                margin: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: _DirectionDetail(direction),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _TimeText extends StatelessWidget {
+  final Duration time;
+
+  const _TimeText(this.time);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringBuffer = StringBuffer();
+    final days = time.inDays;
+    final hours = time.inHours;
+    final minutes = time.inMinutes;
+
+    if (days > 0) stringBuffer.write('$days d ');
+    if (hours > 0) stringBuffer.write('${hours % Duration.hoursPerDay} h ');
+    if (minutes > 0) {
+      stringBuffer.write('${minutes % Duration.minutesPerHour} m');
+    }
+
+    return Text('time: ${stringBuffer.toString()}');
+  }
+}
+
+class _IngredientList extends StatelessWidget {
+  final Map<Ingredient, Mass> massByIngredient;
+  final Map<Ingredient, Volume> volumeByIngredient;
+  final Map<Ingredient, Count> countByIngredient;
+
+  const _IngredientList({
+    this.massByIngredient = const {},
+    this.volumeByIngredient = const {},
+    this.countByIngredient = const {},
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ingredientList = <Widget>[];
+
+    countByIngredient.forEach((ingredient, count) {
+      final stringBuffer = StringBuffer(ingredient.name);
+      final rounded = count.roundedAt(2);
+      if (rounded.value > 0.0) {
+        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
+      }
+
+      ingredientList.add(Text(stringBuffer.toString()));
+    });
+    massByIngredient.forEach((ingredient, mass) {
+      final stringBuffer = StringBuffer(ingredient.name);
+      final rounded = mass.roundedAt(2);
+      if (rounded.value > 0.0) {
+        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
+      }
+
+      ingredientList.add(Text(stringBuffer.toString()));
+    });
+    volumeByIngredient.forEach((ingredient, volume) {
+      final stringBuffer = StringBuffer(ingredient.name);
+      final rounded = volume.roundedAt(2);
+      if (rounded.value > 0.0) {
+        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
+      }
+
+      ingredientList.add(Text(stringBuffer.toString()));
+    });
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: ingredientList,
+    );
+  }
+}
+
+class _DirectionDetail extends StatelessWidget {
+  final Direction direction;
+
+  const _DirectionDetail(this.direction);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _IngredientList(
+          countByIngredient: direction.countByIngredient,
+          massByIngredient: direction.massByIngredient,
+          volumeByIngredient: direction.volumeByIngredient,
+        ),
+        if (direction.time != Duration.zero) ...[
+          const SizedBox(height: 8.0),
+          _TimeText(direction.time),
+        ],
+        const SizedBox(height: 8.0),
+        Text(direction.description),
+      ],
     );
   }
 }

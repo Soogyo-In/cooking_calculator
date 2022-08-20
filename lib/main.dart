@@ -31,7 +31,7 @@ class App extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RecipeEditPage(),
+                    builder: (context) => const RecipeEditPage(),
                   )),
                   child: const Text('Recipe editor'),
                 ),
