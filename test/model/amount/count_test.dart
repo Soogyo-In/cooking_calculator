@@ -5,14 +5,14 @@ void main() {
   test(
     'Get symbol of count unit',
     () {
-      expect(Count.symbol, 'pcs');
+      expect(countSymbol, 'pcs');
     },
   );
 
   test(
-    'String expression',
+    'Get Count object rounded value at specified fraction digits',
     () {
-      expect(const Count(1.555).toZeroBoundedStringAsFixed(2), '1.56 pcs');
+      expect(const Count(1.55).roundedAt(2), const Count(1.6));
     },
   );
 

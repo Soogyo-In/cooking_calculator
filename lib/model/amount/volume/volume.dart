@@ -12,6 +12,14 @@ part 'tablespoon.dart';
 part 'teaspoon.dart';
 part 'volume.freezed.dart';
 
+const cubicCentimeterSymbol = 'cc';
+const cupSymbol = 'cp';
+const fluidOunceSymbol = 'fl.oz';
+const literSymbol = 'L';
+const milliliterSymbol = 'mL';
+const tablespoonSymbol = 'Tbsp';
+const teaspoonSymbol = 'tsp';
+
 const milliliterPerLiter = 1000.0;
 const milliliterPerTeaspoon = 4.92892159375;
 const milliliterPerTablespoon = 14.78676478125;

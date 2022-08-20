@@ -7,6 +7,10 @@ abstract class Amount {
 
   double get value;
 
+  String get symbol;
+
+  Amount roundedAt(int fractionDigits);
+
   Amount operator +(covariant Amount other);
 
   Amount operator -(covariant Amount other);
@@ -14,6 +18,9 @@ abstract class Amount {
   Amount operator *(num value);
 
   Amount operator /(num divisor);
+}
 
-  String toZeroBoundedStringAsFixed(int fractionDigits);
+extension AmountStringifier on Amount {
+  String toStringWithSymbol() =>
+      value % 1.0 == 0.0 ? '${value.truncate()} $symbol' : '$value $symbol';
 }

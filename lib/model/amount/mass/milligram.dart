@@ -2,7 +2,8 @@ part of 'mass.dart';
 
 @freezed
 class Milligram with _$Milligram implements Mass {
-  static const symbol = 'mg';
+  @override
+  final symbol = milligramSymbol;
 
   const Milligram._();
 
@@ -24,6 +25,10 @@ class Milligram with _$Milligram implements Mass {
   Pound toPound() => Pound(poundPerMilligram * value);
 
   @override
+  Milligram roundedAt(int fractionDigits) =>
+      Milligram(value.roundAt(fractionDigits));
+
+  @override
   Milligram operator +(Mass other) =>
       Milligram(value + other.toMilligram().value);
 
@@ -36,8 +41,4 @@ class Milligram with _$Milligram implements Mass {
 
   @override
   Milligram operator /(num divisor) => Milligram(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

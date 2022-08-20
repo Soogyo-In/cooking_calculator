@@ -5,22 +5,22 @@ void main() {
   test(
     'Get symbol of mass unit',
     () {
-      expect(Milligram.symbol, 'mg');
-      expect(Gram.symbol, 'g');
-      expect(Kilogram.symbol, 'kg');
-      expect(Ounce.symbol, 'oz');
-      expect(Pound.symbol, 'lb');
+      expect(milligramSymbol, 'mg');
+      expect(gramSymbol, 'g');
+      expect(kilogramSymbol, 'kg');
+      expect(ounceSymbol, 'oz');
+      expect(poundSymbol, 'lb');
     },
   );
 
   test(
-    'String expression',
+    'Get Mass object rounded value at specified fraction digits',
     () {
-      expect(const Milligram(1.555).toZeroBoundedStringAsFixed(2), '1.56 mg');
-      expect(const Gram(1.555).toZeroBoundedStringAsFixed(2), '1.56 g');
-      expect(const Kilogram(1.555).toZeroBoundedStringAsFixed(2), '1.56 kg');
-      expect(const Ounce(1.555).toZeroBoundedStringAsFixed(2), '1.56 oz');
-      expect(const Pound(1.555).toZeroBoundedStringAsFixed(2), '1.56 lb');
+      expect(const Milligram(1.55).roundedAt(2), const Milligram(1.6));
+      expect(const Gram(1.55).roundedAt(2), const Gram(1.6));
+      expect(const Kilogram(1.55).roundedAt(2), const Kilogram(1.6));
+      expect(const Ounce(1.55).roundedAt(2), const Ounce(1.6));
+      expect(const Pound(1.55).roundedAt(2), const Pound(1.6));
     },
   );
 

@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'Parse zero bounded string as fixed',
+    'Round value at specified fraction digits',
     () {
-      expect(0.006.toZeroBoundedStringAsFixed(2), '0.01');
-      expect(0.005.toZeroBoundedStringAsFixed(2), '0.01');
-      expect(0.004.toZeroBoundedStringAsFixed(2), '0.01');
+      expect(1.006.roundAt(3), 1.01);
+      expect(1.005.roundAt(3), 1.01);
+      expect(1.004.roundAt(3), 1.00);
     },
   );
 }

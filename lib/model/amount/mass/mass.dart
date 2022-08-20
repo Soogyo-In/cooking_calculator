@@ -10,6 +10,12 @@ part 'ounce.dart';
 part 'pound.dart';
 part 'mass.freezed.dart';
 
+const gramSymbol = 'g';
+const kilogramSymbol = 'kg';
+const milligramSymbol = 'mg';
+const ounceSymbol = 'oz';
+const poundSymbol = 'lb';
+
 const gramPerKilogram = 1000.0;
 const gramPerOunce = 28.349523125;
 const gramPerPound = 453.59237;

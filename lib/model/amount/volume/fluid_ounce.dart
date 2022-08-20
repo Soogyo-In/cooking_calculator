@@ -2,7 +2,8 @@ part of 'volume.dart';
 
 @freezed
 class FluidOunce with _$FluidOunce implements Volume {
-  static const symbol = 'fl.oz';
+  @override
+  final symbol = fluidOunceSymbol;
 
   const FluidOunce._();
 
@@ -31,6 +32,10 @@ class FluidOunce with _$FluidOunce implements Volume {
   Teaspoon toTeaspoon() => Teaspoon(teaspoonPerFluidOunce * value);
 
   @override
+  FluidOunce roundedAt(int fractionDigits) =>
+      FluidOunce(value.roundAt(fractionDigits));
+
+  @override
   FluidOunce operator +(Volume other) =>
       FluidOunce(value + other.toFluidOunce().value);
 
@@ -43,8 +48,4 @@ class FluidOunce with _$FluidOunce implements Volume {
 
   @override
   FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

@@ -2,7 +2,8 @@ part of 'volume.dart';
 
 @freezed
 class Liter with _$Liter implements Volume {
-  static const symbol = 'L';
+  @override
+  final symbol = literSymbol;
 
   const Liter._();
 
@@ -31,6 +32,9 @@ class Liter with _$Liter implements Volume {
   Teaspoon toTeaspoon() => Teaspoon(teaspoonPerLiter * value);
 
   @override
+  Liter roundedAt(int fractionDigits) => Liter(value.roundAt(fractionDigits));
+
+  @override
   Liter operator +(Volume other) => Liter(value + other.toLiter().value);
 
   @override
@@ -41,8 +45,4 @@ class Liter with _$Liter implements Volume {
 
   @override
   Liter operator /(num divisor) => Liter(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }
