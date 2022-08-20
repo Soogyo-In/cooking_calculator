@@ -2,7 +2,8 @@ part of 'mass.dart';
 
 @freezed
 class Ounce with _$Ounce implements Mass {
-  static const symbol = 'oz';
+  @override
+  final symbol = ounceSymbol;
 
   const Ounce._();
 
@@ -24,6 +25,9 @@ class Ounce with _$Ounce implements Mass {
   Pound toPound() => Pound(poundPerOunce * value);
 
   @override
+  Ounce roundedAt(int fractionDigits) => Ounce(value.roundAt(fractionDigits));
+
+  @override
   Ounce operator +(Mass other) => Ounce(value + other.toOunce().value);
 
   @override
@@ -34,8 +38,4 @@ class Ounce with _$Ounce implements Mass {
 
   @override
   Ounce operator /(num divisor) => Ounce(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

@@ -2,7 +2,8 @@ part of 'mass.dart';
 
 @freezed
 class Gram with _$Gram implements Mass {
-  static const symbol = 'g';
+  @override
+  final symbol = gramSymbol;
 
   const Gram._();
 
@@ -24,6 +25,9 @@ class Gram with _$Gram implements Mass {
   Pound toPound() => Pound(poundPerGram * value);
 
   @override
+  Gram roundedAt(int fractionDigits) => Gram(value.roundAt(fractionDigits));
+
+  @override
   Gram operator +(Mass other) => Gram(value + other.toGram().value);
 
   @override
@@ -34,8 +38,4 @@ class Gram with _$Gram implements Mass {
 
   @override
   Gram operator /(num divisor) => Gram(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

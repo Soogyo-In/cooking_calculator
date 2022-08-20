@@ -1,24 +1,21 @@
 extension DoubleExtension on double {
-  String toZeroBoundedStringAsFixed(int fractionDigits) {
-    var result = double.parse(toStringAsFixed(fractionDigits + 1));
-
-    for (var i = 0; i < fractionDigits; i++) {
+  double roundAt(int fractionDigits) {
+    var result = this;
+    for (var i = 0; i < fractionDigits - 1; i++) {
       result *= 10.0;
     }
 
+    // fix floating point error;
+    result *= 10.0;
+    result = result.roundToDouble();
+    result /= 10.0;
+
     result = result.roundToDouble();
 
-    for (var i = 0; i < fractionDigits; i++) {
+    for (var i = 0; i < fractionDigits - 1; i++) {
       result /= 10.0;
     }
 
-    if (result == 0.0) {
-      result = 1.0;
-      for (var i = 0; i < fractionDigits; i++) {
-        result /= 10.0;
-      }
-    }
-
-    return result.toStringAsFixed(fractionDigits);
+    return result;
   }
 }

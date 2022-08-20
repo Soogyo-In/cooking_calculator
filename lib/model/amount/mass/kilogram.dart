@@ -2,7 +2,8 @@ part of 'mass.dart';
 
 @freezed
 class Kilogram with _$Kilogram implements Mass {
-  static const symbol = 'kg';
+  @override
+  final symbol = kilogramSymbol;
 
   const Kilogram._();
 
@@ -24,6 +25,10 @@ class Kilogram with _$Kilogram implements Mass {
   Pound toPound() => Pound(poundPerKilogram * value);
 
   @override
+  Kilogram roundedAt(int fractionDigits) =>
+      Kilogram(value.roundAt(fractionDigits));
+
+  @override
   Kilogram operator +(Mass other) => Kilogram(value + other.toKilogram().value);
 
   @override
@@ -34,8 +39,4 @@ class Kilogram with _$Kilogram implements Mass {
 
   @override
   Kilogram operator /(num divisor) => Kilogram(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

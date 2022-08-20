@@ -2,7 +2,8 @@ part of 'mass.dart';
 
 @freezed
 class Pound with _$Pound implements Mass {
-  static const symbol = 'lb';
+  @override
+  final symbol = poundSymbol;
 
   const Pound._();
 
@@ -24,6 +25,9 @@ class Pound with _$Pound implements Mass {
   Pound toPound() => Pound(value);
 
   @override
+  Pound roundedAt(int fractionDigits) => Pound(value.roundAt(fractionDigits));
+
+  @override
   Pound operator +(Mass other) => Pound(value + other.toPound().value);
 
   @override
@@ -34,8 +38,4 @@ class Pound with _$Pound implements Mass {
 
   @override
   Pound operator /(num divisor) => Pound(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

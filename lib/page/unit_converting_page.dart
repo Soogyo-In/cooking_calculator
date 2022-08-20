@@ -9,11 +9,11 @@ abstract class AmountUnit<T extends Amount> {
 }
 
 enum MassUnit implements AmountUnit {
-  milligram(Milligram.symbol),
-  gram(Gram.symbol),
-  kilogram(Kilogram.symbol),
-  ounce(Ounce.symbol),
-  pound(Pound.symbol);
+  milligram(milligramSymbol),
+  gram(gramSymbol),
+  kilogram(kilogramSymbol),
+  ounce(ounceSymbol),
+  pound(poundSymbol);
 
   @override
   final String abbreviation;
@@ -38,13 +38,13 @@ enum MassUnit implements AmountUnit {
 }
 
 enum VolumeUnit implements AmountUnit {
-  cubicCentimeter(CubicCentimeter.symbol),
-  milliliter(Milliliter.symbol),
-  liter(Liter.symbol),
-  teaspoon(Teaspoon.symbol),
-  tablespoon(Tablespoon.symbol),
-  fluidOunce(FluidOunce.symbol),
-  cup(Cup.symbol);
+  cubicCentimeter(cubicCentimeterSymbol),
+  milliliter(milliliterSymbol),
+  liter(literSymbol),
+  teaspoon(teaspoonSymbol),
+  tablespoon(tablespoonSymbol),
+  fluidOunce(fluidOunceSymbol),
+  cup(cupSymbol);
 
   @override
   final String abbreviation;
@@ -229,15 +229,15 @@ class _MassUnitConverter extends UnitConverter<MassUnit> {
 
     switch (ref.watch(toUnitProvider)) {
       case MassUnit.milligram:
-        return fromValue.toMilligram().toZeroBoundedStringAsFixed(2);
+        return fromValue.toMilligram().roundedAt(3).toStringWithSymbol();
       case MassUnit.gram:
-        return fromValue.toGram().toZeroBoundedStringAsFixed(2);
+        return fromValue.toGram().roundedAt(3).toStringWithSymbol();
       case MassUnit.kilogram:
-        return fromValue.toKilogram().toZeroBoundedStringAsFixed(2);
+        return fromValue.toKilogram().roundedAt(3).toStringWithSymbol();
       case MassUnit.ounce:
-        return fromValue.toOunce().toZeroBoundedStringAsFixed(2);
+        return fromValue.toOunce().roundedAt(3).toStringWithSymbol();
       case MassUnit.pound:
-        return fromValue.toPound().toZeroBoundedStringAsFixed(2);
+        return fromValue.toPound().roundedAt(3).toStringWithSymbol();
     }
   }
 }
@@ -259,19 +259,19 @@ class _VolumeUnitConverter extends UnitConverter<VolumeUnit> {
 
     switch (ref.watch(toUnitProvider)) {
       case VolumeUnit.cubicCentimeter:
-        return fromValue.toCubicCentimeter().toZeroBoundedStringAsFixed(2);
+        return fromValue.toCubicCentimeter().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.milliliter:
-        return fromValue.toMilliliter().toZeroBoundedStringAsFixed(2);
+        return fromValue.toMilliliter().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.liter:
-        return fromValue.toLiter().toZeroBoundedStringAsFixed(2);
+        return fromValue.toLiter().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.teaspoon:
-        return fromValue.toTeaspoon().toZeroBoundedStringAsFixed(2);
+        return fromValue.toTeaspoon().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.tablespoon:
-        return fromValue.toTablespoon().toZeroBoundedStringAsFixed(2);
+        return fromValue.toTablespoon().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.fluidOunce:
-        return fromValue.toFluidOunce().toZeroBoundedStringAsFixed(2);
+        return fromValue.toFluidOunce().roundedAt(3).toStringWithSymbol();
       case VolumeUnit.cup:
-        return fromValue.toCup().toZeroBoundedStringAsFixed(2);
+        return fromValue.toCup().roundedAt(3).toStringWithSymbol();
     }
   }
 }

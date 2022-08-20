@@ -2,7 +2,8 @@ part of 'volume.dart';
 
 @freezed
 class Cup with _$Cup implements Volume {
-  static const symbol = 'cp';
+  @override
+  final symbol = cupSymbol;
 
   const Cup._();
 
@@ -31,6 +32,9 @@ class Cup with _$Cup implements Volume {
   Teaspoon toTeaspoon() => Teaspoon(teaspoonPerCup * value);
 
   @override
+  Cup roundedAt(int fractionDigits) => Cup(value.roundAt(fractionDigits));
+
+  @override
   Cup operator +(Volume other) => Cup(value + other.toCup().value);
 
   @override
@@ -41,8 +45,4 @@ class Cup with _$Cup implements Volume {
 
   @override
   Cup operator /(num divisor) => Cup(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }

@@ -5,46 +5,46 @@ void main() {
   test(
     'Get symbol of volume unit',
     () {
-      expect(CubicCentimeter.symbol, 'cc');
-      expect(Milliliter.symbol, 'mL');
-      expect(Liter.symbol, 'L');
-      expect(Teaspoon.symbol, 'tsp');
-      expect(Tablespoon.symbol, 'Tbsp');
-      expect(FluidOunce.symbol, 'fl.oz');
-      expect(Cup.symbol, 'cp');
+      expect(cubicCentimeterSymbol, 'cc');
+      expect(milliliterSymbol, 'mL');
+      expect(literSymbol, 'L');
+      expect(teaspoonSymbol, 'tsp');
+      expect(tablespoonSymbol, 'Tbsp');
+      expect(fluidOunceSymbol, 'fl.oz');
+      expect(cupSymbol, 'cp');
     },
   );
 
   test(
-    'String expression',
+    'Get Volume object rounded value at specified fraction digits',
     () {
       expect(
-        const CubicCentimeter(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 cc',
+        const CubicCentimeter(1.55).roundedAt(2),
+        const CubicCentimeter(1.6),
       );
       expect(
-        const Milliliter(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 mL',
+        const Milliliter(1.55).roundedAt(2),
+        const Milliliter(1.6),
       );
       expect(
-        const Liter(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 L',
+        const Liter(1.55).roundedAt(2),
+        const Liter(1.6),
       );
       expect(
-        const Teaspoon(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 tsp',
+        const Teaspoon(1.55).roundedAt(2),
+        const Teaspoon(1.6),
       );
       expect(
-        const Tablespoon(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 Tbsp',
+        const Tablespoon(1.55).roundedAt(2),
+        const Tablespoon(1.6),
       );
       expect(
-        const FluidOunce(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 fl.oz',
+        const FluidOunce(1.55).roundedAt(2),
+        const FluidOunce(1.6),
       );
       expect(
-        const Cup(1.555).toZeroBoundedStringAsFixed(2),
-        '1.56 cp',
+        const Cup(1.55).roundedAt(2),
+        const Cup(1.6),
       );
     },
   );

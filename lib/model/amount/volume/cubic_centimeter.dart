@@ -2,7 +2,8 @@ part of 'volume.dart';
 
 @freezed
 class CubicCentimeter with _$CubicCentimeter implements Volume {
-  static const symbol = 'cc';
+  @override
+  final symbol = cubicCentimeterSymbol;
 
   const CubicCentimeter._();
 
@@ -30,6 +31,10 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
   Teaspoon toTeaspoon() => Teaspoon(value * teaspoonPerCubicCentimeter);
 
   @override
+  CubicCentimeter roundedAt(int fractionDigits) =>
+      CubicCentimeter(value.roundAt(fractionDigits));
+
+  @override
   CubicCentimeter operator +(Volume other) =>
       CubicCentimeter(value + other.toCubicCentimeter().value);
 
@@ -43,8 +48,4 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
 
   @override
   CubicCentimeter operator /(num divisor) => CubicCentimeter(value / divisor);
-
-  @override
-  String toZeroBoundedStringAsFixed(int fractionDigits) =>
-      '${value.toZeroBoundedStringAsFixed(fractionDigits)} $symbol';
 }
