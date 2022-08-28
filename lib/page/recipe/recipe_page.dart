@@ -1,34 +1,19 @@
 import 'package:cooking_calulator/model/model.dart';
-import 'package:cooking_calulator/model/util/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RecipeEditPage extends StatefulWidget {
+final _servingsProvider = StateProvider<int?>((ref) => null);
+
+class RecipePage extends ConsumerWidget {
   final Recipe recipe;
 
-  const RecipeEditPage({super.key, required this.recipe});
+  const RecipePage({super.key, required this.recipe});
 
   @override
-  State<RecipeEditPage> createState() => _RecipeEditPageState();
-}
-
-class _RecipeEditPageState extends State<RecipeEditPage> {
-  late int _servings;
-
-  @override
-  void initState() {
-    _servings = widget.recipe.servings;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant RecipeEditPage oldWidget) {
-    _servings = widget.recipe.servings;
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final recipe = widget.recipe;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final servings =
+        ref.watch(_servingsProvider.state).state ?? recipe.servings;
+    final ratio = servings / recipe.servings;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Recipe editor')),
@@ -44,7 +29,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
               children: [
                 const Text('servings: '),
                 DropdownButton<int>(
-                  value: _servings,
+                  value: servings,
                   items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                       .map((servings) => DropdownMenuItem(
                             value: servings,
@@ -52,10 +37,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
                           ))
                       .toList(),
                   onChanged: (servings) {
-                    if (servings == null) return;
-                    setState(() {
-                      _servings = servings;
-                    });
+                    ref.read(_servingsProvider.notifier).state = servings;
                   },
                 ),
               ],
@@ -66,21 +48,9 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
             ],
             const SizedBox(height: 8.0),
             _IngredientList(
-              countByIngredient: calculateAmountByIngredientServingsFor(
-                amountByIngredient: recipe.countByIngredient,
-                originServings: recipe.servings,
-                toServings: _servings,
-              ),
-              massByIngredient: calculateAmountByIngredientServingsFor(
-                amountByIngredient: recipe.massByIngredient,
-                originServings: recipe.servings,
-                toServings: _servings,
-              ),
-              volumeByIngredient: calculateAmountByIngredientServingsFor(
-                amountByIngredient: recipe.volumeByIngredient,
-                originServings: recipe.servings,
-                toServings: _servings,
-              ),
+              countByIngredient: recipe.getCountByIngredientWithRatio(ratio),
+              massByIngredient: recipe.getMassByIngredientWithRatio(ratio),
+              volumeByIngredient: recipe.getVolumeByIngredientWithRatio(ratio),
             ),
             const SizedBox(height: 8.0),
             ...recipe.directions.map(
@@ -91,7 +61,7 @@ class _RecipeEditPageState extends State<RecipeEditPage> {
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: _DirectionDetail(direction, recipe.servings, _servings),
+                child: _DirectionDetail(direction, ratio),
               ),
             ),
           ],
@@ -175,31 +145,25 @@ class _IngredientList extends StatelessWidget {
 
 class _DirectionDetail extends StatelessWidget {
   final Direction direction;
-  final int originServings;
-  final int toServings;
+  final double servingRatio;
 
-  const _DirectionDetail(this.direction, this.originServings, this.toServings);
+  const _DirectionDetail(this.direction, this.servingRatio);
 
   @override
   Widget build(BuildContext context) {
+    //
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _IngredientList(
-          countByIngredient: calculateAmountByIngredientServingsFor(
-            amountByIngredient: direction.countByIngredient,
-            originServings: originServings,
-            toServings: toServings,
+          countByIngredient: direction.getCountByIngredientWithRatio(
+            servingRatio,
           ),
-          massByIngredient: calculateAmountByIngredientServingsFor(
-            amountByIngredient: direction.massByIngredient,
-            originServings: originServings,
-            toServings: toServings,
+          massByIngredient: direction.getMassByIngredientWithRatio(
+            servingRatio,
           ),
-          volumeByIngredient: calculateAmountByIngredientServingsFor(
-            amountByIngredient: direction.volumeByIngredient,
-            originServings: originServings,
-            toServings: toServings,
+          volumeByIngredient: direction.getVolumeByIngredientWithRatio(
+            servingRatio,
           ),
         ),
         if (direction.time != Duration.zero) ...[
