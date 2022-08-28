@@ -70,32 +70,50 @@ class Recipe with _$Recipe {
         (time, direction) => time + direction.time,
       );
 
-  Map<Ingredient, Mass> getMassByIngredientServingsFor(int servings) {
+  Map<Ingredient, Mass> getMassByIngredientWithRatio(double ratio) {
     final calculated = <Ingredient, Mass>{};
 
-    massByIngredient.forEach((ingredient, mass) {
-      calculated[ingredient] = (mass * (servings / this.servings)) as Mass;
-    });
+    for (final direction in directions) {
+      direction
+          .getMassByIngredientWithRatio(ratio)
+          .forEach((ingredient, mass) => calculated.update(
+                ingredient,
+                (value) => (value + mass) as Mass,
+                ifAbsent: () => mass,
+              ));
+    }
 
     return calculated;
   }
 
-  Map<Ingredient, Volume> getVolumeByIngredientServingsFor(int servings) {
+  Map<Ingredient, Volume> getVolumeByIngredientWithRatio(double ratio) {
     final calculated = <Ingredient, Volume>{};
 
-    volumeByIngredient.forEach((ingredient, volume) {
-      calculated[ingredient] = (volume * (servings / this.servings)) as Volume;
-    });
+    for (final direction in directions) {
+      direction
+          .getVolumeByIngredientWithRatio(ratio)
+          .forEach((ingredient, volume) => calculated.update(
+                ingredient,
+                (value) => (value + volume) as Volume,
+                ifAbsent: () => volume,
+              ));
+    }
 
     return calculated;
   }
 
-  Map<Ingredient, Count> getCountByIngredientServingsFor(int servings) {
+  Map<Ingredient, Count> getCountByIngredientWithRatio(double ratio) {
     final calculated = <Ingredient, Count>{};
 
-    countByIngredient.forEach((ingredient, amount) {
-      calculated[ingredient] = amount * (servings / this.servings);
-    });
+    for (final direction in directions) {
+      direction
+          .getCountByIngredientWithRatio(ratio)
+          .forEach((ingredient, count) => calculated.update(
+                ingredient,
+                (value) => value + count,
+                ifAbsent: () => count,
+              ));
+    }
 
     return calculated;
   }
