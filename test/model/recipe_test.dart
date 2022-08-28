@@ -97,17 +97,17 @@ void main() {
   );
 
   test(
-    'Recipe provides masses of each ingredients for servings',
+    'Recipe provides masses of each ingredients with ratio',
     () {
       expect(
-        recipe.getMassByIngredientServingsFor(1),
+        recipe.getMassByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(50.05),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(0.5),
+          const Ingredient(name: 'mass 1'): const Mass.gram(100.1),
+          const Ingredient(name: 'mass 2'): const Mass.ounce(1.0),
         },
       );
       expect(
-        recipe.getMassByIngredientServingsFor(8),
+        recipe.getMassByIngredientWithRatio(2.0),
         {
           const Ingredient(name: 'mass 1'): const Mass.gram(400.4),
           const Ingredient(name: 'mass 2'): const Mass.ounce(4.0),
@@ -117,17 +117,17 @@ void main() {
   );
 
   test(
-    'Recipe provides volumes of each ingredients for servings',
+    'Recipe provides volumes of each ingredients with ratio',
     () {
       expect(
-        recipe.getVolumeByIngredientServingsFor(1),
+        recipe.getVolumeByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(50.05),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(0.5),
+          const Ingredient(name: 'volume 1'): const Volume.liter(100.1),
+          const Ingredient(name: 'volume 2'): const Volume.teaspoon(1.0),
         },
       );
       expect(
-        recipe.getVolumeByIngredientServingsFor(8),
+        recipe.getVolumeByIngredientWithRatio(2.0),
         {
           const Ingredient(name: 'volume 1'): const Volume.liter(400.4),
           const Ingredient(name: 'volume 2'): const Volume.teaspoon(4.0),
@@ -137,17 +137,17 @@ void main() {
   );
 
   test(
-    'Recipe provides counts of each ingredients for servings',
+    'Recipe provides counts of each ingredients with ratio',
     () {
       expect(
-        recipe.getCountByIngredientServingsFor(1),
+        recipe.getCountByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'count 1'): const Count(0.5),
-          const Ingredient(name: 'count 2'): const Count(0.5),
+          const Ingredient(name: 'count 1'): const Count(1.0),
+          const Ingredient(name: 'count 2'): const Count(1.0),
         },
       );
       expect(
-        recipe.getCountByIngredientServingsFor(8),
+        recipe.getCountByIngredientWithRatio(2.0),
         {
           const Ingredient(name: 'count 1'): const Count(4.0),
           const Ingredient(name: 'count 2'): const Count(4.0),
