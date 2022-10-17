@@ -1,4 +1,5 @@
 import 'package:cooking_calulator/model/model.dart';
+import 'package:cooking_calulator/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,14 +7,20 @@ final _servingsProvider = StateProvider<int?>((ref) => null);
 
 class RecipePage extends ConsumerWidget {
   final Recipe recipe;
+  final servingTextEditor = TextEditingController();
 
-  const RecipePage({super.key, required this.recipe});
+  RecipePage({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final servings =
         ref.watch(_servingsProvider.state).state ?? recipe.servings;
     final ratio = servings / recipe.servings;
+    final servingsString = servings.toString();
+    servingTextEditor.value = TextEditingValue(
+      text: servingsString,
+      selection: TextSelection.collapsed(offset: servingsString.length),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Recipe editor')),
@@ -25,33 +32,29 @@ class RecipePage extends ConsumerWidget {
             const SizedBox(height: 8.0),
             Text(recipe.description),
             const SizedBox(height: 8.0),
-            Row(
-              children: [
-                const Text('servings: '),
-                DropdownButton<int>(
-                  value: servings,
-                  items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                      .map((servings) => DropdownMenuItem(
-                            value: servings,
-                            child: Text(servings.toString()),
-                          ))
-                      .toList(),
-                  onChanged: (servings) {
-                    ref.read(_servingsProvider.notifier).state = servings;
-                  },
-                ),
-              ],
+            IntegerInput(
+              controller: servingTextEditor,
+              decoration: const InputDecoration(
+                label: Text('servings'),
+              ),
+              maxLength: 2,
+              onChanged: (text) {
+                if (text.isNotEmpty) {
+                  ref.read(_servingsProvider.notifier).state =
+                      int.tryParse(text);
+                }
+              },
             ),
             if (recipe.time != Duration.zero) ...[
               const SizedBox(height: 8.0),
-              _TimeText(recipe.time),
+              TimeText(time: recipe.time),
             ],
             const SizedBox(height: 8.0),
-            _IngredientList(
-              countByIngredient: recipe.getCountByIngredientWithRatio(ratio),
-              massByIngredient: recipe.getMassByIngredientWithRatio(ratio),
-              volumeByIngredient: recipe.getVolumeByIngredientWithRatio(ratio),
-            ),
+            _IngredientList(Map.fromEntries([
+              ...recipe.getCountByIngredientWithRatio(ratio).entries,
+              ...recipe.getMassByIngredientWithRatio(ratio).entries,
+              ...recipe.getVolumeByIngredientWithRatio(ratio).entries,
+            ])),
             const SizedBox(height: 8.0),
             ...recipe.directions.map(
               (direction) => Container(
@@ -71,69 +74,42 @@ class RecipePage extends ConsumerWidget {
   }
 }
 
-class _TimeText extends StatelessWidget {
-  final Duration time;
-
-  const _TimeText(this.time);
-
-  @override
-  Widget build(BuildContext context) {
-    final stringBuffer = StringBuffer();
-    final days = time.inDays;
-    final hours = time.inHours;
-    final minutes = time.inMinutes;
-
-    if (days > 0) stringBuffer.write('$days d ');
-    if (hours > 0) stringBuffer.write('${hours % Duration.hoursPerDay} h ');
-    if (minutes > 0) {
-      stringBuffer.write('${minutes % Duration.minutesPerHour} m');
-    }
-
-    return Text('time: ${stringBuffer.toString()}');
-  }
-}
-
 class _IngredientList extends StatelessWidget {
-  final Map<Ingredient, Mass> massByIngredient;
-  final Map<Ingredient, Volume> volumeByIngredient;
-  final Map<Ingredient, Count> countByIngredient;
+  final Map<Ingredient, Amount> _amountByIngredient;
 
-  const _IngredientList({
-    this.massByIngredient = const {},
-    this.volumeByIngredient = const {},
-    this.countByIngredient = const {},
-  });
+  const _IngredientList(Map<Ingredient, Amount> amountByIngredient)
+      : _amountByIngredient = amountByIngredient;
 
   @override
   Widget build(BuildContext context) {
     final ingredientList = <Widget>[];
 
-    countByIngredient.forEach((ingredient, count) {
-      final stringBuffer = StringBuffer(ingredient.name);
-      final rounded = count.roundedAt(2);
-      if (rounded.value > 0.0) {
-        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
+    _amountByIngredient.forEach((ingredient, amount) {
+      if (amount.roundedAt(2).value <= 0.0) {
+        ingredientList.add(Text(ingredient.name));
+        return;
+      }
+      Widget? unitConverter;
+
+      if (amount is Volume) {
+        unitConverter = UnitConverter.volume(volume: amount);
+      }
+      if (amount is Mass) {
+        unitConverter = UnitConverter.mass(mass: amount);
       }
 
-      ingredientList.add(Text(stringBuffer.toString()));
-    });
-    massByIngredient.forEach((ingredient, mass) {
-      final stringBuffer = StringBuffer(ingredient.name);
-      final rounded = mass.roundedAt(2);
-      if (rounded.value > 0.0) {
-        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
+      if (unitConverter != null) {
+        ingredientList.add(SizedBox(
+          height: 22.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(ingredient.name),
+              unitConverter,
+            ],
+          ),
+        ));
       }
-
-      ingredientList.add(Text(stringBuffer.toString()));
-    });
-    volumeByIngredient.forEach((ingredient, volume) {
-      final stringBuffer = StringBuffer(ingredient.name);
-      final rounded = volume.roundedAt(2);
-      if (rounded.value > 0.0) {
-        stringBuffer.write(': ${rounded.toStringWithSymbol()}');
-      }
-
-      ingredientList.add(Text(stringBuffer.toString()));
     });
 
     return Column(
@@ -155,20 +131,14 @@ class _DirectionDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _IngredientList(
-          countByIngredient: direction.getCountByIngredientWithRatio(
-            servingRatio,
-          ),
-          massByIngredient: direction.getMassByIngredientWithRatio(
-            servingRatio,
-          ),
-          volumeByIngredient: direction.getVolumeByIngredientWithRatio(
-            servingRatio,
-          ),
-        ),
+        _IngredientList(Map.fromEntries([
+          ...direction.getCountByIngredientWithRatio(servingRatio).entries,
+          ...direction.getMassByIngredientWithRatio(servingRatio).entries,
+          ...direction.getVolumeByIngredientWithRatio(servingRatio).entries,
+        ])),
         if (direction.time != Duration.zero) ...[
           const SizedBox(height: 8.0),
-          _TimeText(direction.time),
+          TimeText(time: direction.time),
         ],
         const SizedBox(height: 8.0),
         Text(direction.description),
