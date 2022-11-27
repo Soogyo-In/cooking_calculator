@@ -92,61 +92,88 @@ enum VolumeUnit implements AmountUnit<Volume> {
   }
 }
 
-abstract class UnitConverter<U extends AmountUnit, A extends Amount>
+abstract class AmountField<U extends AmountUnit, A extends Amount>
     extends ConsumerWidget {
-  final List<U> units;
-  final StateProvider<U> unitProvider;
   final A amount;
+  final List<U>? units;
+  final U? unit;
+  final ValueChanged<String>? onValueChanged;
+  final ValueChanged<U?>? onUnitChanged;
+  final _textEditingController = TextEditingController();
 
-  const UnitConverter({
-    required this.units,
-    required this.unitProvider,
+  AmountField({
     required this.amount,
+    this.units,
+    this.unit,
+    this.onValueChanged,
+    this.onUnitChanged,
     super.key,
   });
 
-  static UnitConverter<MassUnit, Mass> mass({
+  static AmountField<MassUnit, Mass> mass({
     required Mass mass,
+    MassUnit? unit,
+    ValueChanged<String>? onValueChanged,
+    ValueChanged<MassUnit?>? onUnitChanged,
     Key? key,
   }) =>
-      _MassUnitConverter(
-        unitProvider: StateProvider((ref) => MassUnit.fromAmount(mass)),
+      _MassField(
         amount: mass,
+        unit: unit,
+        onValueChanged: onValueChanged,
+        onUnitChanged: onUnitChanged,
         key: key,
       );
 
-  static UnitConverter<VolumeUnit, Volume> volume({
+  static AmountField<VolumeUnit, Volume> volume({
     required Volume volume,
+    VolumeUnit? unit,
+    ValueChanged<String>? onValueChanged,
+    ValueChanged<VolumeUnit?>? onUnitChanged,
     Key? key,
   }) =>
-      _VolumeUnitConverter(
-        unitProvider: StateProvider((ref) => VolumeUnit.fromAmount(volume)),
+      _VolumeField(
         amount: volume,
+        unit: unit,
+        onValueChanged: onValueChanged,
+        onUnitChanged: onUnitChanged,
         key: key,
       );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final valueString = buildNotatedValue(ref)?.toString() ?? '';
+    _textEditingController.value = _textEditingController.value.copyWith(
+      text: valueString,
+      selection: _textEditingController.selection.isValid
+          ? null
+          : TextSelection.collapsed(offset: valueString.length - 1),
+    );
+
     return Row(
       children: [
-        Text(buildNotatedValue(ref).toString()),
+        SizedBox(
+          width: 60.0,
+          child: TextField(
+            textAlign: TextAlign.end,
+            controller: _textEditingController,
+            onChanged: onValueChanged,
+          ),
+        ),
         SizedBox(
           width: 70.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               DropdownButton<U>(
-                value: ref.watch(unitProvider),
+                value: unit,
                 items: units
-                    .map((unit) => DropdownMenuItem(
+                    ?.map((unit) => DropdownMenuItem(
                           value: unit,
                           child: Text(unit.abbreviation),
                         ))
                     .toList(),
-                onChanged: (unit) {
-                  if (unit == null) return;
-                  ref.watch(unitProvider.state).state = unit;
-                },
+                onChanged: onUnitChanged,
               ),
             ],
           ),
@@ -155,19 +182,21 @@ abstract class UnitConverter<U extends AmountUnit, A extends Amount>
     );
   }
 
-  double buildNotatedValue(WidgetRef ref);
+  double? buildNotatedValue(WidgetRef ref);
 }
 
-class _MassUnitConverter extends UnitConverter<MassUnit, Mass> {
-  const _MassUnitConverter({
-    required super.unitProvider,
+class _MassField extends AmountField<MassUnit, Mass> {
+  _MassField({
     required super.amount,
+    super.unit,
+    super.onValueChanged,
+    super.onUnitChanged,
     super.key,
   }) : super(units: MassUnit.values);
 
   @override
-  double buildNotatedValue(WidgetRef ref) {
-    switch (ref.watch(unitProvider)) {
+  double? buildNotatedValue(WidgetRef ref) {
+    switch (unit) {
       case MassUnit.milligram:
         return amount.toMilligram().roundedAt(3).value;
       case MassUnit.gram:
@@ -178,20 +207,24 @@ class _MassUnitConverter extends UnitConverter<MassUnit, Mass> {
         return amount.toOunce().roundedAt(3).value;
       case MassUnit.pound:
         return amount.toPound().roundedAt(3).value;
+      default:
+        return null;
     }
   }
 }
 
-class _VolumeUnitConverter extends UnitConverter<VolumeUnit, Volume> {
-  const _VolumeUnitConverter({
-    required super.unitProvider,
+class _VolumeField extends AmountField<VolumeUnit, Volume> {
+  _VolumeField({
     required super.amount,
+    super.unit,
+    super.onValueChanged,
+    super.onUnitChanged,
     super.key,
   }) : super(units: VolumeUnit.values);
 
   @override
-  double buildNotatedValue(WidgetRef ref) {
-    switch (ref.watch(unitProvider)) {
+  double? buildNotatedValue(WidgetRef ref) {
+    switch (unit) {
       case VolumeUnit.cubicCentimeter:
         return amount.toCubicCentimeter().roundedAt(3).value;
       case VolumeUnit.milliliter:
@@ -206,6 +239,8 @@ class _VolumeUnitConverter extends UnitConverter<VolumeUnit, Volume> {
         return amount.toFluidOunce().roundedAt(3).value;
       case VolumeUnit.cup:
         return amount.toCup().roundedAt(3).value;
+      default:
+        return null;
     }
   }
 }

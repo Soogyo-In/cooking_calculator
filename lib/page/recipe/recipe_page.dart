@@ -3,7 +3,21 @@ import 'package:cooking_calulator/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _servingsProvider = StateProvider<int?>((ref) => null);
+final _amountFactorProvider = StateProvider<double>((ref) => 1.0);
+final _servingFamily =
+    StateProvider.autoDispose.family<StateProvider<int>, int>(
+  (ref, servings) => StateProvider<int>(
+    (ref) => servings * ref.watch(_amountFactorProvider).round(),
+  ),
+);
+final _volumeUnitFamily =
+    StateProvider.autoDispose.family<StateProvider<VolumeUnit?>, VolumeUnit?>(
+  (ref, volumeUnit) => StateProvider((ref) => volumeUnit),
+);
+final _massUnitFamily =
+    StateProvider.autoDispose.family<StateProvider<MassUnit?>, MassUnit?>(
+  (ref, massUnit) => StateProvider((ref) => massUnit),
+);
 
 class RecipePage extends ConsumerWidget {
   final Recipe recipe;
@@ -13,13 +27,11 @@ class RecipePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final servings =
-        ref.watch(_servingsProvider.state).state ?? recipe.servings;
-    final ratio = servings / recipe.servings;
+    final servingsProvider = ref.watch(_servingFamily(recipe.servings));
+    final servings = ref.watch(servingsProvider);
     final servingsString = servings.toString();
-    servingTextEditor.value = TextEditingValue(
+    servingTextEditor.value = servingTextEditor.value.copyWith(
       text: servingsString,
-      selection: TextSelection.collapsed(offset: servingsString.length),
     );
 
     return Scaffold(
@@ -38,12 +50,7 @@ class RecipePage extends ConsumerWidget {
                 label: Text('servings'),
               ),
               maxLength: 2,
-              onChanged: (text) {
-                if (text.isNotEmpty) {
-                  ref.read(_servingsProvider.notifier).state =
-                      int.tryParse(text);
-                }
-              },
+              onChanged: (text) => _onChanged(text, ref, servingsProvider),
             ),
             if (recipe.time != Duration.zero) ...[
               const SizedBox(height: 8.0),
@@ -51,9 +58,9 @@ class RecipePage extends ConsumerWidget {
             ],
             const SizedBox(height: 8.0),
             _IngredientList(Map.fromEntries([
-              ...recipe.getCountByIngredientWithRatio(ratio).entries,
-              ...recipe.getMassByIngredientWithRatio(ratio).entries,
-              ...recipe.getVolumeByIngredientWithRatio(ratio).entries,
+              ...recipe.countByIngredient.entries,
+              ...recipe.massByIngredient.entries,
+              ...recipe.volumeByIngredient.entries,
             ])),
             const SizedBox(height: 8.0),
             ...recipe.directions.map(
@@ -64,7 +71,7 @@ class RecipePage extends ConsumerWidget {
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: _DirectionDetail(direction, ratio),
+                child: _DirectionDetail(direction),
               ),
             ),
           ],
@@ -72,30 +79,70 @@ class RecipePage extends ConsumerWidget {
       ),
     );
   }
+
+  void _onChanged(
+    String text,
+    WidgetRef ref,
+    StateProvider<int> servingsProvider,
+  ) {
+    if (text.isNotEmpty) {
+      final servings = int.tryParse(text) ?? 0;
+      ref.read(_amountFactorProvider.state).state =
+          servings / ref.read(servingsProvider.state).state;
+    }
+  }
 }
 
-class _IngredientList extends StatelessWidget {
+class _IngredientList extends ConsumerWidget {
   final Map<Ingredient, Amount> _amountByIngredient;
 
   const _IngredientList(Map<Ingredient, Amount> amountByIngredient)
       : _amountByIngredient = amountByIngredient;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final factor = ref.watch(_amountFactorProvider);
     final ingredientList = <Widget>[];
 
     _amountByIngredient.forEach((ingredient, amount) {
+      final editedAmount = amount * factor;
       if (amount.roundedAt(2).value <= 0.0) {
         ingredientList.add(Text(ingredient.name));
         return;
       }
       Widget? unitConverter;
 
-      if (amount is Volume) {
-        unitConverter = UnitConverter.volume(volume: amount);
+      if (editedAmount is Volume) {
+        final volumeUnitProvider = ref.watch(
+          _volumeUnitFamily(VolumeUnit.fromAmount(editedAmount)),
+        );
+        unitConverter = AmountField.volume(
+          volume: editedAmount,
+          unit: ref.watch(volumeUnitProvider),
+          onValueChanged: (value) => _onAmountValueChanged(
+            ref: ref,
+            value: value,
+            amount: amount,
+          ),
+          onUnitChanged: (unit) =>
+              ref.read(volumeUnitProvider.state).state = unit,
+        );
       }
-      if (amount is Mass) {
-        unitConverter = UnitConverter.mass(mass: amount);
+      if (editedAmount is Mass) {
+        final massUnitProvider = ref.watch(
+          _massUnitFamily(MassUnit.fromAmount(editedAmount)),
+        );
+        unitConverter = AmountField.mass(
+          mass: editedAmount,
+          unit: ref.watch(massUnitProvider),
+          onValueChanged: (value) => _onAmountValueChanged(
+            ref: ref,
+            value: value,
+            amount: amount,
+          ),
+          onUnitChanged: (unit) =>
+              ref.read(massUnitProvider.state).state = unit,
+        );
       }
 
       if (unitConverter != null) {
@@ -117,13 +164,21 @@ class _IngredientList extends StatelessWidget {
       children: ingredientList,
     );
   }
+
+  void _onAmountValueChanged({
+    required WidgetRef ref,
+    required String value,
+    required Amount amount,
+  }) {
+    ref.watch(_amountFactorProvider.state).state =
+        double.parse(value) / amount.value;
+  }
 }
 
 class _DirectionDetail extends StatelessWidget {
   final Direction direction;
-  final double servingRatio;
 
-  const _DirectionDetail(this.direction, this.servingRatio);
+  const _DirectionDetail(this.direction);
 
   @override
   Widget build(BuildContext context) {
@@ -132,9 +187,9 @@ class _DirectionDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _IngredientList(Map.fromEntries([
-          ...direction.getCountByIngredientWithRatio(servingRatio).entries,
-          ...direction.getMassByIngredientWithRatio(servingRatio).entries,
-          ...direction.getVolumeByIngredientWithRatio(servingRatio).entries,
+          ...direction.countByIngredient.entries,
+          ...direction.massByIngredient.entries,
+          ...direction.volumeByIngredient.entries,
         ])),
         if (direction.time != Duration.zero) ...[
           const SizedBox(height: 8.0),
