@@ -1,6 +1,6 @@
 name: cooking_calulator
 description: Unit converter and amount calculator for cook
-version: 0.1.0+0
+version: 0.2.0+0
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -11,7 +11,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-  # State management
+  # state management
   riverpod: ^1.0.3
   flutter_riverpod: ^1.0.3
 
