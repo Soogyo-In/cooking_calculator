@@ -1,5 +1,5 @@
-import 'package:cooking_calulator/model/model.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:domain/model/model.dart';
+import 'package:test/test.dart';
 
 void main() {
   test(

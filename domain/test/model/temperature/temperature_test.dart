@@ -1,5 +1,5 @@
-import 'package:cooking_calulator/model/temperature/temperature.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:domain/model/model.dart';
+import 'package:test/test.dart';
 
 const _fahrenheitPerCelsius = 33.8;
 const _celsiusPerFahrenheit = -17.22222222222222;

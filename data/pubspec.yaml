@@ -1,11 +1,16 @@
 name: data
 description: A sample command-line application.
 version: 0.0.0
+publish_to: none
 
 environment:
   sdk: '>=2.17.1 <3.0.0'
 
 dependencies:
+  # layers
+  domain:
+    path: ../domain
+
   isar: ^3.0.5
   path: ^1.8.0
 

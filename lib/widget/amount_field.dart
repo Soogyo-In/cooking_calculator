@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/model/model.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

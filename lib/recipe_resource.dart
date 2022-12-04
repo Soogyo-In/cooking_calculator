@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/model/model.dart';
+import 'package:domain/domain.dart';
 
 final slowRoasetedPorkBellyRecipe = Recipe(
   name: 'SLOW ROASTED PORK BELLY',

@@ -1,6 +1,7 @@
 name: cooking_calulator
 description: Unit converter and amount calculator for cook
 version: 0.2.0+0
+publish_to: none
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -8,6 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # layers
+  domain:
+    path: ./domain
+  data:
+    path: ./data
 
   # state management
   flutter_riverpod: ^1.0.3

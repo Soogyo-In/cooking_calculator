@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/model/util/util.dart';
+import 'package:domain/model/util/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

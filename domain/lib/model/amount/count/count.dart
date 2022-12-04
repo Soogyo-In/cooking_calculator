@@ -1,5 +1,5 @@
-import 'package:cooking_calulator/model/amount/amount.dart';
-import 'package:cooking_calulator/model/util/util.dart';
+import 'package:domain/model/model.dart';
+import 'package:domain/model/util/util.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'count.freezed.dart';
