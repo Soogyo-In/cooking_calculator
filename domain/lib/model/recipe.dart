@@ -1,8 +1,5 @@
+import 'package:domain/domain.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'amount/amount.dart';
-import 'direction.dart';
-import 'ingredient.dart';
 
 part 'recipe.freezed.dart';
 
@@ -11,6 +8,7 @@ class Recipe with _$Recipe {
   const Recipe._();
 
   const factory Recipe({
+    int? id,
     required String name,
     required List<Direction> directions,
     @Default(1) int servings,

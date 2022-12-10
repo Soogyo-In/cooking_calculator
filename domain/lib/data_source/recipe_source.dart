@@ -1,19 +1,19 @@
 import 'package:domain/domain.dart';
 
 abstract class RecipeSource {
-  Future<int> addRecipe(Recipe recipe);
+  Future<Recipe> addRecipe(Recipe recipe);
 
-  Future<Recipe?> getRecipe(int id);
+  Future<Recipe> getRecipe(int id);
 
-  Future<int> updateRecipe(Recipe recipe);
+  Future<void> updateRecipe(Recipe recipe);
 
-  Future<bool> deleteRecipe(int id);
+  Future<void> deleteRecipe(int id);
 
-  Future<int> addIngredient(Ingredient ingredient);
+  Future<Ingredient> addIngredient(Ingredient ingredient);
 
-  Future<Ingredient?> getIngredient(int id);
+  Future<Ingredient> getIngredient(int id);
 
-  Future<int> updateIngredient(Ingredient ingredient);
+  Future<void> updateIngredient(Ingredient ingredient);
 
-  Future<bool> deleteIngredient(int id);
+  Future<void> deleteIngredient(int id);
 }

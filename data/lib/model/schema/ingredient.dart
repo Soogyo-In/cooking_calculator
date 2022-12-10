@@ -4,7 +4,9 @@ part 'ingredient.g.dart';
 
 @collection
 class Ingredient {
-  final id = Isar.autoIncrement;
+  final Id id;
   late String name;
   String? description;
+
+  Ingredient({Id? id}) : id = id ?? Isar.autoIncrement;
 }

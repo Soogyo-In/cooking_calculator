@@ -6,11 +6,13 @@ part 'recipe.g.dart';
 
 @collection
 class Recipe {
-  final id = Isar.autoIncrement;
+  final Id id;
   late String name;
   late List<Direction> directions;
   late byte servings;
   String? description;
+
+  Recipe({Id? id}) : id = id ?? Isar.autoIncrement;
 }
 
 @embedded
