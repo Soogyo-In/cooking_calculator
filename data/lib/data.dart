@@ -1,3 +1,3 @@
 export 'exceptions.dart';
-export 'local_source/local_source.dart';
+export 'datasource/datasource.dart';
 export 'model/model.dart';

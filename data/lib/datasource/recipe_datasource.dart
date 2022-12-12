@@ -1,6 +1,6 @@
 import 'package:domain/domain.dart';
 
-abstract class RecipeSource {
+abstract class RecipeDatasource {
   Future<Recipe> addRecipe(Recipe recipe);
 
   Future<Recipe> getRecipe(int id);

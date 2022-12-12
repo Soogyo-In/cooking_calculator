@@ -1,16 +1,13 @@
-part of 'local_source.dart';
+part of 'local_datasource.dart';
 
-class RecipeIsar implements domain.RecipeSource {
+class RecipeLocalDatasource implements RecipeDatasource {
   @override
   Future<domain.Recipe> addRecipe(domain.Recipe recipe) =>
       _upsertRecipe(recipe);
 
   @override
   Future<domain.Recipe> getRecipe(Id id) async {
-    final isar = await Isar.open([
-      RecipeSchema,
-      IngredientSchema,
-    ]);
+    final isar = await Isar.open([RecipeSchema, IngredientSchema]);
     final recipeData = await isar.recipes.get(id);
     if (recipeData == null) throw DataNotFoundException();
 
@@ -118,11 +115,7 @@ class RecipeIsar implements domain.RecipeSource {
   }
 
   Future<domain.Recipe> _upsertRecipe(domain.Recipe recipe) async {
-    final isar = await Isar.open([
-      RecipeSchema,
-      IngredientSchema,
-    ]);
-
+    final isar = await Isar.open([RecipeSchema, IngredientSchema]);
     final directionData = <Direction>[];
     for (final direction in recipe.directions) {
       final amountByIngredient = {
