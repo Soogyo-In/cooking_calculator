@@ -1,10 +1,51 @@
+import 'package:data/data.dart';
+import 'package:isar/isar.dart';
 import 'package:test/test.dart';
+import 'package:domain/domain.dart' as domain;
 
 void main() async {
+  late RecipeLocalDatasource datasource;
+
+  setUp(() {
+    Isar.initializeIsarCore(download: true);
+    datasource = RecipeLocalDatasource();
+  });
+
   group('[Recipe]', () {
     test(
       'should return added recipe object with id after adding the recipe',
-      () {},
+      () {
+        final recipe = domain.Recipe(
+          directions: [
+            domain.Direction(
+              description: 'description',
+              temperature: domain.Temperature.celsius(1.0),
+              time: Duration(hours: 1),
+              countByIngredientId: {
+                domain.Ingredient(
+                  name: 'egg',
+                  description: 'description',
+                ): domain.Count(1),
+              },
+              massByIngredientId: {
+                domain.Ingredient(
+                  name: 'salt',
+                  description: 'description',
+                ): domain.Gram(1),
+              },
+              volumeByIngredientId: {
+                domain.Ingredient(
+                  name: 'milk',
+                  description: 'description',
+                ): domain.Liter(1),
+              },
+            ),
+          ],
+          name: 'name',
+          description: 'description',
+          servings: 1,
+        );
+      },
     );
 
     test('Isar should be closed after adding the recipe', () {});

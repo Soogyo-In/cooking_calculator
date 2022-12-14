@@ -25,7 +25,7 @@ class Direction {
 
 @embedded
 class IngredientAmount {
-  late int id;
+  late int ingredientId;
   @enumerated
   late MatterUnit unit;
   late float value;

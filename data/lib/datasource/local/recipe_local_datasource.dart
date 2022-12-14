@@ -11,23 +11,9 @@ class RecipeLocalDatasource implements RecipeDatasource {
     final recipeData = await isar.recipes.get(id);
     if (recipeData == null) throw DataNotFoundException();
 
-    final getIngredients = recipeData.directions
-        .expand((directionData) => directionData.ingredients ?? [])
-        .map((ingredient) => isar.ingredients.get(ingredient.id));
-    final ingredientDataByIds = <int, domain.Ingredient>{};
-    final ingredientData = await Future.wait(getIngredients);
-    for (final ingredient in ingredientData) {
-      if (ingredient == null) throw DataNotFoundException();
-      ingredientDataByIds[ingredient.id] = domain.Ingredient(
-        name: ingredient.name,
-        description: ingredient.description ?? '',
-        id: ingredient.id,
-      );
-    }
-
     final directions = recipeData.directions.map(
-      (direction) {
-        final temperatureData = direction.temperature;
+      (directionData) {
+        final temperatureData = directionData.temperature;
         domain.Temperature? temperature;
         if (temperatureData != null) {
           if (temperatureData.unit.isCelsius) {
@@ -38,27 +24,31 @@ class RecipeLocalDatasource implements RecipeDatasource {
           }
         }
 
-        final countByIngredient = <domain.Ingredient, domain.Count>{};
-        final massByIngredient = <domain.Ingredient, domain.Mass>{};
-        final volumeByIngredient = <domain.Ingredient, domain.Volume>{};
-        final ingredients = direction.ingredients ?? [];
-        for (final ingredientData in ingredients) {
-          final ingredient = ingredientDataByIds[ingredientData.id];
-          if (ingredient == null) throw DataNotFoundException();
-
-          final amount = ingredientData.unit.toAmount(ingredientData.value);
-          if (amount is domain.Count) countByIngredient[ingredient] = amount;
-          if (amount is domain.Mass) massByIngredient[ingredient] = amount;
-          if (amount is domain.Volume) volumeByIngredient[ingredient] = amount;
+        final countByIngredientId = <int, domain.Count>{};
+        final massByIngredientId = <int, domain.Mass>{};
+        final volumeByIngredientId = <int, domain.Volume>{};
+        final ingredientAmounts = directionData.ingredients ?? [];
+        for (final ingredientAmount in ingredientAmounts) {
+          final ingredientId = ingredientAmount.ingredientId;
+          final amount = ingredientAmount.unit.toAmount(ingredientAmount.value);
+          if (amount is domain.Count) {
+            countByIngredientId[ingredientId] = amount;
+          }
+          if (amount is domain.Mass) {
+            massByIngredientId[ingredientId] = amount;
+          }
+          if (amount is domain.Volume) {
+            volumeByIngredientId[ingredientId] = amount;
+          }
         }
 
         return domain.Direction(
-          description: direction.description,
+          description: directionData.description,
           temperature: temperature,
-          time: Duration(seconds: direction.timeInSeconds ?? 0),
-          countByIngredient: countByIngredient,
-          massByIngredient: massByIngredient,
-          volumeByIngredient: volumeByIngredient,
+          time: Duration(seconds: directionData.timeInSeconds ?? 0),
+          countByIngredientId: countByIngredientId,
+          massByIngredientId: massByIngredientId,
+          volumeByIngredientId: volumeByIngredientId,
         );
       },
     ).toList();
@@ -118,40 +108,21 @@ class RecipeLocalDatasource implements RecipeDatasource {
     final isar = await Isar.open([RecipeSchema, IngredientSchema]);
     final directionData = <Direction>[];
     for (final direction in recipe.directions) {
-      final amountByIngredient = {
-        ...direction.massByIngredient,
-        ...direction.volumeByIngredient,
-        ...direction.countByIngredient,
+      final amountByIngredientId = {
+        ...direction.massByIngredientId,
+        ...direction.volumeByIngredientId,
+        ...direction.countByIngredientId,
       };
-      final ingredientData = <IngredientAmount>[];
-      final amountByPutIngredient = amountByIngredient.map(
-        (ingredient, amount) => MapEntry(
-          amount,
-          isar.ingredients.put(
-            Ingredient(id: ingredient.id)
-              ..description = ingredient.description
-              ..name = ingredient.name,
-          ),
-        ),
-      );
-
-      final newIngredients = await Future.wait(
-        amountByPutIngredient.entries.map(
-          (entry) {
-            final amount = entry.key;
-            final putIngredient = entry.value;
-
-            return putIngredient.then(
-              (id) => IngredientAmount()
-                ..id = id
-                ..unit = MatterUnit.fromAmount(amount)
-                ..value = amount.value,
-            );
-          },
-        ),
-      );
-
-      ingredientData.addAll(newIngredients);
+      final ingredientData = amountByIngredientId.entries.map(
+        (entry) {
+          final ingredientId = entry.key;
+          final amount = entry.value;
+          return IngredientAmount()
+            ..ingredientId = ingredientId
+            ..unit = MatterUnit.fromAmount(amount)
+            ..value = amount.value;
+        },
+      ).toList();
 
       Temperature? temperatureData;
       final temperature = direction.temperature;
