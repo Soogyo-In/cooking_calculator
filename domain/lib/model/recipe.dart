@@ -15,13 +15,13 @@ class Recipe with _$Recipe {
     @Default('') String description,
   }) = _Recipe;
 
-  Map<Ingredient, Mass> get massByIngredient {
-    final merged = <Ingredient, Mass>{};
+  Map<int, Mass> get massByIngredientId {
+    final merged = <int, Mass>{};
 
     for (final direction in directions) {
-      direction.massByIngredient.forEach((ingredient, mass) {
+      direction.massByIngredientId.forEach((ingredientId, mass) {
         merged.update(
-          ingredient,
+          ingredientId,
           (value) => (value + mass) as Mass,
           ifAbsent: () => mass,
         );
@@ -31,13 +31,13 @@ class Recipe with _$Recipe {
     return merged;
   }
 
-  Map<Ingredient, Volume> get volumeByIngredient {
-    final merged = <Ingredient, Volume>{};
+  Map<int, Volume> get volumeByIngredientId {
+    final merged = <int, Volume>{};
 
     for (final direction in directions) {
-      direction.volumeByIngredient.forEach((ingredient, volume) {
+      direction.volumeByIngredientId.forEach((ingredientId, volume) {
         merged.update(
-          ingredient,
+          ingredientId,
           (value) => (value + volume) as Volume,
           ifAbsent: () => volume,
         );
@@ -47,13 +47,13 @@ class Recipe with _$Recipe {
     return merged;
   }
 
-  Map<Ingredient, Count> get countByIngredient {
-    final merged = <Ingredient, Count>{};
+  Map<int, Count> get countByIngredientId {
+    final merged = <int, Count>{};
 
     for (final direction in directions) {
-      direction.countByIngredient.forEach((ingredient, count) {
+      direction.countByIngredientId.forEach((ingredientId, count) {
         merged.update(
-          ingredient,
+          ingredientId,
           (value) => value + count,
           ifAbsent: () => count,
         );
@@ -68,14 +68,14 @@ class Recipe with _$Recipe {
         (time, direction) => time + direction.time,
       );
 
-  Map<Ingredient, Mass> getMassByIngredientWithRatio(double ratio) {
-    final calculated = <Ingredient, Mass>{};
+  Map<int, Mass> getMassByIngredientWithRatio(double ratio) {
+    final calculated = <int, Mass>{};
 
     for (final direction in directions) {
       direction
           .getMassByIngredientWithRatio(ratio)
-          .forEach((ingredient, mass) => calculated.update(
-                ingredient,
+          .forEach((ingredientId, mass) => calculated.update(
+                ingredientId,
                 (value) => (value + mass) as Mass,
                 ifAbsent: () => mass,
               ));
@@ -84,14 +84,14 @@ class Recipe with _$Recipe {
     return calculated;
   }
 
-  Map<Ingredient, Volume> getVolumeByIngredientWithRatio(double ratio) {
-    final calculated = <Ingredient, Volume>{};
+  Map<int, Volume> getVolumeByIngredientWithRatio(double ratio) {
+    final calculated = <int, Volume>{};
 
     for (final direction in directions) {
       direction
           .getVolumeByIngredientWithRatio(ratio)
-          .forEach((ingredient, volume) => calculated.update(
-                ingredient,
+          .forEach((ingredientId, volume) => calculated.update(
+                ingredientId,
                 (value) => (value + volume) as Volume,
                 ifAbsent: () => volume,
               ));
@@ -100,14 +100,14 @@ class Recipe with _$Recipe {
     return calculated;
   }
 
-  Map<Ingredient, Count> getCountByIngredientWithRatio(double ratio) {
-    final calculated = <Ingredient, Count>{};
+  Map<int, Count> getCountByIngredientWithRatio(double ratio) {
+    final calculated = <int, Count>{};
 
     for (final direction in directions) {
       direction
           .getCountByIngredientWithRatio(ratio)
-          .forEach((ingredient, count) => calculated.update(
-                ingredient,
+          .forEach((ingredientId, count) => calculated.update(
+                ingredientId,
                 (value) => value + count,
                 ifAbsent: () => count,
               ));

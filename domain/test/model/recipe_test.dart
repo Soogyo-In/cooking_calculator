@@ -11,30 +11,30 @@ void main() {
       directions: [
         Direction(
           description: 'step 1',
-          massByIngredient: {
-            const Ingredient(name: 'mass 1'): const Mass.gram(200.0),
-            const Ingredient(name: 'mass 2'): const Mass.ounce(2.0),
+          massByIngredientId: {
+            1: const Mass.gram(200.0),
+            2: const Mass.ounce(2.0),
           },
-          volumeByIngredient: {
-            const Ingredient(name: 'volume 1'): const Volume.liter(200.0),
-            const Ingredient(name: 'volume 2'): const Volume.teaspoon(2.0),
+          volumeByIngredientId: {
+            3: const Volume.liter(200.0),
+            4: const Volume.teaspoon(2.0),
           },
-          countByIngredient: {
-            const Ingredient(name: 'count 1'): const Count(1.0),
-            const Ingredient(name: 'count 2'): const Count(2.0),
+          countByIngredientId: {
+            5: const Count(1.0),
+            6: const Count(2.0),
           },
           time: const Duration(minutes: 1),
         ),
         Direction(
           description: 'step 2',
-          massByIngredient: {
-            const Ingredient(name: 'mass 1'): const Mass.milligram(200.0),
+          massByIngredientId: {
+            1: const Mass.milligram(200.0),
           },
-          volumeByIngredient: {
-            const Ingredient(name: 'volume 1'): const Volume.milliliter(200.0),
+          volumeByIngredientId: {
+            3: const Volume.milliliter(200.0),
           },
-          countByIngredient: {
-            const Ingredient(name: 'count 1'): const Count(1.0),
+          countByIngredientId: {
+            5: const Count(1.0),
           },
           time: const Duration(days: 1),
         ),
@@ -51,10 +51,10 @@ void main() {
     'Recipe provides whole masses of each ingredients',
     () {
       expect(
-        recipe.massByIngredient,
+        recipe.massByIngredientId,
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(200.2),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(2.0),
+          1: const Mass.gram(200.2),
+          2: const Mass.ounce(2.0),
         },
       );
     },
@@ -64,10 +64,10 @@ void main() {
     'Recipe provides whole volumes of each ingredients',
     () {
       expect(
-        recipe.volumeByIngredient,
+        recipe.volumeByIngredientId,
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(200.2),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(2.0),
+          3: const Volume.liter(200.2),
+          4: const Volume.teaspoon(2.0),
         },
       );
     },
@@ -77,10 +77,10 @@ void main() {
     'Recipe provides whole counts of each ingredients',
     () {
       expect(
-        recipe.countByIngredient,
+        recipe.countByIngredientId,
         {
-          const Ingredient(name: 'count 1'): const Count(2.0),
-          const Ingredient(name: 'count 2'): const Count(2.0),
+          5: const Count(2.0),
+          6: const Count(2.0),
         },
       );
     },
@@ -102,15 +102,15 @@ void main() {
       expect(
         recipe.getMassByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(100.1),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(1.0),
+          1: const Mass.gram(100.1),
+          2: const Mass.ounce(1.0),
         },
       );
       expect(
         recipe.getMassByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(400.4),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(4.0),
+          1: const Mass.gram(400.4),
+          2: const Mass.ounce(4.0),
         },
       );
     },
@@ -122,15 +122,15 @@ void main() {
       expect(
         recipe.getVolumeByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(100.1),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(1.0),
+          3: const Volume.liter(100.1),
+          4: const Volume.teaspoon(1.0),
         },
       );
       expect(
         recipe.getVolumeByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(400.4),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(4.0),
+          3: const Volume.liter(400.4),
+          4: const Volume.teaspoon(4.0),
         },
       );
     },
@@ -142,15 +142,15 @@ void main() {
       expect(
         recipe.getCountByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'count 1'): const Count(1.0),
-          const Ingredient(name: 'count 2'): const Count(1.0),
+          5: const Count(1.0),
+          6: const Count(1.0),
         },
       );
       expect(
         recipe.getCountByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'count 1'): const Count(4.0),
-          const Ingredient(name: 'count 2'): const Count(4.0),
+          5: const Count(4.0),
+          6: const Count(4.0),
         },
       );
     },

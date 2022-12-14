@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 void main() {
   final direction = Direction(
     description: 'step 1',
-    massByIngredient: {
-      const Ingredient(name: 'mass 1'): const Mass.gram(200.0),
-      const Ingredient(name: 'mass 2'): const Mass.ounce(2.0),
+    massByIngredientId: {
+      1: const Mass.gram(200.0),
+      2: const Mass.ounce(2.0),
     },
-    volumeByIngredient: {
-      const Ingredient(name: 'volume 1'): const Volume.liter(200.0),
-      const Ingredient(name: 'volume 2'): const Volume.teaspoon(2.0),
+    volumeByIngredientId: {
+      3: const Volume.liter(200.0),
+      4: const Volume.teaspoon(2.0),
     },
-    countByIngredient: {
-      const Ingredient(name: 'count 1'): const Count(1.0),
-      const Ingredient(name: 'count 2'): const Count(2.0),
+    countByIngredientId: {
+      5: const Count(1.0),
+      6: const Count(2.0),
     },
     time: const Duration(minutes: 1),
   );
@@ -25,15 +25,15 @@ void main() {
       expect(
         direction.getMassByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(100.0),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(1.0),
+          1: const Mass.gram(100.0),
+          2: const Mass.ounce(1.0),
         },
       );
       expect(
         direction.getMassByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'mass 1'): const Mass.gram(400.0),
-          const Ingredient(name: 'mass 2'): const Mass.ounce(4.0),
+          1: const Mass.gram(400.0),
+          2: const Mass.ounce(4.0),
         },
       );
     },
@@ -45,15 +45,15 @@ void main() {
       expect(
         direction.getVolumeByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(100.0),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(1.0),
+          3: const Volume.liter(100.0),
+          4: const Volume.teaspoon(1.0),
         },
       );
       expect(
         direction.getVolumeByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'volume 1'): const Volume.liter(400.0),
-          const Ingredient(name: 'volume 2'): const Volume.teaspoon(4.0),
+          3: const Volume.liter(400.0),
+          4: const Volume.teaspoon(4.0),
         },
       );
     },
@@ -65,15 +65,15 @@ void main() {
       expect(
         direction.getCountByIngredientWithRatio(0.5),
         {
-          const Ingredient(name: 'count 1'): const Count(0.5),
-          const Ingredient(name: 'count 2'): const Count(1.0),
+          5: const Count(0.5),
+          6: const Count(1.0),
         },
       );
       expect(
         direction.getCountByIngredientWithRatio(2.0),
         {
-          const Ingredient(name: 'count 1'): const Count(2.0),
-          const Ingredient(name: 'count 2'): const Count(4.0),
+          5: const Count(2.0),
+          6: const Count(4.0),
         },
       );
     },
