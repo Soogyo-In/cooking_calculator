@@ -1,3 +1,4 @@
+import 'package:cooking_calulator/recipe_resource.dart';
 import 'package:cooking_calulator/widget/widget.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,9 @@ class RecipePage extends ConsumerWidget {
             ],
             const SizedBox(height: 8.0),
             _IngredientList(Map.fromEntries([
-              ...recipe.countByIngredient.entries,
-              ...recipe.massByIngredient.entries,
-              ...recipe.volumeByIngredient.entries,
+              ...recipe.countByIngredientId.entries,
+              ...recipe.massByIngredientId.entries,
+              ...recipe.volumeByIngredientId.entries,
             ])),
             const SizedBox(height: 8.0),
             ...recipe.directions.map(
@@ -94,20 +95,20 @@ class RecipePage extends ConsumerWidget {
 }
 
 class _IngredientList extends ConsumerWidget {
-  final Map<Ingredient, Amount> _amountByIngredient;
+  final Map<int, Amount> _amountByIngredientId;
 
-  const _IngredientList(Map<Ingredient, Amount> amountByIngredient)
-      : _amountByIngredient = amountByIngredient;
+  const _IngredientList(Map<int, Amount> amountByIngredientId)
+      : _amountByIngredientId = amountByIngredientId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final factor = ref.watch(_amountFactorProvider);
     final ingredientList = <Widget>[];
 
-    _amountByIngredient.forEach((ingredient, amount) {
+    _amountByIngredientId.forEach((ingredientId, amount) {
       final editedAmount = amount * factor;
       if (amount.roundedAt(2).value <= 0.0) {
-        ingredientList.add(Text(ingredient.name));
+        ingredientList.add(Text(ingredientById[ingredientId]!.name));
         return;
       }
       Widget? unitConverter;
@@ -151,7 +152,7 @@ class _IngredientList extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(ingredient.name),
+              Text(ingredientById[ingredientId]!.name),
               unitConverter,
             ],
           ),
@@ -187,9 +188,9 @@ class _DirectionDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _IngredientList(Map.fromEntries([
-          ...direction.countByIngredient.entries,
-          ...direction.massByIngredient.entries,
-          ...direction.volumeByIngredient.entries,
+          ...direction.countByIngredientId.entries,
+          ...direction.massByIngredientId.entries,
+          ...direction.volumeByIngredientId.entries,
         ])),
         if (direction.time != Duration.zero) ...[
           const SizedBox(height: 8.0),
