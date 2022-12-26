@@ -1,12 +1,12 @@
 import 'package:isar/isar.dart';
 
-part 'ingredient.g.dart';
+part 'ingredient_data.g.dart';
 
 @collection
-class Ingredient {
+class IngredientData {
   final Id id;
   late String name;
   String? description;
 
-  Ingredient({Id? id}) : id = id ?? Isar.autoIncrement;
+  IngredientData({this.id = Isar.autoIncrement});
 }

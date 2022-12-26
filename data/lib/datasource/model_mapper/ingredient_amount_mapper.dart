@@ -1,7 +1,7 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 
-extension IngredientAmountMapper on IngredientAmount {
+extension IngredientAmountMapper on IngredientAmountData {
   static MatterUnit fromAmount(Amount amount) {
     if (amount is Milligram) return MatterUnit.milligram;
     if (amount is Gram) return MatterUnit.gram;

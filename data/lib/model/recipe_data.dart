@@ -2,29 +2,29 @@ import 'package:isar/isar.dart';
 
 import 'enum/enum.dart';
 
-part 'recipe.g.dart';
+part 'recipe_data.g.dart';
 
 @collection
-class Recipe {
+class RecipeData {
   final Id id;
   late String name;
-  late List<Direction> directions;
+  late List<DirectionData> directions;
   late byte servings;
   String? description;
 
-  Recipe({Id? id}) : id = id ?? Isar.autoIncrement;
+  RecipeData({this.id = Isar.autoIncrement});
 }
 
 @embedded
-class Direction {
+class DirectionData {
   late String description;
-  List<IngredientAmount>? ingredients;
+  List<IngredientAmountData>? ingredients;
   int? timeInSeconds;
-  Temperature? temperature;
+  TemperatureData? temperature;
 }
 
 @embedded
-class IngredientAmount {
+class IngredientAmountData {
   late int ingredientId;
   @enumerated
   late MatterUnit unit;
@@ -32,7 +32,7 @@ class IngredientAmount {
 }
 
 @embedded
-class Temperature {
+class TemperatureData {
   @enumerated
   late TemperatureUnit unit;
   late float value;

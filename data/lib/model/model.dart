@@ -1,1 +1,3 @@
-export 'schema/schema.dart';
+export 'enum/enum.dart';
+export 'ingredient_data.dart';
+export 'recipe_data.dart';

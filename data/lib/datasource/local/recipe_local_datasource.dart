@@ -2,28 +2,27 @@ part of 'local_datasource.dart';
 
 class RecipeLocalDatasource implements RecipeDatasource {
   @override
-  Future<domain.Recipe> addRecipe(domain.Recipe recipe) =>
-      _upsertRecipe(recipe);
+  Future<Recipe> addRecipe(Recipe recipe) => _upsertRecipe(recipe);
 
   @override
-  Future<domain.Recipe> getRecipe(Id id) async {
-    final isar = await Isar.open([RecipeSchema, IngredientSchema]);
-    final recipeData = await isar.recipes.get(id);
+  Future<Recipe> getRecipe(Id id) async {
+    final isar = await Isar.open([RecipeDataSchema, IngredientDataSchema]);
+    final recipeData = await isar.recipeDatas.get(id);
     if (recipeData == null) throw DataNotFoundException();
 
     final directions = recipeData.directions.map(
       (directionData) {
-        final countByIngredientId = <int, domain.Count>{};
-        final massByIngredientId = <int, domain.Mass>{};
-        final volumeByIngredientId = <int, domain.Volume>{};
+        final countByIngredientId = <int, Count>{};
+        final massByIngredientId = <int, Mass>{};
+        final volumeByIngredientId = <int, Volume>{};
         final amountSetterByType = {
-          (domain.Count): (ingredientId, amount) {
+          (Count): (ingredientId, amount) {
             countByIngredientId[ingredientId] = amount;
           },
-          (domain.Mass): (ingredientId, amount) {
+          (Mass): (ingredientId, amount) {
             massByIngredientId[ingredientId] = amount;
           },
-          (domain.Volume): (ingredientId, amount) {
+          (Volume): (ingredientId, amount) {
             volumeByIngredientId[ingredientId] = amount;
           },
         };
@@ -34,7 +33,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
           amountSetterByType[amount.runtimeType]?.call(ingredientId, amount);
         }
 
-        return domain.Direction(
+        return Direction(
           description: directionData.description,
           temperature: directionData.temperature?.toDomainTemperature(),
           time: Duration(seconds: directionData.timeInSeconds ?? 0),
@@ -47,7 +46,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     await isar.close();
 
-    return domain.Recipe(
+    return Recipe(
       directions: directions,
       name: recipeData.name,
       description: recipeData.description ?? '',
@@ -57,28 +56,28 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateRecipe(domain.Recipe recipe) => _upsertRecipe(recipe);
+  Future<void> updateRecipe(Recipe recipe) => _upsertRecipe(recipe);
 
   @override
   Future<void> deleteRecipe(Id id) async {
-    final isar = await Isar.open([RecipeSchema]);
-    await isar.recipes.delete(id);
+    final isar = await Isar.open([RecipeDataSchema]);
+    await isar.recipeDatas.delete(id);
     isar.close();
   }
 
   @override
-  Future<domain.Ingredient> addIngredient(domain.Ingredient ingredient) =>
+  Future<Ingredient> addIngredient(Ingredient ingredient) =>
       _upsertIngredient(ingredient);
 
   @override
-  Future<domain.Ingredient> getIngredient(Id id) async {
-    final isar = await Isar.open([IngredientSchema]);
-    final ingredient = await isar.ingredients.get(id);
+  Future<Ingredient> getIngredient(Id id) async {
+    final isar = await Isar.open([IngredientDataSchema]);
+    final ingredient = await isar.ingredientDatas.get(id);
     if (ingredient == null) throw DataNotFoundException();
 
     await isar.close();
 
-    return domain.Ingredient(
+    return Ingredient(
       name: ingredient.name,
       description: ingredient.description ?? '',
       id: ingredient.id,
@@ -86,19 +85,19 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateIngredient(domain.Ingredient ingredient) =>
+  Future<void> updateIngredient(Ingredient ingredient) =>
       _upsertIngredient(ingredient);
 
   @override
   Future<void> deleteIngredient(Id id) async {
-    final isar = await Isar.open([IngredientSchema]);
-    await isar.ingredients.delete(id);
+    final isar = await Isar.open([IngredientDataSchema]);
+    await isar.ingredientDatas.delete(id);
     await isar.close();
   }
 
-  Future<domain.Recipe> _upsertRecipe(domain.Recipe recipe) async {
-    final isar = await Isar.open([RecipeSchema, IngredientSchema]);
-    final directionData = <Direction>[];
+  Future<Recipe> _upsertRecipe(Recipe recipe) async {
+    final isar = await Isar.open([RecipeDataSchema, IngredientDataSchema]);
+    final directionData = <DirectionData>[];
     for (final direction in recipe.directions) {
       final amountByIngredientId = {
         ...direction.massByIngredientId,
@@ -109,7 +108,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
         (entry) {
           final ingredientId = entry.key;
           final amount = entry.value;
-          return IngredientAmount()
+          return IngredientAmountData()
             ..ingredientId = ingredientId
             ..unit = IngredientAmountMapper.fromAmount(amount)
             ..value = amount.value;
@@ -117,7 +116,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
       ).toList();
 
       directionData.add(
-        Direction()
+        DirectionData()
           ..description = direction.description
           ..ingredients = ingredientData
           ..temperature = direction.temperature?.toTemperature()
@@ -125,8 +124,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
       );
     }
 
-    final id = await isar.recipes.put(
-      Recipe(id: recipe.id)
+    final id = await isar.recipeDatas.put(
+      RecipeData(id: recipe.id ?? Isar.autoIncrement)
         ..description = recipe.description
         ..directions = directionData
         ..name = recipe.name
@@ -138,12 +137,12 @@ class RecipeLocalDatasource implements RecipeDatasource {
     return recipe.copyWith(id: id);
   }
 
-  Future<domain.Ingredient> _upsertIngredient(
-    domain.Ingredient ingredient,
+  Future<Ingredient> _upsertIngredient(
+    Ingredient ingredient,
   ) async {
-    final isar = await Isar.open([IngredientSchema]);
-    final id = await isar.ingredients.put(
-      Ingredient(id: ingredient.id)
+    final isar = await Isar.open([IngredientDataSchema]);
+    final id = await isar.ingredientDatas.put(
+      IngredientData(id: ingredient.id ?? Isar.autoIncrement)
         ..description = ingredient.description
         ..name = ingredient.name,
     );

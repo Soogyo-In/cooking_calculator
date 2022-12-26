@@ -1,5 +1,3 @@
-import 'package:domain/domain.dart';
-
 enum MatterUnit {
   milligram,
   gram,

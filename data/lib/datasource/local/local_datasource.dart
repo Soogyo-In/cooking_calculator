@@ -1,8 +1,5 @@
-import 'package:data/datasource/model_mapper/model_mapper.dart';
-import 'package:data/datasource/recipe_datasource.dart';
-import 'package:data/exceptions.dart';
-import 'package:data/model/schema/schema.dart';
-import 'package:domain/domain.dart' as domain;
+import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 import 'package:isar/isar.dart';
 
 part 'recipe_local_datasource.dart';

@@ -10,29 +10,29 @@ class Celsius with _$Celsius implements Temperature {
 
   const Celsius._();
 
-  const factory Celsius(double degree) = _Celsius;
+  const factory Celsius(double value) = _Celsius;
 
   @override
   Celsius toCelsius() => this;
 
   @override
-  Fahrenheit toFahrenheit() => Fahrenheit(degree * 9 / 5 + 32);
+  Fahrenheit toFahrenheit() => Fahrenheit(value * 9 / 5 + 32);
 
   @override
   Celsius operator +(Temperature other) =>
-      Celsius(degree + other.toCelsius().degree);
+      Celsius(value + other.toCelsius().value);
 
   @override
   Celsius operator -(Temperature other) =>
-      Celsius(degree - other.toCelsius().degree);
+      Celsius(value - other.toCelsius().value);
 
   @override
-  Celsius operator *(num factors) => Celsius(degree * factors.toDouble());
+  Celsius operator *(num factors) => Celsius(value * factors.toDouble());
 
   @override
-  Celsius operator /(num divisor) => Celsius(degree / divisor);
+  Celsius operator /(num divisor) => Celsius(value / divisor);
 
   @override
   String toStringAsFixed(int fractionDigits) =>
-      '${degree.toStringAsFixed(fractionDigits)} $symbol';
+      '${value.toStringAsFixed(fractionDigits)} $symbol';
 }
