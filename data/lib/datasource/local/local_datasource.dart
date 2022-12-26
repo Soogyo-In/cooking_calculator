@@ -1,3 +1,4 @@
+import 'package:data/datasource/model_mapper/model_mapper.dart';
 import 'package:data/datasource/recipe_datasource.dart';
 import 'package:data/exceptions.dart';
 import 'package:data/model/schema/schema.dart';

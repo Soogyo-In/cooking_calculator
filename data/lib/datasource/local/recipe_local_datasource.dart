@@ -13,38 +13,30 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     final directions = recipeData.directions.map(
       (directionData) {
-        final temperatureData = directionData.temperature;
-        domain.Temperature? temperature;
-        if (temperatureData != null) {
-          if (temperatureData.unit.isCelsius) {
-            temperature = domain.Celsius(temperatureData.value);
-          }
-          if (temperatureData.unit.isFahrenheit) {
-            temperature = domain.Fahrenheit(temperatureData.value);
-          }
-        }
-
         final countByIngredientId = <int, domain.Count>{};
         final massByIngredientId = <int, domain.Mass>{};
         final volumeByIngredientId = <int, domain.Volume>{};
+        final amountSetterByType = {
+          (domain.Count): (ingredientId, amount) {
+            countByIngredientId[ingredientId] = amount;
+          },
+          (domain.Mass): (ingredientId, amount) {
+            massByIngredientId[ingredientId] = amount;
+          },
+          (domain.Volume): (ingredientId, amount) {
+            volumeByIngredientId[ingredientId] = amount;
+          },
+        };
         final ingredientAmounts = directionData.ingredients ?? [];
         for (final ingredientAmount in ingredientAmounts) {
           final ingredientId = ingredientAmount.ingredientId;
-          final amount = ingredientAmount.unit.toAmount(ingredientAmount.value);
-          if (amount is domain.Count) {
-            countByIngredientId[ingredientId] = amount;
-          }
-          if (amount is domain.Mass) {
-            massByIngredientId[ingredientId] = amount;
-          }
-          if (amount is domain.Volume) {
-            volumeByIngredientId[ingredientId] = amount;
-          }
+          final amount = ingredientAmount.toAmount();
+          amountSetterByType[amount.runtimeType]?.call(ingredientId, amount);
         }
 
         return domain.Direction(
           description: directionData.description,
-          temperature: temperature,
+          temperature: directionData.temperature?.toDomainTemperature(),
           time: Duration(seconds: directionData.timeInSeconds ?? 0),
           countByIngredientId: countByIngredientId,
           massByIngredientId: massByIngredientId,
@@ -119,22 +111,16 @@ class RecipeLocalDatasource implements RecipeDatasource {
           final amount = entry.value;
           return IngredientAmount()
             ..ingredientId = ingredientId
-            ..unit = MatterUnit.fromAmount(amount)
+            ..unit = IngredientAmountMapper.fromAmount(amount)
             ..value = amount.value;
         },
       ).toList();
-
-      Temperature? temperatureData;
-      final temperature = direction.temperature;
-      if (temperature != null) {
-        temperatureData = TemperatureUnit.fromTemperature(temperature);
-      }
 
       directionData.add(
         Direction()
           ..description = direction.description
           ..ingredients = ingredientData
-          ..temperature = temperatureData
+          ..temperature = direction.temperature?.toTemperature()
           ..timeInSeconds = direction.time.inMilliseconds,
       );
     }
