@@ -56,8 +56,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
   @override
   Future<void> deleteRecipe(Id id) async {
     final isar = await Isar.open([RecipeDataSchema]);
-    await isar.recipeDatas.delete(id);
-    isar.close();
+    await isar.writeTxn(() => isar.recipeDatas.delete(id));
+    await isar.close();
   }
 
   @override

@@ -109,12 +109,16 @@ void main() async {
           group(
             'Failed',
             () {
+              const invalidId = -1;
+
               test(
                 'Should Isar instance is closed',
                 () async {
-                  await datasource.getRecipe(addedRecipe.id!);
-
-                  expect(Isar.getInstance(), isNull);
+                  try {
+                    await datasource.getRecipe(invalidId);
+                  } catch (e) {
+                    expect(Isar.getInstance(), isNull);
+                  }
                 },
               );
 
@@ -122,7 +126,7 @@ void main() async {
                 'Should throw exception',
                 () async {
                   expect(
-                    datasource.getRecipe(-1),
+                    datasource.getRecipe(invalidId),
                     throwsA(isA<DataNotFoundException>()),
                   );
                 },
@@ -183,22 +187,30 @@ void main() async {
         },
       );
 
-      test('should return recipe object match with the given id', () {});
+      group(
+        'Delete',
+        () {
+          late Recipe addedRecipe;
 
-      test(
-        'should throw the exception when failed to find match data with the given id',
-        () {},
+          setUp(() async {
+            addedRecipe = await datasource.addRecipe(recipe);
+          });
+
+          group(
+            'Succeed',
+            () {
+              test(
+                'Should Isar instance is closed',
+                () async {
+                  await datasource.deleteRecipe(addedRecipe.id!);
+
+                  expect(Isar.getInstance(), isNull);
+                },
+              );
+            },
+          );
+        },
       );
-
-      test('Isar should be closed after searching the recipe', () {});
-
-      test('the recipe should not be found after deletion', () {});
-
-      test('Isar should be closed after updating the recipe', () {});
-
-      test('the recipe should be changed after the update', () {});
-
-      test('Isar should be closed after deleting the recipe', () {});
     },
   );
 
