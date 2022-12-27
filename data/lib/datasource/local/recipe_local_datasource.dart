@@ -56,7 +56,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateRecipe(Recipe recipe) => _upsertRecipe(recipe);
+  Future<Recipe> updateRecipe(Recipe recipe) => _upsertRecipe(recipe);
 
   @override
   Future<void> deleteRecipe(Id id) async {
@@ -85,7 +85,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateIngredient(Ingredient ingredient) =>
+  Future<Ingredient> updateIngredient(Ingredient ingredient) =>
       _upsertIngredient(ingredient);
 
   @override

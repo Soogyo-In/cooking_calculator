@@ -5,7 +5,7 @@ abstract class RecipeDatasource {
 
   Future<Recipe> getRecipe(int id);
 
-  Future<void> updateRecipe(Recipe recipe);
+  Future<Recipe> updateRecipe(Recipe recipe);
 
   Future<void> deleteRecipe(int id);
 
@@ -13,7 +13,7 @@ abstract class RecipeDatasource {
 
   Future<Ingredient> getIngredient(int id);
 
-  Future<void> updateIngredient(Ingredient ingredient);
+  Future<Ingredient> updateIngredient(Ingredient ingredient);
 
   Future<void> deleteIngredient(int id);
 }
