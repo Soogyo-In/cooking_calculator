@@ -124,13 +124,15 @@ class RecipeLocalDatasource implements RecipeDatasource {
       );
     }
 
-    final id = await isar.recipeDatas.put(
-      RecipeData(id: recipe.id ?? Isar.autoIncrement)
-        ..description = recipe.description
-        ..directions = directionData
-        ..name = recipe.name
-        ..servings = recipe.servings,
-    );
+    final id = await isar.writeTxn(() {
+      return isar.recipeDatas.put(
+        RecipeData(id: recipe.id ?? Isar.autoIncrement)
+          ..description = recipe.description
+          ..directions = directionData
+          ..name = recipe.name
+          ..servings = recipe.servings,
+      );
+    });
 
     await isar.close();
 
