@@ -6,7 +6,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<Recipe> getRecipe(Id id) async {
-    final isar = await Isar.open([RecipeDataSchema, IngredientDataSchema]);
+    final isar = await Isar.open([RecipeDataSchema]);
     final recipeData = await isar.recipeDatas.get(id);
     if (recipeData == null) throw DataNotFoundException();
 
@@ -96,7 +96,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   Future<Recipe> _upsertRecipe(Recipe recipe) async {
-    final isar = await Isar.open([RecipeDataSchema, IngredientDataSchema]);
+    final isar = await Isar.open([RecipeDataSchema]);
     final directionData = <DirectionData>[];
     for (final direction in recipe.directions) {
       final amountByIngredientId = {
