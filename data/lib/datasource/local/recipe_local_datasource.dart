@@ -8,29 +8,24 @@ class RecipeLocalDatasource implements RecipeDatasource {
   Future<Recipe> getRecipe(Id id) async {
     final isar = await Isar.open([RecipeDataSchema]);
     final recipeData = await isar.recipeDatas.get(id);
-    if (recipeData == null) throw DataNotFoundException();
+    if (recipeData == null) {
+      await isar.close();
+      throw DataNotFoundException();
+    }
 
     final directions = recipeData.directions.map(
       (directionData) {
         final countByIngredientId = <int, Count>{};
         final massByIngredientId = <int, Mass>{};
         final volumeByIngredientId = <int, Volume>{};
-        final amountSetterByType = {
-          (Count): (ingredientId, amount) {
-            countByIngredientId[ingredientId] = amount;
-          },
-          (Mass): (ingredientId, amount) {
-            massByIngredientId[ingredientId] = amount;
-          },
-          (Volume): (ingredientId, amount) {
-            volumeByIngredientId[ingredientId] = amount;
-          },
-        };
         final ingredientAmounts = directionData.ingredients ?? [];
         for (final ingredientAmount in ingredientAmounts) {
           final ingredientId = ingredientAmount.ingredientId;
           final amount = ingredientAmount.toAmount();
-          amountSetterByType[amount.runtimeType]?.call(ingredientId, amount);
+
+          if (amount is Count) countByIngredientId[ingredientId] = amount;
+          if (amount is Mass) massByIngredientId[ingredientId] = amount;
+          if (amount is Volume) volumeByIngredientId[ingredientId] = amount;
         }
 
         return Direction(
@@ -73,7 +68,10 @@ class RecipeLocalDatasource implements RecipeDatasource {
   Future<Ingredient> getIngredient(Id id) async {
     final isar = await Isar.open([IngredientDataSchema]);
     final ingredient = await isar.ingredientDatas.get(id);
-    if (ingredient == null) throw DataNotFoundException();
+    if (ingredient == null) {
+      await isar.close();
+      throw DataNotFoundException();
+    }
 
     await isar.close();
 
@@ -120,7 +118,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
           ..description = direction.description
           ..ingredients = ingredientData
           ..temperature = direction.temperature?.toTemperature()
-          ..timeInSeconds = direction.time.inMilliseconds,
+          ..timeInSeconds = direction.time.inSeconds,
       );
     }
 

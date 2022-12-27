@@ -74,6 +74,65 @@ void main() async {
       );
 
       group(
+        'Read',
+        () {
+          late Recipe addedRecipe;
+
+          setUp(() async {
+            addedRecipe = await datasource.addRecipe(recipe);
+          });
+
+          group(
+            'Succeed',
+            () {
+              test(
+                'Should Isar instance is closed',
+                () async {
+                  await datasource.getRecipe(addedRecipe.id!);
+
+                  expect(Isar.getInstance(), isNull);
+                },
+              );
+
+              test(
+                'Should return read recipe object',
+                () async {
+                  expect(
+                    await datasource.getRecipe(addedRecipe.id!),
+                    addedRecipe,
+                  );
+                },
+              );
+            },
+          );
+
+          group(
+            'Failed',
+            () {
+              test(
+                'Should Isar instance is closed',
+                () async {
+                  await datasource.getRecipe(addedRecipe.id!);
+
+                  expect(Isar.getInstance(), isNull);
+                },
+              );
+
+              test(
+                'Should throw exception',
+                () async {
+                  expect(
+                    datasource.getRecipe(-1),
+                    throwsA(isA<DataNotFoundException>()),
+                  );
+                },
+              );
+            },
+          );
+        },
+      );
+
+      group(
         'Update',
         () {
           late Recipe addedRecipe;
