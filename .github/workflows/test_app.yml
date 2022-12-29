@@ -1,0 +1,58 @@
+name: Test App
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: dart-lang/setup-dart@v1.3
+
+      - uses: subosito/flutter-action@v2.8.0
+
+      - name: Install domain layer dependencies
+        working-directory: ./domain
+        run: dart pub get
+
+      - name: Run build runner for domain layer code generation
+        working-directory: ./domain
+        run: dart pub run build_runner build
+
+      - name: Run domain layer tests
+        working-directory: ./domain      
+        run: dart test
+
+      - name: Install data layer dependencies
+        working-directory: ./data
+        run: dart pub get
+
+      - name: Run build runner for data layer code generation
+        working-directory: ./data
+        run: dart pub run build_runner build
+
+      - name: Run data layer tests
+        working-directory: ./data
+        run: dart test
+
+      - name: Install interface layer dependencies
+        run: flutter pub get
+
+      - name: Run build runner for interface layer code generation
+        run: flutter pub run build_runner build
+
+      - name: Run interface layer tests
+        run: flutter test
+
+      - name: Analyze project source
+        run: dart analyze
