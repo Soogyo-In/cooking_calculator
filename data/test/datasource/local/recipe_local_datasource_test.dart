@@ -214,29 +214,174 @@ void main() async {
     },
   );
 
-  group('[Ingredient]', () {
-    test(
-      'should return added ingredient object with id after adding the ingredient',
-      () {},
+  group('Ingredient', () {
+    const ingredient = Ingredient(
+      name: 'name',
+      description: 'description',
     );
 
-    test('Isar should be closed after adding the ingredient', () {});
+    group(
+      'Add',
+      () {
+        group(
+          'Succeed',
+          () {
+            test(
+              'Should Isar instance is closed',
+              () async {
+                await datasource.addIngredient(ingredient);
 
-    test('should return ingredient object match with the given id', () {});
+                expect(Isar.getInstance(), isNull);
+              },
+            );
 
-    test(
-      'should throw the exception when failed to find match data with the given id',
-      () {},
+            test(
+              'Should return added ingredient object with id',
+              () async {
+                final addedIngredient =
+                    await datasource.addIngredient(ingredient);
+
+                expect(
+                  addedIngredient,
+                  Ingredient(
+                    name: ingredient.name,
+                    description: ingredient.description,
+                    id: addedIngredient.id,
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
 
-    test('Isar should be closed after searching the ingredient', () {});
+    group(
+      'Read',
+      () {
+        late Ingredient addedIngredient;
 
-    test('the ingredient should not be found after deletion', () {});
+        setUp(() async {
+          addedIngredient = await datasource.addIngredient(ingredient);
+        });
 
-    test('Isar should be closed after updating the ingredient', () {});
+        group(
+          'Succeed',
+          () {
+            test(
+              'Should Isar instance is closed',
+              () async {
+                await datasource.getIngredient(addedIngredient.id!);
 
-    test('the ingredient should be changed after the update', () {});
+                expect(Isar.getInstance(), isNull);
+              },
+            );
 
-    test('Isar should be closed after deleting the ingredient', () {});
+            test(
+              'Should return read ingredient object',
+              () async {
+                expect(
+                  await datasource.getIngredient(addedIngredient.id!),
+                  addedIngredient,
+                );
+              },
+            );
+          },
+        );
+
+        group(
+          'Failed',
+          () {
+            const invalidId = -1;
+
+            test(
+              'Should Isar instance is closed',
+              () async {
+                try {
+                  await datasource.getIngredient(invalidId);
+                } catch (e) {
+                  expect(Isar.getInstance(), isNull);
+                }
+              },
+            );
+
+            test(
+              'Should throw exception',
+              () async {
+                expect(
+                  datasource.getIngredient(invalidId),
+                  throwsA(isA<DataNotFoundException>()),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+
+    group(
+      'Update',
+      () {
+        late Ingredient addedIngredient;
+        late Ingredient updatedIngredient;
+
+        setUp(() async {
+          addedIngredient = await datasource.addIngredient(ingredient);
+          updatedIngredient = addedIngredient.copyWith(
+            description: 'newDescription',
+            name: 'newName',
+          );
+        });
+
+        group(
+          'Succeed',
+          () {
+            test(
+              'Should Isar instance is closed',
+              () async {
+                await datasource.updateIngredient(updatedIngredient);
+
+                expect(Isar.getInstance(), isNull);
+              },
+            );
+
+            test(
+              'Should return updated ingredient object',
+              () async {
+                expect(
+                  await datasource.updateIngredient(updatedIngredient),
+                  updatedIngredient,
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+
+    group(
+      'Delete',
+      () {
+        late Ingredient addedIngredient;
+
+        setUp(() async {
+          addedIngredient = await datasource.addIngredient(ingredient);
+        });
+
+        group(
+          'Succeed',
+          () {
+            test(
+              'Should Isar instance is closed',
+              () async {
+                await datasource.deleteIngredient(addedIngredient.id!);
+
+                expect(Isar.getInstance(), isNull);
+              },
+            );
+          },
+        );
+      },
+    );
   });
 }

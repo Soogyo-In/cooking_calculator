@@ -89,7 +89,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   @override
   Future<void> deleteIngredient(Id id) async {
     final isar = await Isar.open([IngredientDataSchema]);
-    await isar.ingredientDatas.delete(id);
+    await isar.writeTxn(() => isar.ingredientDatas.delete(id));
     await isar.close();
   }
 
@@ -141,11 +141,13 @@ class RecipeLocalDatasource implements RecipeDatasource {
     Ingredient ingredient,
   ) async {
     final isar = await Isar.open([IngredientDataSchema]);
-    final id = await isar.ingredientDatas.put(
-      IngredientData(id: ingredient.id ?? Isar.autoIncrement)
-        ..description = ingredient.description
-        ..name = ingredient.name,
-    );
+    final id = await isar.writeTxn(() {
+      return isar.ingredientDatas.put(
+        IngredientData(id: ingredient.id ?? Isar.autoIncrement)
+          ..description = ingredient.description
+          ..name = ingredient.name,
+      );
+    });
 
     await isar.close();
 
