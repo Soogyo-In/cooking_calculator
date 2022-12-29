@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cooking_calulator">
+    package="com.workshop.soso.cooking_calulator">
    <application
         android:label="cooking_calulator"
         android:name="${applicationName}"
