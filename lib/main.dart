@@ -1,16 +1,24 @@
+import 'package:collection/collection.dart';
 import 'package:cooking_calulator/recipe_resource.dart';
 import 'package:cooking_calulator/page/recipe/recipe_page.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'page/unit_converting_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: App()));
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  List<Recipe> recipes = [];
+  Map<int, Ingredient> ingredientById = {};
 
   @override
   Widget build(BuildContext context) {
@@ -20,25 +28,41 @@ class App extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Menu'),
+              title: const Text('레시피'),
             ),
-            body: Column(
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const UnitConvertingPage(),
-                  )),
-                  child: const Text('Unit converter'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RecipePage(
-                      recipe: slowRoasetedPorkBellyRecipe,
+            body: ListView.separated(
+              shrinkWrap: true,
+              itemCount: recipes.length,
+              itemBuilder: (context, index) {
+                final recipe = recipes[index];
+                final ingredientIdSet = {
+                  ...recipe.countByIngredientId.keys,
+                  ...recipe.massByIngredientId.keys,
+                  ...recipe.volumeByIngredientId.keys,
+                };
+                return Card(
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RecipePage(
+                        recipe: slowRoasetedPorkBellyRecipe,
+                      ),
+                    )),
+                    child: Column(
+                      children: [
+                        Text(recipe.name),
+                        Wrap(
+                          children: ingredientIdSet
+                              .map((id) => ingredientById[id]?.name)
+                              .whereNotNull()
+                              .map((name) => Chip(label: Text(name)))
+                              .toList(),
+                        )
+                      ],
                     ),
-                  )),
-                  child: const Text('Recipe editor'),
-                ),
-              ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(),
             ),
           );
         },

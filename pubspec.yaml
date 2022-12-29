@@ -24,6 +24,7 @@ dependencies:
 
   # database
   isar: ^3.0.5
+  collection: ^1.16.0
 
 dev_dependencies:
   flutter_test:
