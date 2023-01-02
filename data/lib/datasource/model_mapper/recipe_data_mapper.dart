@@ -1,7 +1,7 @@
 part of 'model_mapper.dart';
 
 extension RecipDataMapper on RecipeData {
-  Recipe toRecipe() {
+  IndexedRecipe toRecipe() {
     final directions = this.directions.map(
       (directionData) {
         final countByIngredientId = <int, Count>{};
@@ -28,7 +28,7 @@ extension RecipDataMapper on RecipeData {
       },
     ).toList();
 
-    return Recipe(
+    return IndexedRecipe(
       directions: directions,
       name: name,
       description: description ?? '',

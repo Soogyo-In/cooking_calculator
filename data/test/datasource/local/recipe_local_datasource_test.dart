@@ -58,7 +58,7 @@ void main() async {
 
                   expect(
                     addedRecipe,
-                    Recipe(
+                    IndexedRecipe(
                       name: recipe.name,
                       directions: recipe.directions,
                       description: recipe.description,
@@ -76,7 +76,7 @@ void main() async {
       group(
         'Read',
         () {
-          late Recipe addedRecipe;
+          late IndexedRecipe addedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -88,7 +88,7 @@ void main() async {
               test(
                 'Should Isar instance is closed',
                 () async {
-                  await datasource.getRecipe(addedRecipe.id!);
+                  await datasource.getRecipe(addedRecipe.id);
 
                   expect(Isar.getInstance(), isNull);
                 },
@@ -98,7 +98,7 @@ void main() async {
                 'Should return read recipe object',
                 () async {
                   expect(
-                    await datasource.getRecipe(addedRecipe.id!),
+                    await datasource.getRecipe(addedRecipe.id),
                     addedRecipe,
                   );
                 },
@@ -174,8 +174,8 @@ void main() async {
       group(
         'Update',
         () {
-          late Recipe addedRecipe;
-          late Recipe updatedRecipe;
+          late IndexedRecipe addedRecipe;
+          late IndexedRecipe updatedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -225,7 +225,7 @@ void main() async {
       group(
         'Delete',
         () {
-          late Recipe addedRecipe;
+          late IndexedRecipe addedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -237,7 +237,7 @@ void main() async {
               test(
                 'Should Isar instance is closed',
                 () async {
-                  await datasource.deleteRecipe(addedRecipe.id!);
+                  await datasource.deleteRecipe(addedRecipe.id);
 
                   expect(Isar.getInstance(), isNull);
                 },
@@ -278,7 +278,7 @@ void main() async {
 
                 expect(
                   addedIngredient,
-                  Ingredient(
+                  IndexedIngredient(
                     name: ingredient.name,
                     description: ingredient.description,
                     id: addedIngredient.id,
@@ -294,7 +294,7 @@ void main() async {
     group(
       'Read',
       () {
-        late Ingredient addedIngredient;
+        late IndexedIngredient addedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);
@@ -306,7 +306,7 @@ void main() async {
             test(
               'Should Isar instance is closed',
               () async {
-                await datasource.getIngredient(addedIngredient.id!);
+                await datasource.getIngredient(addedIngredient.id);
 
                 expect(Isar.getInstance(), isNull);
               },
@@ -316,7 +316,7 @@ void main() async {
               'Should return read ingredient object',
               () async {
                 expect(
-                  await datasource.getIngredient(addedIngredient.id!),
+                  await datasource.getIngredient(addedIngredient.id),
                   addedIngredient,
                 );
               },
@@ -392,8 +392,8 @@ void main() async {
     group(
       'Update',
       () {
-        late Ingredient addedIngredient;
-        late Ingredient updatedIngredient;
+        late IndexedIngredient addedIngredient;
+        late IndexedIngredient updatedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);
@@ -432,7 +432,7 @@ void main() async {
     group(
       'Delete',
       () {
-        late Ingredient addedIngredient;
+        late IndexedIngredient addedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);
@@ -444,7 +444,7 @@ void main() async {
             test(
               'Should Isar instance is closed',
               () async {
-                await datasource.deleteIngredient(addedIngredient.id!);
+                await datasource.deleteIngredient(addedIngredient.id);
 
                 expect(Isar.getInstance(), isNull);
               },
