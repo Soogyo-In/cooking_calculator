@@ -17,7 +17,7 @@ dependencies:
     path: ./data
 
   # state management
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.1.3
 
   # annotation
   freezed_annotation: ^2.0.0
