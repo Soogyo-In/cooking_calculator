@@ -91,7 +91,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
           final amount = entry.value;
           return IngredientAmountData()
             ..ingredientId = ingredientId
-            ..unit = IngredientAmountMapper.fromAmount(amount)
+            ..unit = amount.toMatterUnit()
             ..value = amount.value;
         },
       ).toList();
@@ -100,7 +100,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
         DirectionData()
           ..description = direction.description
           ..ingredients = ingredientData
-          ..temperature = direction.temperature?.toTemperature()
+          ..temperature = direction.temperature?.toTemperatureData()
           ..timeInSeconds = direction.time.inSeconds,
       );
     }

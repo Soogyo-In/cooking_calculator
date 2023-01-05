@@ -19,7 +19,7 @@ extension RecipDataMapper on RecipeData {
 
         return Direction(
           description: directionData.description,
-          temperature: directionData.temperature?.toDomainTemperature(),
+          temperature: directionData.temperature?.toTemperature(),
           time: Duration(seconds: directionData.timeInSeconds ?? 0),
           countByIngredientId: countByIngredientId,
           massByIngredientId: massByIngredientId,
