@@ -4,7 +4,7 @@ import 'package:riverpod/riverpod.dart';
 final cachedRecipeRepositoryProvider =
     StateNotifierProvider<CachedRecipeRepository, RecipeTable>(
   (ref) => CachedRecipeRepository(
-    recipeDataSource: RecipeLocalDatasource(),
+    recipeDatasource: RecipeLocalDatasource(),
   ),
 );
 

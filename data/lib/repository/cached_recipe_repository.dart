@@ -7,15 +7,16 @@ class CachedRecipeRepository extends StateNotifier<RecipeTable>
   final RecipeDatasource _recipeDataSource;
 
   CachedRecipeRepository({
-    required RecipeDatasource recipeDataSource,
+    required RecipeDatasource recipeDatasource,
     RecipeTable initialCache = const {},
-  })  : _recipeDataSource = recipeDataSource,
+  })  : _recipeDataSource = recipeDatasource,
         super(initialCache);
 
   @override
   Future<IndexedRecipe> addRecipe(Recipe recipe) async {
     final indexedRecipe = await _recipeDataSource.addRecipe(recipe);
-    state[indexedRecipe.id] = indexedRecipe;
+
+    state = Map.from(state)..[indexedRecipe.id] = indexedRecipe;
 
     return indexedRecipe;
   }
@@ -23,7 +24,8 @@ class CachedRecipeRepository extends StateNotifier<RecipeTable>
   @override
   Future<void> deleteRecipe(int id) async {
     await _recipeDataSource.deleteRecipe(id);
-    state.remove(id);
+
+    state = Map.from(state)..remove(id);
   }
 
   @override
@@ -40,7 +42,7 @@ class CachedRecipeRepository extends StateNotifier<RecipeTable>
   Future<IndexedRecipe> getRecipe(int id) async {
     final recipe = state[id] ?? await _recipeDataSource.getRecipe(id);
 
-    state.putIfAbsent(id, () => recipe);
+    state = Map.from(state)..putIfAbsent(id, () => recipe);
 
     return recipe;
   }
@@ -48,7 +50,8 @@ class CachedRecipeRepository extends StateNotifier<RecipeTable>
   @override
   Future<IndexedRecipe> updateRecipe(IndexedRecipe recipe) async {
     final updatedRecipe = await _recipeDataSource.updateRecipe(recipe);
-    state[updatedRecipe.id] = updatedRecipe;
+
+    state = Map.from(state)..[updatedRecipe.id] = updatedRecipe;
 
     return updatedRecipe;
   }
