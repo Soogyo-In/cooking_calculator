@@ -1,10 +1,16 @@
 import 'package:data/data.dart';
 import 'package:riverpod/riverpod.dart';
 
-final cachedRecipeRepositoryProvider = StateNotifierProvider(
-  (ref) => CachedRecipeRepository(RecipeLocalDatasource()),
+final cachedRecipeRepositoryProvider =
+    StateNotifierProvider<CachedRecipeRepository, RecipeTable>(
+  (ref) => CachedRecipeRepository(
+    recipeDataSource: RecipeLocalDatasource(),
+  ),
 );
 
-final cachedIngredientRepositoryProvider = StateNotifierProvider(
-  (ref) => CachedIngredientRepository(RecipeLocalDatasource()),
+final cachedIngredientRepositoryProvider =
+    StateNotifierProvider<CachedIngredientRepository, IngredientTable>(
+  (ref) => CachedIngredientRepository(
+    recipeDatasource: RecipeLocalDatasource(),
+  ),
 );

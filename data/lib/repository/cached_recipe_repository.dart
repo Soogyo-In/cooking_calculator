@@ -1,12 +1,16 @@
 part of 'repository.dart';
 
-class CachedRecipeRepository extends StateNotifier<Map<int, IndexedRecipe>>
+typedef RecipeTable = Map<int, IndexedRecipe>;
+
+class CachedRecipeRepository extends StateNotifier<RecipeTable>
     implements RecipeRepository {
   final RecipeDatasource _recipeDataSource;
 
-  CachedRecipeRepository(RecipeDatasource recipeDataSource)
-      : _recipeDataSource = recipeDataSource,
-        super({});
+  CachedRecipeRepository({
+    required RecipeDatasource recipeDataSource,
+    RecipeTable initialCache = const {},
+  })  : _recipeDataSource = recipeDataSource,
+        super(initialCache);
 
   @override
   Future<IndexedRecipe> addRecipe(Recipe recipe) async {

@@ -1,18 +1,22 @@
 part of 'repository.dart';
 
-class CachedIngredientRepository
-    extends StateNotifier<Map<int, IndexedIngredient>>
+typedef IngredientTable = Map<int, IndexedIngredient>;
+
+class CachedIngredientRepository extends StateNotifier<IngredientTable>
     implements IngredientRepository {
   final RecipeDatasource _recipeDataSource;
 
-  CachedIngredientRepository(RecipeDatasource recipeDataSource)
-      : _recipeDataSource = recipeDataSource,
-        super({});
+  CachedIngredientRepository({
+    required RecipeDatasource recipeDatasource,
+    IngredientTable initialCache = const {},
+  })  : _recipeDataSource = recipeDatasource,
+        super(initialCache);
 
   @override
   Future<IndexedIngredient> addIngredient(Ingredient ingredient) async {
     final indexedIngredient = await _recipeDataSource.addIngredient(ingredient);
-    state[indexedIngredient.id] = indexedIngredient;
+
+    state = Map.from(state)..[indexedIngredient.id] = indexedIngredient;
 
     return indexedIngredient;
   }
@@ -20,7 +24,8 @@ class CachedIngredientRepository
   @override
   Future<void> deleteIngredient(int id) async {
     await _recipeDataSource.deleteIngredient(id);
-    state.remove(id);
+
+    state = Map.from(state)..remove(id);
   }
 
   @override
@@ -37,7 +42,7 @@ class CachedIngredientRepository
   Future<IndexedIngredient> getIngredient(int id) async {
     final ingredient = state[id] ?? await _recipeDataSource.getIngredient(id);
 
-    state.putIfAbsent(id, () => ingredient);
+    state = Map.from(state)..putIfAbsent(id, () => ingredient);
 
     return ingredient;
   }
@@ -49,7 +54,8 @@ class CachedIngredientRepository
     final updatedIngredient = await _recipeDataSource.updateIngredient(
       ingredient,
     );
-    state[updatedIngredient.id] = updatedIngredient;
+
+    state = Map.from(state)..[updatedIngredient.id] = updatedIngredient;
 
     return updatedIngredient;
   }
