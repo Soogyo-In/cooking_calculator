@@ -43,9 +43,7 @@ void main() {
     container = ProviderContainer(
       overrides: [
         cachedRecipeRepositoryProvider.overrideWith(
-          (ref) {
-            recipeDatasource = MockRecipeDatasource();
-
+          (ref, recipeDatasource) {
             when(recipeDatasource.addRecipe(newRecipe)).thenAnswer(
               (_) async => newIndexedRecipe,
             );
@@ -58,7 +56,10 @@ void main() {
         ),
       ],
     );
-    repository = container.read(cachedRecipeRepositoryProvider.notifier);
+    recipeDatasource = MockRecipeDatasource();
+    repository = container.read(
+      cachedRecipeRepositoryProvider(recipeDatasource).notifier,
+    );
   });
 
   tearDown(() {
@@ -117,16 +118,16 @@ void main() {
           late CachedRecipeRepository repository;
 
           setUp(() {
-            recipeDatasource = MockRecipeDatasource();
             container = ProviderContainer(overrides: [
               cachedRecipeRepositoryProvider.overrideWith(
-                (ref) => CachedRecipeRepository(
+                (ref, recipeDatasource) => CachedRecipeRepository(
                   recipeDatasource: recipeDatasource,
                 ),
               ),
             ]);
+            recipeDatasource = MockRecipeDatasource();
             repository = container.read(
-              cachedRecipeRepositoryProvider.notifier,
+              cachedRecipeRepositoryProvider(recipeDatasource).notifier,
             );
 
             when(recipeDatasource.getAllRecipes()).thenAnswer(
@@ -182,16 +183,16 @@ void main() {
           late CachedRecipeRepository repository;
 
           setUp(() {
-            recipeDatasource = MockRecipeDatasource();
             container = ProviderContainer(overrides: [
               cachedRecipeRepositoryProvider.overrideWith(
-                (ref) => CachedRecipeRepository(
+                (ref, recipeDatasource) => CachedRecipeRepository(
                   recipeDatasource: recipeDatasource,
                 ),
               ),
             ]);
+            recipeDatasource = MockRecipeDatasource();
             repository = container.read(
-              cachedRecipeRepositoryProvider.notifier,
+              cachedRecipeRepositoryProvider(recipeDatasource).notifier,
             );
 
             when(recipeDatasource.getAllRecipes()).thenAnswer(
