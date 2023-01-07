@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
-import 'cached_recip_repository_test.mocks.dart';
+import 'cached_recipe_repository_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<RecipeDatasource>()])
 void main() {
