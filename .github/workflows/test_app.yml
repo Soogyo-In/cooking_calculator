@@ -27,7 +27,7 @@ jobs:
 
       - name: Run build runner for domain layer code generation
         working-directory: ./domain
-        run: dart pub run build_runner build
+        run: dart pub run build_runner build -d
 
       - name: Run domain layer tests
         working-directory: ./domain      
@@ -39,7 +39,7 @@ jobs:
 
       - name: Run build runner for data layer code generation
         working-directory: ./data
-        run: dart pub run build_runner build
+        run: dart pub run build_runner build -d
 
       - name: Run data layer tests
         working-directory: ./data
@@ -49,7 +49,7 @@ jobs:
         run: flutter pub get
 
       - name: Run build runner for interface layer code generation
-        run: flutter pub run build_runner build
+        run: flutter pub run build_runner build -d
 
       - name: Run interface layer tests
         run: flutter test

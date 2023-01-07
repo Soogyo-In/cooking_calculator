@@ -1,19 +1,23 @@
 import 'package:domain/domain.dart';
 
 abstract class RecipeDatasource {
-  Future<Recipe> addRecipe(Recipe recipe);
+  Future<IndexedRecipe> addRecipe(Recipe recipe);
 
-  Future<Recipe> getRecipe(int id);
+  Future<IndexedRecipe> getRecipe(int id);
 
-  Future<Recipe> updateRecipe(Recipe recipe);
+  Future<List<IndexedRecipe>> getAllRecipes();
+
+  Future<IndexedRecipe> updateRecipe(IndexedRecipe recipe);
 
   Future<void> deleteRecipe(int id);
 
-  Future<Ingredient> addIngredient(Ingredient ingredient);
+  Future<IndexedIngredient> addIngredient(Ingredient ingredient);
 
-  Future<Ingredient> getIngredient(int id);
+  Future<IndexedIngredient> getIngredient(int id);
 
-  Future<Ingredient> updateIngredient(Ingredient ingredient);
+  Future<List<IndexedIngredient>> getAllIngredients();
+
+  Future<IndexedIngredient> updateIngredient(IndexedIngredient ingredient);
 
   Future<void> deleteIngredient(int id);
 }

@@ -4,16 +4,23 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'recipe.freezed.dart';
 
 @freezed
-class Recipe with _$Recipe {
+abstract class Recipe with _$Recipe {
   const Recipe._();
 
   const factory Recipe({
-    int? id,
     required String name,
     required List<Direction> directions,
     @Default(1) int servings,
     @Default('') String description,
   }) = _Recipe;
+
+  const factory Recipe.indexed({
+    required int id,
+    required String name,
+    required List<Direction> directions,
+    @Default(1) int servings,
+    @Default('') String description,
+  }) = IndexedRecipe;
 
   Map<int, Mass> get massByIngredientId {
     final merged = <int, Mass>{};

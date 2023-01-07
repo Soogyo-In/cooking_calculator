@@ -1,8 +1,7 @@
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
+part of 'model_mapper.dart';
 
 extension TemperatureMapper on Temperature {
-  TemperatureData toTemperature() {
+  TemperatureData toTemperatureData() {
     TemperatureUnit? unit;
     if (this is Fahrenheit) unit = TemperatureUnit.fahrenheit;
     if (this is Celsius) unit = TemperatureUnit.celsius;

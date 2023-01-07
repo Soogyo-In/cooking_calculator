@@ -1,28 +1,6 @@
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
+part of 'model_mapper.dart';
 
 extension IngredientAmountMapper on IngredientAmountData {
-  static MatterUnit fromAmount(Amount amount) {
-    if (amount is Milligram) return MatterUnit.milligram;
-    if (amount is Gram) return MatterUnit.gram;
-    if (amount is Kilogram) return MatterUnit.kilogram;
-    if (amount is Ounce) return MatterUnit.ounce;
-    if (amount is Pound) return MatterUnit.pound;
-    if (amount is CubicCentimeter) return MatterUnit.cubicCentimeter;
-    if (amount is Milliliter) return MatterUnit.milliliter;
-    if (amount is Liter) return MatterUnit.liter;
-    if (amount is Teaspoon) return MatterUnit.teaspoon;
-    if (amount is Tablespoon) return MatterUnit.tablespoon;
-    if (amount is FluidOunce) return MatterUnit.fluidOunce;
-    if (amount is Cup) return MatterUnit.cup;
-    if (amount is Count) return MatterUnit.count;
-    throw ArgumentError.value(
-      amount,
-      'amount',
-      'Unsupported type ${amount.runtimeType}',
-    );
-  }
-
   Amount toAmount() {
     if (unit.isMilligram) return Milligram(value);
     if (unit.isGram) return Gram(value);
