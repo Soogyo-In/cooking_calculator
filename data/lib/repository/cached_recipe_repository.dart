@@ -2,56 +2,84 @@ part of 'repository.dart';
 
 typedef RecipeTable = Map<int, IndexedRecipe>;
 
-class CachedRecipeRepository extends StateNotifier<RecipeTable>
+class CachedRecipeRepository extends AsyncNotifier<RecipeTable>
     implements RecipeRepository {
-  final RecipeDatasource _recipeDataSource;
+  final _cache = <int, IndexedRecipe>{};
 
-  CachedRecipeRepository({
-    required RecipeDatasource recipeDatasource,
-    RecipeTable initialCache = const {},
-  })  : _recipeDataSource = recipeDatasource,
-        super(initialCache);
+  RecipeDatasource get _recipeDataSource => ref.watch(recipeDatasourceProvider);
+
+  @override
+  FutureOr<RecipeTable> build() async {
+    final recipes = await _recipeDataSource.getAllRecipes();
+    for (final recipe in recipes) {
+      _cache[recipe.id] = recipe;
+    }
+    return _cache;
+  }
 
   @override
   Future<IndexedRecipe> addRecipe(Recipe recipe) async {
-    final indexedRecipe = await _recipeDataSource.addRecipe(recipe);
+    state = const AsyncValue.loading();
 
-    state = Map.from(state)..[indexedRecipe.id] = indexedRecipe;
+    late final IndexedRecipe indexedRecipe;
+    state = await AsyncValue.guard(() async {
+      indexedRecipe = await _recipeDataSource.addRecipe(recipe);
+      return _cache..[indexedRecipe.id] = indexedRecipe;
+    });
 
     return indexedRecipe;
   }
 
   @override
   Future<void> deleteRecipe(int id) async {
-    await _recipeDataSource.deleteRecipe(id);
-
-    state = Map.from(state)..remove(id);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await _recipeDataSource.deleteRecipe(id);
+      return _cache..remove(id);
+    });
   }
 
   @override
   Future<List<IndexedRecipe>> getAllRecipes() async {
-    if (state.isNotEmpty) return state.values.toList();
+    if (_cache.isNotEmpty) return Future.sync(() => _cache.values.toList());
 
-    final recipes = await _recipeDataSource.getAllRecipes();
-    state = {for (final recipe in recipes) recipe.id: recipe};
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final recipes = await _recipeDataSource.getAllRecipes();
+      for (final recipe in recipes) {
+        _cache[recipe.id] = recipe;
+      }
+      return _cache;
+    });
 
-    return recipes;
+    return _cache.values.toList();
   }
 
   @override
   Future<IndexedRecipe> getRecipe(int id) async {
-    final recipe = state[id] ?? await _recipeDataSource.getRecipe(id);
+    final cache = _cache[id];
+    if (cache != null) return Future.sync(() => cache);
 
-    state = Map.from(state)..putIfAbsent(id, () => recipe);
+    state = const AsyncValue.loading();
+
+    late final IndexedRecipe recipe;
+    state = await AsyncValue.guard(() async {
+      recipe = await _recipeDataSource.getRecipe(id);
+      return _cache..[id] = recipe;
+    });
 
     return recipe;
   }
 
   @override
   Future<IndexedRecipe> updateRecipe(IndexedRecipe recipe) async {
-    final updatedRecipe = await _recipeDataSource.updateRecipe(recipe);
+    state = const AsyncValue.loading();
 
-    state = Map.from(state)..[updatedRecipe.id] = updatedRecipe;
+    late final IndexedRecipe updatedRecipe;
+    state = await AsyncValue.guard(() async {
+      updatedRecipe = await _recipeDataSource.updateRecipe(recipe);
+      return _cache..[updatedRecipe.id] = updatedRecipe;
+    });
 
     return updatedRecipe;
   }

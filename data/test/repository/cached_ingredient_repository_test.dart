@@ -1,7 +1,4 @@
-import 'package:data/datasource/recipe_datasource.dart';
-import 'package:data/provider/provider.dart';
-import 'package:data/repository/repository.dart';
-import 'package:domain/domain.dart';
+import 'package:data/data.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:riverpod/riverpod.dart';
@@ -34,30 +31,21 @@ void main() {
   late CachedIngredientRepository repository;
 
   setUp(() {
-    container = ProviderContainer(
-      overrides: [
-        cachedIngredientRepositoryProvider.overrideWith(
-          (ref, recipeDatasource) {
-            when(recipeDatasource.addIngredient(newIngredient)).thenAnswer(
-              (_) async => newIndexedIngredient,
-            );
-
-            return CachedIngredientRepository(
-              recipeDatasource: recipeDatasource,
-              initialCache: initialCache,
-            );
-          },
-        ),
-      ],
-    );
     recipeDatasource = MockRecipeDatasource();
-    repository = container.read(
-      cachedIngredientRepositoryProvider(recipeDatasource).notifier,
+    when(recipeDatasource.addIngredient(any)).thenAnswer(
+      (_) async => newIndexedIngredient,
     );
-  });
+    when(recipeDatasource.getIngredient(initialIngredientId)).thenAnswer(
+      (_) async => initialIngredient,
+    );
+    when(recipeDatasource.getAllIngredients()).thenAnswer(
+      (_) async => initialCache.values.toList(),
+    );
 
-  tearDown(() {
-    container.dispose();
+    container = ProviderContainer(overrides: [
+      recipeDatasourceProvider.overrideWith((_) => recipeDatasource),
+    ]);
+    repository = container.read(cachedIngredientRepositoryProvider.notifier);
   });
 
   group(
@@ -79,7 +67,9 @@ void main() {
           await repository.addIngredient(newIngredient);
 
           expect(
-            repository.debugState[newIndexedIngredient.id],
+            container
+                .read(cachedIngredientRepositoryProvider)
+                .value?[newIndexedIngredient.id],
             newIndexedIngredient,
           );
         },
@@ -108,24 +98,19 @@ void main() {
       group(
         'If no cached data >',
         () {
-          late ProviderContainer container;
-          late CachedIngredientRepository repository;
-
           setUp(() {
-            container = ProviderContainer(overrides: [
-              cachedIngredientRepositoryProvider.overrideWith(
-                (ref, recipeDatasource) => CachedIngredientRepository(
-                  recipeDatasource: recipeDatasource,
-                ),
-              ),
-            ]);
             recipeDatasource = MockRecipeDatasource();
-            repository = container.read(
-              cachedIngredientRepositoryProvider(recipeDatasource).notifier,
-            );
-
             when(recipeDatasource.getAllIngredients()).thenAnswer(
               (_) async => initialCache.values.toList(),
+            );
+
+            container = ProviderContainer(
+              overrides: [
+                recipeDatasourceProvider.overrideWith((_) => recipeDatasource),
+              ],
+            );
+            repository = container.read(
+              cachedIngredientRepositoryProvider.notifier,
             );
           });
 
@@ -134,7 +119,10 @@ void main() {
             () async {
               await repository.getAllIngredients();
 
-              expect(repository.debugState, initialCache);
+              expect(
+                container.read(cachedIngredientRepositoryProvider).value,
+                initialCache,
+              );
             },
           );
 
@@ -173,22 +161,8 @@ void main() {
       group(
         'If no cached data >',
         () {
-          late ProviderContainer container;
-          late CachedIngredientRepository repository;
-
           setUp(() {
-            container = ProviderContainer(overrides: [
-              cachedIngredientRepositoryProvider.overrideWith(
-                (ref, recipeDatasource) => CachedIngredientRepository(
-                  recipeDatasource: recipeDatasource,
-                ),
-              ),
-            ]);
             recipeDatasource = MockRecipeDatasource();
-            repository = container.read(
-              cachedIngredientRepositoryProvider(recipeDatasource).notifier,
-            );
-
             when(recipeDatasource.getAllIngredients()).thenAnswer(
               (_) async => initialCache.values.toList(),
             );
@@ -197,6 +171,15 @@ void main() {
             ).thenAnswer(
               (_) async => initialCache.entries.first.value,
             );
+
+            container = ProviderContainer(
+              overrides: [
+                recipeDatasourceProvider.overrideWith((_) => recipeDatasource),
+              ],
+            );
+            repository = container.read(
+              cachedIngredientRepositoryProvider.notifier,
+            );
           });
 
           test(
@@ -204,7 +187,10 @@ void main() {
             () async {
               await repository.getIngredient(initialIngredientId);
 
-              expect(repository.debugState, initialCache);
+              expect(
+                container.read(cachedIngredientRepositoryProvider).value,
+                initialCache,
+              );
             },
           );
 
@@ -252,7 +238,7 @@ void main() {
           await repository.updateIngredient(updatedIngredient);
 
           expect(
-            repository.debugState,
+            container.read(cachedIngredientRepositoryProvider).value,
             {initialIngredientId: updatedIngredient},
           );
         },
@@ -268,7 +254,10 @@ void main() {
         () async {
           await repository.deleteIngredient(initialIngredientId);
 
-          expect(repository.debugState, isEmpty);
+          expect(
+            container.read(cachedIngredientRepositoryProvider).value,
+            isEmpty,
+          );
         },
       );
     },

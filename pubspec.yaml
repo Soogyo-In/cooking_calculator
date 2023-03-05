@@ -10,9 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # layers
-  domain:
-    path: ./domain
+  # layersØ
   data:
     path: ./data
 
