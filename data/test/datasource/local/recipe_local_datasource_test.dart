@@ -1,18 +1,20 @@
 import 'package:data/data.dart';
 import 'package:isar/isar.dart';
 import 'package:test/test.dart';
-import 'package:domain/domain.dart';
 
 void main() async {
   late RecipeLocalDatasource datasource;
 
   setUp(() async {
     await Isar.initializeIsarCore(download: true);
-    datasource = RecipeLocalDatasource();
+    datasource = RecipeLocalDatasource('');
   });
 
   tearDown(() async {
-    final isar = await Isar.open([RecipeDataSchema, IngredientDataSchema]);
+    final isar = await Isar.open(
+      [RecipeDataSchema, IngredientDataSchema],
+      directory: '',
+    );
     await isar.writeTxn(() => isar.clear());
     await isar.close();
   });

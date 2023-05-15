@@ -1,12 +1,16 @@
 part of 'local_datasource.dart';
 
 class RecipeLocalDatasource implements RecipeDatasource {
+  const RecipeLocalDatasource(this.databasePath);
+
+  final String databasePath;
+
   @override
   Future<IndexedRecipe> addRecipe(Recipe recipe) => _upsertRecipe(recipe);
 
   @override
   Future<IndexedRecipe> getRecipe(Id id) async {
-    final isar = await Isar.open([RecipeDataSchema]);
+    final isar = await _openDatabase([RecipeDataSchema]);
     final recipeData = await isar.recipeDatas.get(id);
 
     await isar.close();
@@ -18,7 +22,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<List<IndexedRecipe>> getAllRecipes() async {
-    final isar = await Isar.open([RecipeDataSchema]);
+    final isar = await _openDatabase([RecipeDataSchema]);
     final recipeDatas = await isar.recipeDatas.where().findAll();
 
     await isar.close();
@@ -32,7 +36,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<void> deleteRecipe(Id id) async {
-    final isar = await Isar.open([RecipeDataSchema]);
+    final isar = await _openDatabase([RecipeDataSchema]);
     await isar.writeTxn(() => isar.recipeDatas.delete(id));
     await isar.close();
   }
@@ -43,7 +47,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<IndexedIngredient> getIngredient(Id id) async {
-    final isar = await Isar.open([IngredientDataSchema]);
+    final isar = await _openDatabase([IngredientDataSchema]);
     final ingredientData = await isar.ingredientDatas.get(id);
 
     await isar.close();
@@ -55,7 +59,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<List<IndexedIngredient>> getAllIngredients() async {
-    final isar = await Isar.open([IngredientDataSchema]);
+    final isar = await _openDatabase([IngredientDataSchema]);
     final ingredientDatas = await isar.ingredientDatas.where().findAll();
 
     await isar.close();
@@ -71,13 +75,13 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   @override
   Future<void> deleteIngredient(Id id) async {
-    final isar = await Isar.open([IngredientDataSchema]);
+    final isar = await _openDatabase([IngredientDataSchema]);
     await isar.writeTxn(() => isar.ingredientDatas.delete(id));
     await isar.close();
   }
 
   Future<IndexedRecipe> _upsertRecipe(Recipe recipe) async {
-    final isar = await Isar.open([RecipeDataSchema]);
+    final isar = await _openDatabase([RecipeDataSchema]);
     final directionData = <DirectionData>[];
     for (final direction in recipe.directions) {
       final amountByIngredientId = {
@@ -134,7 +138,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   Future<IndexedIngredient> _upsertIngredient(Ingredient ingredient) async {
-    final isar = await Isar.open([IngredientDataSchema]);
+    final isar = await _openDatabase([IngredientDataSchema]);
     final id = await isar.writeTxn(() {
       final id = ingredient.map(
         (value) => Isar.autoIncrement,
@@ -158,4 +162,9 @@ class RecipeLocalDatasource implements RecipeDatasource {
       indexed: (value) => value,
     );
   }
+
+  Future<Isar> _openDatabase(List<CollectionSchema> schemas) => Isar.open(
+        schemas,
+        directory: databasePath,
+      );
 }
