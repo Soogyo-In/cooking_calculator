@@ -1,13 +1,17 @@
 part of 'mass.dart';
 
-@freezed
-class Ounce with _$Ounce implements Mass {
+const ounceSymbol = 'oz';
+
+final class Ounce extends Mass {
+  Ounce(double value)
+      : _inMilligrams = (milligramPerOunce * value).round(),
+        super(
+          symbol: ounceSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = ounceSymbol;
-
-  const Ounce._();
-
-  const factory Ounce(double value) = _Ounce;
+  final int _inMilligrams;
 
   @override
   Gram toGram() => Gram(gramPerOunce * value);
@@ -16,7 +20,7 @@ class Ounce with _$Ounce implements Mass {
   Kilogram toKilogram() => Kilogram(kilogramPerOunce * value);
 
   @override
-  Milligram toMilligram() => Milligram(milligramPerOunce * value);
+  Milligram toMilligram() => Milligram((milligramPerOunce * value).round());
 
   @override
   Ounce toOunce() => Ounce(value);
@@ -34,7 +38,7 @@ class Ounce with _$Ounce implements Mass {
   Ounce operator -(Mass other) => Ounce(value - other.toOunce().value);
 
   @override
-  Ounce operator *(num factors) => Ounce(value * factors.toDouble());
+  Ounce operator *(num factor) => Ounce(value * factor);
 
   @override
   Ounce operator /(num divisor) => Ounce(value / divisor);

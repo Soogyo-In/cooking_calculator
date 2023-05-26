@@ -1,20 +1,11 @@
-import 'package:domain/model/util/util.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../amount.dart';
+import 'package:domain/model/amount/amount.dart';
+import 'package:domain/model/extension/extension.dart';
 
 part 'gram.dart';
 part 'kilogram.dart';
 part 'milligram.dart';
 part 'ounce.dart';
 part 'pound.dart';
-part 'mass.freezed.dart';
-
-const gramSymbol = 'g';
-const kilogramSymbol = 'kg';
-const milligramSymbol = 'mg';
-const ounceSymbol = 'oz';
-const poundSymbol = 'lb';
 
 const gramPerKilogram = 1000.0;
 const gramPerOunce = 28.349523125;
@@ -42,16 +33,26 @@ const milligramPerPound = milligramPerGram * gramPerPound;
 const kilogramPerPound = kilogramPerGram * gramPerPound;
 const ouncePerPound = ouncePerGram * gramPerPound;
 
-abstract class Mass implements Amount {
-  const factory Mass.milligram(double value) = Milligram;
+sealed class Mass extends Amount {
+  Mass({
+    required super.value,
+    required super.symbol,
+  });
 
-  const factory Mass.gram(double value) = Gram;
+  factory Mass.milligram(int value) = Milligram;
 
-  const factory Mass.kilogram(double value) = Kilogram;
+  factory Mass.gram(double value) = Gram;
 
-  const factory Mass.ounce(double value) = Ounce;
+  factory Mass.kilogram(double value) = Kilogram;
 
-  const factory Mass.pound(double value) = Pound;
+  factory Mass.ounce(double value) = Ounce;
+
+  factory Mass.pound(double value) = Pound;
+
+  @override
+  List<Object?> get props => super.props..add(_inMilligrams);
+
+  int get _inMilligrams;
 
   Milligram toMilligram();
 
@@ -62,4 +63,32 @@ abstract class Mass implements Amount {
   Ounce toOunce();
 
   Pound toPound();
+
+  @override
+  Mass operator +(Mass other);
+
+  @override
+  Mass operator -(Mass other);
+
+  @override
+  Mass operator *(num factor);
+
+  @override
+  Mass operator /(num divisor);
+
+  @override
+  bool operator <(covariant Mass other) => compareTo(other) < 0;
+
+  @override
+  bool operator >(covariant Mass other) => compareTo(other) > 0;
+
+  @override
+  bool operator <=(covariant Mass other) => compareTo(other) <= 0;
+
+  @override
+  bool operator >=(covariant Mass other) => compareTo(other) >= 0;
+
+  @override
+  int compareTo(covariant Mass other) =>
+      _inMilligrams.compareTo(other._inMilligrams);
 }

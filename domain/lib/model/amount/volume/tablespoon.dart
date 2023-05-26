@@ -1,17 +1,21 @@
 part of 'volume.dart';
 
-@freezed
-class Tablespoon with _$Tablespoon implements Volume {
+const tablespoonSymbol = 'Tbsp';
+
+final class Tablespoon extends Volume {
+  Tablespoon(double value)
+      : _inMilliliters = (milliliterPerTablespoon * value).round(),
+        super(
+          symbol: tablespoonSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = tablespoonSymbol;
-
-  const Tablespoon._();
-
-  const factory Tablespoon(double value) = _Tablespoon;
+  final int _inMilliliters;
 
   @override
   CubicCentimeter toCubicCentimeter() =>
-      CubicCentimeter(cubicCentimeterPerTablespoon * value);
+      CubicCentimeter((milliliterPerTablespoon * value).round());
 
   @override
   Cup toCup() => Cup(cupPerTablespoon * value);
@@ -23,7 +27,8 @@ class Tablespoon with _$Tablespoon implements Volume {
   Liter toLiter() => Liter(literPerTablespoon * value);
 
   @override
-  Milliliter toMilliliter() => Milliliter(milliliterPerTablespoon * value);
+  Milliliter toMilliliter() =>
+      Milliliter((milliliterPerTablespoon * value).round());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(value);
@@ -44,7 +49,7 @@ class Tablespoon with _$Tablespoon implements Volume {
       Tablespoon(value - other.toTablespoon().value);
 
   @override
-  Tablespoon operator *(num factors) => Tablespoon(value * factors.toDouble());
+  Tablespoon operator *(num factor) => Tablespoon(value * factor);
 
   @override
   Tablespoon operator /(num divisor) => Tablespoon(value / divisor);

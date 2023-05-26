@@ -1,23 +1,30 @@
-import 'celsius.dart';
-import 'fahrenheit.dart';
+import 'package:equatable/equatable.dart';
 
-export 'celsius.dart';
-export 'fahrenheit.dart';
+part 'celsius.dart';
+part 'fahrenheit.dart';
 
-abstract class Temperature {
-  const Temperature();
+abstract base class Temperature extends Equatable {
+  Temperature({
+    required this.value,
+    required this.symbol,
+  });
 
-  const factory Temperature.celsius(double value) = Celsius;
+  factory Temperature.celsius(double value) = Celsius;
 
-  const factory Temperature.fahrenheit(double value) = Fahrenheit;
+  factory Temperature.fahrenheit(double value) = Fahrenheit;
 
-  double get value;
+  final double value;
+
+  final String symbol;
+
+  @override
+  List<Object?> get props => [value, symbol];
 
   Temperature operator +(covariant Temperature other);
 
   Temperature operator -(covariant Temperature other);
 
-  Temperature operator *(num value);
+  Temperature operator *(num factor);
 
   Temperature operator /(num divisor);
 

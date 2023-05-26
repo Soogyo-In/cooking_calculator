@@ -1,16 +1,19 @@
 part of 'volume.dart';
 
-@freezed
-class CubicCentimeter with _$CubicCentimeter implements Volume {
+const cubicCentimeterSymbol = 'cc';
+
+final class CubicCentimeter extends Volume {
+  CubicCentimeter(int value)
+      : super(
+          symbol: cubicCentimeterSymbol,
+          value: value.toDouble(),
+        );
+
   @override
-  final symbol = cubicCentimeterSymbol;
-
-  const CubicCentimeter._();
-
-  const factory CubicCentimeter(double value) = _CubicCentimeter;
+  int get _inMilliliters => value.toInt();
 
   @override
-  CubicCentimeter toCubicCentimeter() => CubicCentimeter(value);
+  CubicCentimeter toCubicCentimeter() => CubicCentimeter(value.toInt());
 
   @override
   Cup toCup() => Cup(value * cupPerCubicCentimeter);
@@ -22,7 +25,8 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
   Liter toLiter() => Liter(value * literPerCubicCentimeter);
 
   @override
-  Milliliter toMilliliter() => Milliliter(value * milliliterPerCubicCentimeter);
+  Milliliter toMilliliter() =>
+      Milliliter((value * milliliterPerCubicCentimeter).toInt());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(value * tablespoonPerCubicCentimeter);
@@ -32,20 +36,21 @@ class CubicCentimeter with _$CubicCentimeter implements Volume {
 
   @override
   CubicCentimeter roundedAt(int fractionDigits) =>
-      CubicCentimeter(value.roundAt(fractionDigits));
+      CubicCentimeter(value.toInt());
 
   @override
   CubicCentimeter operator +(Volume other) =>
-      CubicCentimeter(value + other.toCubicCentimeter().value);
+      CubicCentimeter((value + other.toCubicCentimeter().value).round());
 
   @override
   CubicCentimeter operator -(Volume other) =>
-      CubicCentimeter(value - other.toCubicCentimeter().value);
+      CubicCentimeter((value - other.toCubicCentimeter().value).round());
 
   @override
-  CubicCentimeter operator *(num factors) =>
-      CubicCentimeter(value * factors.toDouble());
+  CubicCentimeter operator *(num factor) =>
+      CubicCentimeter((value * factor).round());
 
   @override
-  CubicCentimeter operator /(num divisor) => CubicCentimeter(value / divisor);
+  CubicCentimeter operator /(num divisor) =>
+      CubicCentimeter((value / divisor).round());
 }

@@ -6,18 +6,10 @@ const _celsiusPerFahrenheit = -17.22222222222222;
 
 void main() {
   test(
-    'Get symbol of temperature unit',
-    () {
-      expect(Celsius.symbol, '°C');
-      expect(Fahrenheit.symbol, '°F');
-    },
-  );
-
-  test(
     'String expression',
     () {
-      expect(const Celsius(1.555).toStringAsFixed(2), '1.55 °C');
-      expect(const Fahrenheit(1.555).toStringAsFixed(2), '1.55 °F');
+      expect(Celsius(1.555).toStringAsFixed(2), '1.55 °C');
+      expect(Fahrenheit(1.555).toStringAsFixed(2), '1.55 °F');
     },
   );
 
@@ -29,22 +21,22 @@ void main() {
         () {
           // Celsius
           expect(
-            const Celsius(1.0) + const Celsius(1.0),
-            const Celsius(2.0),
+            Celsius(1.0) + Celsius(1.0),
+            Celsius(2.0),
           );
           expect(
-            const Celsius(1.0) + const Fahrenheit(1.0),
-            const Celsius(1.0 + _celsiusPerFahrenheit),
+            Celsius(1.0) + Fahrenheit(1.0),
+            Celsius(1.0 + _celsiusPerFahrenheit),
           );
 
           // Fahrenheit
           expect(
-            const Fahrenheit(1.0) + const Celsius(1.0),
-            const Fahrenheit(1.0 + _fahrenheitPerCelsius),
+            Fahrenheit(1.0) + Celsius(1.0),
+            Fahrenheit(1.0 + _fahrenheitPerCelsius),
           );
           expect(
-            const Fahrenheit(1.0) + const Fahrenheit(1.0),
-            const Fahrenheit(2.0),
+            Fahrenheit(1.0) + Fahrenheit(1.0),
+            Fahrenheit(2.0),
           );
         },
       );
@@ -54,22 +46,22 @@ void main() {
         () {
           // Celsius
           expect(
-            const Celsius(1.0) - const Celsius(1.0),
-            const Celsius(0.0),
+            Celsius(1.0) - Celsius(1.0),
+            Celsius(0.0),
           );
           expect(
-            const Celsius(1.0) - const Fahrenheit(1.0),
-            const Celsius(1.0 - _celsiusPerFahrenheit),
+            Celsius(1.0) - Fahrenheit(1.0),
+            Celsius(1.0 - _celsiusPerFahrenheit),
           );
 
           // Fahrenheit
           expect(
-            const Fahrenheit(1.0) - const Celsius(1.0),
-            const Fahrenheit(1.0 - _fahrenheitPerCelsius),
+            Fahrenheit(1.0) - Celsius(1.0),
+            Fahrenheit(1.0 - _fahrenheitPerCelsius),
           );
           expect(
-            const Fahrenheit(1.0) - const Fahrenheit(1.0),
-            const Fahrenheit(0.0),
+            Fahrenheit(1.0) - Fahrenheit(1.0),
+            Fahrenheit(0.0),
           );
         },
       );
@@ -77,16 +69,16 @@ void main() {
       test(
         'Multiblication',
         () {
-          expect(const Celsius(1.0) * 2, const Celsius(2.0));
-          expect(const Fahrenheit(1.0) * 2, const Fahrenheit(2.0));
+          expect(Celsius(1.0) * 2, Celsius(2.0));
+          expect(Fahrenheit(1.0) * 2, Fahrenheit(2.0));
         },
       );
 
       test(
         'Division',
         () {
-          expect(const Celsius(2.0) / 2, const Celsius(1.0));
-          expect(const Fahrenheit(2.0) / 2, const Fahrenheit(1.0));
+          expect(Celsius(2.0) / 2, Celsius(1.0));
+          expect(Fahrenheit(2.0) / 2, Fahrenheit(1.0));
         },
       );
     },
@@ -95,33 +87,33 @@ void main() {
   group(
     '[Convert temperature unit]',
     () {
-      const celsius = Temperature.celsius(1.0);
-      const farhenheit = Temperature.fahrenheit(1.0);
+      final celsius = Temperature.celsius(1.0);
+      final farhenheit = Temperature.fahrenheit(1.0);
 
       test(
-        'Convert to cubic centimeter',
+        'Convert to toCelsius',
         () {
           expect(
             celsius.toCelsius(),
-            const Temperature.celsius(1.0),
+            Temperature.celsius(1.0),
           );
           expect(
             farhenheit.toCelsius(),
-            const Temperature.celsius(_celsiusPerFahrenheit),
+            Temperature.celsius(_celsiusPerFahrenheit),
           );
         },
       );
 
       test(
-        'Convert to milliliter',
+        'Convert to fahrenheit',
         () {
           expect(
             celsius.toFahrenheit(),
-            const Temperature.fahrenheit(_fahrenheitPerCelsius),
+            Temperature.fahrenheit(_fahrenheitPerCelsius),
           );
           expect(
             farhenheit.toFahrenheit(),
-            const Temperature.fahrenheit(1.0),
+            Temperature.fahrenheit(1.0),
           );
         },
       );

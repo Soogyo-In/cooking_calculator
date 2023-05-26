@@ -1,17 +1,21 @@
 part of 'volume.dart';
 
-@freezed
-class Liter with _$Liter implements Volume {
+const literSymbol = 'L';
+
+final class Liter extends Volume {
+  Liter(double value)
+      : _inMilliliters = (milliliterPerLiter * value).round(),
+        super(
+          symbol: literSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = literSymbol;
-
-  const Liter._();
-
-  const factory Liter(double value) = _Liter;
+  final int _inMilliliters;
 
   @override
   CubicCentimeter toCubicCentimeter() =>
-      CubicCentimeter(cubicCentimeterPerLiter * value);
+      CubicCentimeter((milliliterPerLiter * value).round());
 
   @override
   Cup toCup() => Cup(cupPerLiter * value);
@@ -23,7 +27,7 @@ class Liter with _$Liter implements Volume {
   Liter toLiter() => Liter(value);
 
   @override
-  Milliliter toMilliliter() => Milliliter(milliliterPerLiter * value);
+  Milliliter toMilliliter() => Milliliter((milliliterPerLiter * value).round());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(tablespoonPerLiter * value);
@@ -41,7 +45,7 @@ class Liter with _$Liter implements Volume {
   Liter operator -(Volume other) => Liter(value - other.toLiter().value);
 
   @override
-  Liter operator *(num factors) => Liter(value * factors.toDouble());
+  Liter operator *(num factor) => Liter(value * factor);
 
   @override
   Liter operator /(num divisor) => Liter(value / divisor);

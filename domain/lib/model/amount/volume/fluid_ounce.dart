@@ -1,17 +1,21 @@
 part of 'volume.dart';
 
-@freezed
-class FluidOunce with _$FluidOunce implements Volume {
+const fluidOunceSymbol = 'fl.oz';
+
+final class FluidOunce extends Volume {
+  FluidOunce(double value)
+      : _inMilliliters = (milliliterPerFluidOunce * value).round(),
+        super(
+          symbol: fluidOunceSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = fluidOunceSymbol;
-
-  const FluidOunce._();
-
-  const factory FluidOunce(double value) = _FluidOunce;
+  final int _inMilliliters;
 
   @override
   CubicCentimeter toCubicCentimeter() =>
-      CubicCentimeter(cubicCentimeterPerFluidOunce * value);
+      CubicCentimeter((milliliterPerFluidOunce * value).round());
 
   @override
   Cup toCup() => Cup(cupPerFluidOunce * value);
@@ -23,7 +27,8 @@ class FluidOunce with _$FluidOunce implements Volume {
   Liter toLiter() => Liter(literPerFluidOunce * value);
 
   @override
-  Milliliter toMilliliter() => Milliliter(milliliterPerFluidOunce * value);
+  Milliliter toMilliliter() =>
+      Milliliter((milliliterPerFluidOunce * value).round());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(tablespoonPerFluidOunce * value);
@@ -44,7 +49,7 @@ class FluidOunce with _$FluidOunce implements Volume {
       FluidOunce(value - other.toFluidOunce().value);
 
   @override
-  FluidOunce operator *(num factors) => FluidOunce(value * factors.toDouble());
+  FluidOunce operator *(num factor) => FluidOunce(value * factor);
 
   @override
   FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
