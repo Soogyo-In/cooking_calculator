@@ -4,7 +4,7 @@ version: 0.2.0+0
 publish_to: none
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -18,11 +18,11 @@ dependencies:
   flutter_riverpod: ^2.1.3
 
   # annotation
-  freezed_annotation: ^2.0.0
 
   # database
   collection: ^1.16.0
   isar_flutter_libs: ^3.0.5
+  path_provider: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -33,7 +33,6 @@ dev_dependencies:
 
   # code generator
   build_runner: ^2.1.8
-  freezed: ^2.0.0
   json_serializable: ^6.1.6
 
 flutter:

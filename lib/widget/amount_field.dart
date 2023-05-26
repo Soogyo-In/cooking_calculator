@@ -1,96 +1,7 @@
-import 'package:domain/domain.dart';
+import 'package:cooking_calulator/model/enum/enum.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-abstract class AmountUnit<T extends Amount> {
-  String get abbreviation;
-
-  T toAmount(double value);
-}
-
-enum MassUnit implements AmountUnit<Mass> {
-  milligram(milligramSymbol),
-  gram(gramSymbol),
-  kilogram(kilogramSymbol),
-  ounce(ounceSymbol),
-  pound(poundSymbol);
-
-  const MassUnit(this.abbreviation);
-
-  @override
-  final String abbreviation;
-
-  static MassUnit fromAmount(Mass mass) {
-    if (mass is Milligram) return milligram;
-    if (mass is Gram) return gram;
-    if (mass is Kilogram) return kilogram;
-    if (mass is Ounce) return ounce;
-    if (mass is Pound) return pound;
-    throw ArgumentError.value(mass, 'mass', 'unsupported unit');
-  }
-
-  @override
-  Mass toAmount(double value) {
-    switch (this) {
-      case MassUnit.milligram:
-        return Milligram(value);
-      case MassUnit.gram:
-        return Gram(value);
-      case MassUnit.kilogram:
-        return Kilogram(value);
-      case MassUnit.ounce:
-        return Ounce(value);
-      case MassUnit.pound:
-        return Pound(value);
-    }
-  }
-}
-
-enum VolumeUnit implements AmountUnit<Volume> {
-  cubicCentimeter(cubicCentimeterSymbol),
-  milliliter(milliliterSymbol),
-  liter(literSymbol),
-  teaspoon(teaspoonSymbol),
-  tablespoon(tablespoonSymbol),
-  fluidOunce(fluidOunceSymbol),
-  cup(cupSymbol);
-
-  const VolumeUnit(this.abbreviation);
-
-  @override
-  final String abbreviation;
-
-  static VolumeUnit fromAmount(Volume volume) {
-    if (volume is CubicCentimeter) return cubicCentimeter;
-    if (volume is Milliliter) return milliliter;
-    if (volume is Liter) return liter;
-    if (volume is Teaspoon) return teaspoon;
-    if (volume is Tablespoon) return tablespoon;
-    if (volume is FluidOunce) return fluidOunce;
-    if (volume is Cup) return cup;
-    throw ArgumentError.value(volume, 'volume', 'unsupported unit');
-  }
-
-  @override
-  Volume toAmount(double value) {
-    switch (this) {
-      case VolumeUnit.cubicCentimeter:
-        return CubicCentimeter(value);
-      case VolumeUnit.milliliter:
-        return Milliliter(value);
-      case VolumeUnit.liter:
-        return Liter(value);
-      case VolumeUnit.teaspoon:
-        return Teaspoon(value);
-      case VolumeUnit.tablespoon:
-        return Tablespoon(value);
-      case VolumeUnit.fluidOunce:
-        return FluidOunce(value);
-      case VolumeUnit.cup:
-        return Cup(value);
-    }
-  }
-}
 
 abstract class AmountField<U extends AmountUnit, A extends Amount>
     extends ConsumerWidget {
@@ -170,7 +81,7 @@ abstract class AmountField<U extends AmountUnit, A extends Amount>
                 items: units
                     ?.map((unit) => DropdownMenuItem(
                           value: unit,
-                          child: Text(unit.abbreviation),
+                          child: Text(unit.symbol),
                         ))
                     .toList(),
                 onChanged: onUnitChanged,

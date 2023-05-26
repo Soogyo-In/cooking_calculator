@@ -13,18 +13,23 @@ class RecipeData {
   String? description;
 
   RecipeData({this.id = Isar.autoIncrement});
+
+  Set<int> get ingredientIdSet => directions
+      .expand((direction) => direction.preps ?? <PrepData>[])
+      .map((prep) => prep.ingredientId)
+      .toSet();
 }
 
 @embedded
 class DirectionData {
   late String description;
-  List<IngredientAmountData>? ingredients;
+  List<PrepData>? preps;
   int? timeInSeconds;
   TemperatureData? temperature;
 }
 
 @embedded
-class IngredientAmountData {
+class PrepData {
   late int ingredientId;
   @enumerated
   late MatterUnit unit;

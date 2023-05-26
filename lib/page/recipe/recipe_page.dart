@@ -1,6 +1,8 @@
+import 'package:cooking_calulator/model/amount/amount.dart';
+import 'package:cooking_calulator/model/enum/enum.dart';
 import 'package:cooking_calulator/recipe_resource.dart';
 import 'package:cooking_calulator/widget/widget.dart';
-import 'package:domain/domain.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -88,8 +90,8 @@ class RecipePage extends ConsumerWidget {
   ) {
     if (text.isNotEmpty) {
       final servings = int.tryParse(text) ?? 0;
-      ref.read(_amountFactorProvider.state).state =
-          servings / ref.read(servingsProvider.state).state;
+      ref.read(_amountFactorProvider.notifier).state =
+          servings / ref.read(servingsProvider.notifier).state;
     }
   }
 }
@@ -115,7 +117,7 @@ class _IngredientList extends ConsumerWidget {
 
       if (editedAmount is Volume) {
         final volumeUnitProvider = ref.watch(
-          _volumeUnitFamily(VolumeUnit.fromAmount(editedAmount)),
+          _volumeUnitFamily(editedAmount.unit),
         );
         unitConverter = AmountField.volume(
           volume: editedAmount,
@@ -126,12 +128,12 @@ class _IngredientList extends ConsumerWidget {
             amount: amount,
           ),
           onUnitChanged: (unit) =>
-              ref.read(volumeUnitProvider.state).state = unit,
+              ref.read(volumeUnitProvider.notifier).state = unit,
         );
       }
       if (editedAmount is Mass) {
         final massUnitProvider = ref.watch(
-          _massUnitFamily(MassUnit.fromAmount(editedAmount)),
+          _massUnitFamily(editedAmount.unit),
         );
         unitConverter = AmountField.mass(
           mass: editedAmount,
@@ -142,7 +144,7 @@ class _IngredientList extends ConsumerWidget {
             amount: amount,
           ),
           onUnitChanged: (unit) =>
-              ref.read(massUnitProvider.state).state = unit,
+              ref.read(massUnitProvider.notifier).state = unit,
         );
       }
 
@@ -171,7 +173,7 @@ class _IngredientList extends ConsumerWidget {
     required String value,
     required Amount amount,
   }) {
-    ref.watch(_amountFactorProvider.state).state =
+    ref.watch(_amountFactorProvider.notifier).state =
         double.parse(value) / amount.value;
   }
 }

@@ -1,76 +1,8 @@
-import 'package:domain/domain.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-abstract class AmountUnit<T extends Amount> {
-  String get abbreviation;
-
-  T toAmount(double value);
-}
-
-enum MassUnit implements AmountUnit {
-  milligram(milligramSymbol),
-  gram(gramSymbol),
-  kilogram(kilogramSymbol),
-  ounce(ounceSymbol),
-  pound(poundSymbol);
-
-  @override
-  final String abbreviation;
-
-  const MassUnit(this.abbreviation);
-
-  @override
-  Mass toAmount(double value) {
-    switch (this) {
-      case MassUnit.milligram:
-        return Milligram(value);
-      case MassUnit.gram:
-        return Gram(value);
-      case MassUnit.kilogram:
-        return Kilogram(value);
-      case MassUnit.ounce:
-        return Ounce(value);
-      case MassUnit.pound:
-        return Pound(value);
-    }
-  }
-}
-
-enum VolumeUnit implements AmountUnit {
-  cubicCentimeter(cubicCentimeterSymbol),
-  milliliter(milliliterSymbol),
-  liter(literSymbol),
-  teaspoon(teaspoonSymbol),
-  tablespoon(tablespoonSymbol),
-  fluidOunce(fluidOunceSymbol),
-  cup(cupSymbol);
-
-  @override
-  final String abbreviation;
-
-  const VolumeUnit(this.abbreviation);
-
-  @override
-  Volume toAmount(double value) {
-    switch (this) {
-      case VolumeUnit.cubicCentimeter:
-        return CubicCentimeter(value);
-      case VolumeUnit.milliliter:
-        return Milliliter(value);
-      case VolumeUnit.liter:
-        return Liter(value);
-      case VolumeUnit.teaspoon:
-        return Teaspoon(value);
-      case VolumeUnit.tablespoon:
-        return Tablespoon(value);
-      case VolumeUnit.fluidOunce:
-        return FluidOunce(value);
-      case VolumeUnit.cup:
-        return Cup(value);
-    }
-  }
-}
+import '../model/enum/enum.dart';
 
 final _fromMassUnitProvider = StateProvider((ref) => MassUnit.milligram);
 final _toMassUnitProvider = StateProvider((ref) => MassUnit.milligram);
@@ -162,7 +94,7 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
               decimal: true,
             ),
             onChanged: (text) =>
-                ref.watch(valueProvider.state).state = double.tryParse(text),
+                ref.watch(valueProvider.notifier).state = double.tryParse(text),
           ),
         ),
         const Padding(
@@ -174,12 +106,12 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
           items: units
               .map((unit) => DropdownMenuItem(
                     value: unit,
-                    child: Text(unit.abbreviation),
+                    child: Text(unit.symbol),
                   ))
               .toList(),
           onChanged: (unit) {
             if (unit == null) return;
-            ref.watch(fromUnitProvider.state).state = unit;
+            ref.watch(fromUnitProvider.notifier).state = unit;
           },
         ),
         const Padding(
@@ -191,12 +123,12 @@ abstract class UnitConverter<T extends AmountUnit> extends ConsumerWidget {
           items: units
               .map((unit) => DropdownMenuItem(
                     value: unit,
-                    child: Text(unit.abbreviation),
+                    child: Text(unit.symbol),
                   ))
               .toList(),
           onChanged: (unit) {
             if (unit == null) return;
-            ref.watch(toUnitProvider.state).state = unit;
+            ref.watch(toUnitProvider.notifier).state = unit;
           },
         ),
         Expanded(

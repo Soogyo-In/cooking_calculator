@@ -1,7 +1,7 @@
 part of 'model_mapper.dart';
 
-extension IngredientAmountMapper on IngredientAmountData {
-  Amount toAmount() {
+extension PrepDataExtension on PrepData {
+  Amount getAmount() {
     if (unit.isMilligram) return Milligram(value);
     if (unit.isGram) return Gram(value);
     if (unit.isKilogram) return Kilogram(value);

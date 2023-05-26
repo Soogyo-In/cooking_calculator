@@ -1,20 +1,19 @@
 import 'package:data/data.dart';
-import 'package:domain/domain.dart';
 import 'package:test/test.dart';
 
 void main() {
   test(
     'RecipeData can conver to IndexedRecipe',
     () {
-      final countIngredient = IngredientAmountData()
+      final countIngredient = PrepData()
         ..ingredientId = 1
         ..unit = MatterUnit.count
         ..value = 1.0;
-      final massIngredient = IngredientAmountData()
+      final massIngredient = PrepData()
         ..ingredientId = 2
         ..unit = MatterUnit.gram
         ..value = 1.0;
-      final volumeIngredient = IngredientAmountData()
+      final volumeIngredient = PrepData()
         ..ingredientId = 3
         ..unit = MatterUnit.liter
         ..value = 1.0;
@@ -23,7 +22,7 @@ void main() {
         ..value = 0.0;
       final directionData = DirectionData()
         ..description = 'description'
-        ..ingredients = [
+        ..preps = [
           countIngredient,
           massIngredient,
           volumeIngredient,
@@ -38,15 +37,35 @@ void main() {
 
       expect(
         recipeData.toRecipe(),
-        IndexedRecipe(
+        Recipe(
           id: 1,
           name: 'name',
           directions: [
             Direction(
               description: 'description',
-              countByIngredientId: {1: Count(1.0)},
-              massByIngredientId: {2: Gram(1.0)},
-              volumeByIngredientId: {3: Liter(1.0)},
+              preps: [
+                Prep(
+                  ingredient: Ingredient(
+                    id: 1,
+                    name: '1',
+                  ),
+                  amount: Count(1.0),
+                ),
+                Prep(
+                  ingredient: Ingredient(
+                    id: 2,
+                    name: '2',
+                  ),
+                  amount: Gram(1.0),
+                ),
+                Prep(
+                  ingredient: Ingredient(
+                    id: 3,
+                    name: '3',
+                  ),
+                  amount: Liter(1.0),
+                ),
+              ],
               temperature: Temperature.celsius(0.0),
               time: Duration(seconds: 1),
             ),

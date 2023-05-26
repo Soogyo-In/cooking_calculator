@@ -22,15 +22,26 @@ void main() async {
   group(
     'Recipe',
     () {
-      const recipe = Recipe(
+      const recipe = TransientRecipe(
         directions: [
-          Direction(
+          TransientDirection(
             description: 'description',
             temperature: Temperature.celsius(1.0),
             time: Duration(hours: 1),
-            countByIngredientId: {1: Count(1)},
-            massByIngredientId: {2: Gram(1)},
-            volumeByIngredientId: {3: Liter(1)},
+            preps: [
+              TransientPrep(
+                ingredient: Ingredient(id: 1, name: '1'),
+                amount: Count(1),
+              ),
+              TransientPrep(
+                ingredient: Ingredient(id: 2, name: '2'),
+                amount: Gram(1),
+              ),
+              TransientPrep(
+                ingredient: Ingredient(id: 3, name: '3'),
+                amount: Liter(1),
+              ),
+            ],
           ),
         ],
         name: 'name',
@@ -60,7 +71,7 @@ void main() async {
 
                   expect(
                     addedRecipe,
-                    IndexedRecipe(
+                    Recipe(
                       name: recipe.name,
                       directions: recipe.directions,
                       description: recipe.description,
@@ -78,7 +89,7 @@ void main() async {
       group(
         'Read',
         () {
-          late IndexedRecipe addedRecipe;
+          late Recipe addedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -176,8 +187,8 @@ void main() async {
       group(
         'Update',
         () {
-          late IndexedRecipe addedRecipe;
-          late IndexedRecipe updatedRecipe;
+          late Recipe addedRecipe;
+          late Recipe updatedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -188,9 +199,20 @@ void main() async {
                   description: 'newDescription',
                   temperature: Temperature.celsius(2.0),
                   time: Duration(hours: 2),
-                  countByIngredientId: {4: Count(2)},
-                  massByIngredientId: {5: Milligram(2)},
-                  volumeByIngredientId: {6: Milliliter(2)},
+                  preps: [
+                    Prep(
+                      ingredient: Ingredient(id: 4, name: '4'),
+                      amount: Count(2),
+                    ),
+                    Prep(
+                      ingredient: Ingredient(id: 5, name: '5'),
+                      amount: Milligram(2),
+                    ),
+                    Prep(
+                      ingredient: Ingredient(id: 6, name: '6'),
+                      amount: Milliliter(2),
+                    ),
+                  ],
                 ),
               ],
               name: 'newName',
@@ -227,7 +249,7 @@ void main() async {
       group(
         'Delete',
         () {
-          late IndexedRecipe addedRecipe;
+          late Recipe addedRecipe;
 
           setUp(() async {
             addedRecipe = await datasource.addRecipe(recipe);
@@ -252,7 +274,7 @@ void main() async {
   );
 
   group('Ingredient', () {
-    const ingredient = Ingredient(
+    const ingredient = TransientIngredient(
       name: 'name',
       description: 'description',
     );
@@ -280,7 +302,7 @@ void main() async {
 
                 expect(
                   addedIngredient,
-                  IndexedIngredient(
+                  Ingredient(
                     name: ingredient.name,
                     description: ingredient.description,
                     id: addedIngredient.id,
@@ -296,7 +318,7 @@ void main() async {
     group(
       'Read',
       () {
-        late IndexedIngredient addedIngredient;
+        late Ingredient addedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);
@@ -394,8 +416,8 @@ void main() async {
     group(
       'Update',
       () {
-        late IndexedIngredient addedIngredient;
-        late IndexedIngredient updatedIngredient;
+        late Ingredient addedIngredient;
+        late Ingredient updatedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);
@@ -434,7 +456,7 @@ void main() async {
     group(
       'Delete',
       () {
-        late IndexedIngredient addedIngredient;
+        late Ingredient addedIngredient;
 
         setUp(() async {
           addedIngredient = await datasource.addIngredient(ingredient);

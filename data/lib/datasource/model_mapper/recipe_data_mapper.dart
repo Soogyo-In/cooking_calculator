@@ -1,38 +1,34 @@
 part of 'model_mapper.dart';
 
 extension RecipDataMapper on RecipeData {
-  IndexedRecipe toRecipe() {
-    final directions = this.directions.map(
-      (directionData) {
-        final countByIngredientId = <int, Count>{};
-        final massByIngredientId = <int, Mass>{};
-        final volumeByIngredientId = <int, Volume>{};
-        final ingredientAmounts = directionData.ingredients ?? [];
-        for (final ingredientAmount in ingredientAmounts) {
-          final ingredientId = ingredientAmount.ingredientId;
-          final amount = ingredientAmount.toAmount();
+  Recipe toRecipe({
+    required Map<int, IngredientData> ingredientById,
+  }) {
+    final directions = this.directions.map((direction) {
+      final preps = direction.preps?.map((prep) {
+            final ingredient =
+                ingredientById[prep.ingredientId]!.toIngredient();
 
-          if (amount is Count) countByIngredientId[ingredientId] = amount;
-          if (amount is Mass) massByIngredientId[ingredientId] = amount;
-          if (amount is Volume) volumeByIngredientId[ingredientId] = amount;
-        }
+            return Prep(
+              ingredient: ingredient,
+              amount: prep.getAmount(),
+            );
+          }).toList() ??
+          [];
 
-        return Direction(
-          description: directionData.description,
-          temperature: directionData.temperature?.toTemperature(),
-          time: Duration(seconds: directionData.timeInSeconds ?? 0),
-          countByIngredientId: countByIngredientId,
-          massByIngredientId: massByIngredientId,
-          volumeByIngredientId: volumeByIngredientId,
-        );
-      },
-    ).toList();
+      return Direction(
+        description: direction.description,
+        preps: preps,
+        temperature: direction.temperature?.toTemperature(),
+        time: Duration(seconds: direction.timeInSeconds ?? 0),
+      );
+    }).toList();
 
-    return IndexedRecipe(
-      directions: directions,
-      name: name,
-      description: description ?? '',
+    return Recipe(
       id: id,
+      name: name,
+      directions: directions,
+      description: description ?? '',
       servings: servings,
     );
   }
