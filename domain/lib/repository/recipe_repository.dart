@@ -1,13 +1,16 @@
 part of 'repository.dart';
 
 abstract class RecipeRepository {
-  Future<IndexedRecipe> addRecipe(Recipe recipe);
+  Future<Recipe> addRecipe(Recipe recipe);
 
-  Future<IndexedRecipe> getRecipe(int id);
+  Future<Recipe> getRecipe(int id);
 
-  Future<List<IndexedRecipe>> getAllRecipes();
+  Future<List<Recipe>> getAllRecipes();
 
-  Future<IndexedRecipe> updateRecipe(IndexedRecipe recipe);
+  Future<Recipe> updateRecipe({
+    required int id,
+    required Recipe recipe,
+  });
 
   Future<void> deleteRecipe(int id);
 }
