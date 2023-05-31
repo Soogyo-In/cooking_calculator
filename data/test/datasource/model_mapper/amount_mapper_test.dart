@@ -1,9 +1,6 @@
 import 'package:data/data.dart';
 import 'package:domain/model/amount/amount.dart';
-import 'package:test/fake.dart';
 import 'package:test/test.dart';
-
-class UnspportedAmount extends Fake implements Amount {}
 
 void main() {
   group(
@@ -13,7 +10,7 @@ void main() {
         'Milligram',
         () {
           expect(
-            Milligram(0.0).toMatterUnit(),
+            Milligram(0).toMatterUnit(),
             MatterUnit.milligram,
           );
         },
@@ -63,7 +60,7 @@ void main() {
         'CubicCentimeter',
         () {
           expect(
-            CubicCentimeter(0.0).toMatterUnit(),
+            CubicCentimeter(0).toMatterUnit(),
             MatterUnit.cubicCentimeter,
           );
         },
@@ -73,7 +70,7 @@ void main() {
         'Milliliter',
         () {
           expect(
-            Milliliter(0.0).toMatterUnit(),
+            Milliliter(0).toMatterUnit(),
             MatterUnit.milliliter,
           );
         },
