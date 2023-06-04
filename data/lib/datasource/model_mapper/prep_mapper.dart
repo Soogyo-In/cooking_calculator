@@ -25,8 +25,9 @@ extension DataPrepMapper on Prep {
 }
 
 extension DomainPrepMapper on domain.Prep {
-  Prep toDataModel(Id ingredientId) => Prep()
-    ..ingredientId = ingredientId
-    ..unit = amount.toMatterUnit()
-    ..value = amount.value;
+  Prep toDataModel(Id ingredientId) => Prep(
+        ingredientId: ingredientId,
+        unit: amount.toMatterUnit(),
+        value: amount.value,
+      );
 }

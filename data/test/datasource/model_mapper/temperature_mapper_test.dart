@@ -9,9 +9,10 @@ void main() {
       test(
         'Celsius',
         () {
-          final temperature = Temperature()
-            ..unit = TemperatureUnit.celsius
-            ..value = 0.0;
+          final temperature = Temperature(
+            unit: TemperatureUnit.celsius,
+            value: 0.0,
+          );
 
           expect(
             temperature.toDomainModel(),
@@ -23,9 +24,10 @@ void main() {
       test(
         'Fahrenheit',
         () {
-          final temperature = Temperature()
-            ..unit = TemperatureUnit.fahrenheit
-            ..value = 0.0;
+          final temperature = Temperature(
+            unit: TemperatureUnit.fahrenheit,
+            value: 0.0,
+          );
 
           expect(
             temperature.toDomainModel(),

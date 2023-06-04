@@ -1,22 +1,39 @@
+import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 
 import 'schema.dart';
 
 part 'recipe.g.dart';
 
-@collection
-class Recipe {
-  Recipe({this.id = Isar.autoIncrement});
+@Collection(inheritance: false)
+class Recipe extends Equatable {
+  const Recipe({
+    this.id = Isar.autoIncrement,
+    required this.name,
+    this.directions = const [],
+    this.servings = 1,
+    this.description = '',
+  });
 
   final Id id;
 
-  late String name;
+  final String name;
 
-  late List<Direction> directions;
+  final List<Direction> directions;
 
-  late byte servings;
+  final byte servings;
 
-  String? description;
+  final String description;
+
+  @ignore
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        directions,
+        servings,
+        description,
+      ];
 }
 
 extension RecipeExtension on Recipe {

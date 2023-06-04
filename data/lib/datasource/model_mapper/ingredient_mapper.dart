@@ -8,7 +8,9 @@ extension DataIngredientMapper on Ingredient {
 }
 
 extension DomainIngredientMapper on domain.Ingredient {
-  Ingredient toDataModel({Id? id}) => Ingredient(id: id ?? Isar.autoIncrement)
-    ..description = description
-    ..name = name;
+  Ingredient toDataModel({Id? id}) => Ingredient(
+        id: id ?? Isar.autoIncrement,
+        description: description,
+        name: name,
+      );
 }

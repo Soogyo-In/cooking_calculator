@@ -9,9 +9,10 @@ void main() {
       test(
         'should convert to domain prep',
         () {
-          final prep = Prep()
-            ..unit = MatterUnit.count
-            ..value = 0;
+          final prep = Prep(
+            unit: MatterUnit.count,
+            value: 0,
+          );
           final ingredient = domain.Ingredient(
             name: 'name',
             description: 'description',
@@ -33,9 +34,10 @@ void main() {
           test(
             'Milligram if unit is milligram',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.milligram
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.milligram,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Milligram(0),
@@ -46,9 +48,10 @@ void main() {
           test(
             'Gram if unit is gram',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.gram
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.gram,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Gram(0.0),
@@ -59,9 +62,10 @@ void main() {
           test(
             'Kilogram if unit is kilogram',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.kilogram
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.kilogram,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Kilogram(0.0),
@@ -72,9 +76,10 @@ void main() {
           test(
             'Ounce if unit is ounce',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.ounce
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.ounce,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Ounce(0.0),
@@ -85,9 +90,10 @@ void main() {
           test(
             'Pound if unit is pound',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.pound
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.pound,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Pound(0.0),
@@ -98,9 +104,10 @@ void main() {
           test(
             'CubicCentimeter if unit is cubicCentimeter',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.cubicCentimeter
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.cubicCentimeter,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.CubicCentimeter(0),
@@ -111,9 +118,10 @@ void main() {
           test(
             'Milliliter if unit is milliliter',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.milliliter
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.milliliter,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Milliliter(0),
@@ -124,9 +132,10 @@ void main() {
           test(
             'Liter if unit is liter',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.liter
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.liter,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Liter(0.0),
@@ -137,9 +146,10 @@ void main() {
           test(
             'Teaspoon if unit is teaspoon',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.teaspoon
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.teaspoon,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Teaspoon(0.0),
@@ -150,9 +160,10 @@ void main() {
           test(
             'Tablespoon if unit is tablespoon',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.tablespoon
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.tablespoon,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Tablespoon(0.0),
@@ -163,9 +174,10 @@ void main() {
           test(
             'FluidOunce if unit is fluidOunce',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.fluidOunce
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.fluidOunce,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.FluidOunce(0.0),
@@ -176,9 +188,10 @@ void main() {
           test(
             'Cup if unit is cup',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.cup
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.cup,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Cup(0.0),
@@ -189,9 +202,10 @@ void main() {
           test(
             'Count if unit is count',
             () {
-              final prep = Prep()
-                ..unit = MatterUnit.count
-                ..value = 0.0;
+              final prep = Prep(
+                unit: MatterUnit.count,
+                value: 0.0,
+              );
               expect(
                 prep.toAmount(),
                 domain.Count(0.0),

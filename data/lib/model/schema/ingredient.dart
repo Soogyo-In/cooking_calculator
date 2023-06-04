@@ -1,15 +1,28 @@
+import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 
 part 'ingredient.g.dart';
 
-@collection
-class Ingredient {
-  Ingredient({this.id = Isar.autoIncrement});
+@Collection(inheritance: false)
+class Ingredient extends Equatable {
+  const Ingredient({
+    this.id = Isar.autoIncrement,
+    required this.name,
+    this.description = '',
+  });
 
   final Id id;
 
   @Index(unique: true, caseSensitive: false)
-  late String name;
+  final String name;
 
-  String? description;
+  final String description;
+
+  @ignore
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+      ];
 }

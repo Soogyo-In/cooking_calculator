@@ -15,8 +15,6 @@ extension DomainTemperatureMapper on domain.Temperature {
     if (this is domain.Celsius) unit = TemperatureUnit.celsius;
     if (unit == null) throw StateError('Unsupported type $runtimeType');
 
-    return Temperature()
-      ..unit = unit
-      ..value = value;
+    return Temperature(unit: unit, value: value);
   }
 }

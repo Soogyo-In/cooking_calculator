@@ -6,15 +6,17 @@ class RecipeLocalDatasource implements RecipeDatasource {
   final String databasePath;
 
   @override
-  Future<void> addRecipe(domain.Recipe recipe) async {
+  Future<Id> addRecipe(domain.Recipe recipe) async {
     final isar = await Isar.open(
       [RecipeSchema, IngredientSchema],
       directory: databasePath,
     );
 
-    await _upsertRecipe(isar: isar, recipe: recipe);
+    final id = await _upsertRecipe(isar: isar, recipe: recipe);
 
     await isar.close();
+
+    return id;
   }
 
   @override
@@ -41,24 +43,23 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     final directions = recipe.directions.map((direction) {
       final preps = direction.preps
-              ?.map((prep) => prep.toDomainModel(
-                    ingredientById[prep.ingredientId]!.toDomainModel(),
-                  ))
-              .toList() ??
-          [];
+          .map((prep) => prep.toDomainModel(
+                ingredientById[prep.ingredientId]!.toDomainModel(),
+              ))
+          .toList();
 
       return domain.Direction(
         description: direction.description,
         preps: preps,
         temperature: direction.temperature?.toDomainModel(),
-        time: Duration(seconds: direction.timeInSeconds ?? 0),
+        time: Duration(seconds: direction.timeInSeconds),
       );
     }).toList();
 
     return domain.Recipe(
       directions: directions,
       name: recipe.name,
-      description: recipe.description ?? '',
+      description: recipe.description,
       servings: recipe.servings,
     );
   }
@@ -89,24 +90,23 @@ class RecipeLocalDatasource implements RecipeDatasource {
     return recipes.map((recipe) {
       final directions = recipe.directions.map((direction) {
         final preps = direction.preps
-                ?.map((prep) => prep.toDomainModel(
-                      ingredientById[prep.ingredientId]!.toDomainModel(),
-                    ))
-                .toList() ??
-            [];
+            .map((prep) => prep.toDomainModel(
+                  ingredientById[prep.ingredientId]!.toDomainModel(),
+                ))
+            .toList();
 
         return domain.Direction(
           description: direction.description,
           preps: preps,
           temperature: direction.temperature?.toDomainModel(),
-          time: Duration(seconds: direction.timeInSeconds ?? 0),
+          time: Duration(seconds: direction.timeInSeconds),
         );
       }).toList();
 
       return domain.Recipe(
         directions: directions,
         name: recipe.name,
-        description: recipe.description ?? '',
+        description: recipe.description,
         servings: recipe.servings,
       );
     }).toList();
@@ -140,15 +140,17 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> addIngredient(domain.Ingredient ingredient) async {
+  Future<Id> addIngredient(domain.Ingredient ingredient) async {
     final isar = await Isar.open(
       [IngredientSchema],
       directory: databasePath,
     );
 
-    await _upsertIngredient(isar: isar, ingredient: ingredient);
+    final id = await _upsertIngredient(isar: isar, ingredient: ingredient);
 
     await isar.close();
+
+    return id;
   }
 
   @override
@@ -208,7 +210,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
     await isar.close();
   }
 
-  Future<void> _upsertRecipe({
+  Future<Id> _upsertRecipe({
     required Isar isar,
     Id? id,
     required domain.Recipe recipe,
@@ -250,33 +252,34 @@ class RecipeLocalDatasource implements RecipeDatasource {
               ))
           .toList();
 
-      return Direction()
-        ..description = direction.description
-        ..preps = preps
-        ..temperature = direction.temperature?.toDataModel()
-        ..timeInSeconds = direction.time.inSeconds;
+      return Direction(
+        description: direction.description,
+        preps: preps,
+        temperature: direction.temperature?.toDataModel(),
+        timeInSeconds: direction.time.inSeconds,
+      );
     }).toList();
 
-    await isar.writeTxn(() => isar.recipes.put(
-          Recipe(id: id ?? Isar.autoIncrement)
-            ..description = recipe.description
-            ..directions = directions
-            ..name = recipe.name
-            ..servings = recipe.servings,
-        ));
+    return isar.writeTxn(() => isar.recipes.put(Recipe(
+          id: id ?? Isar.autoIncrement,
+          description: recipe.description,
+          directions: directions,
+          name: recipe.name,
+          servings: recipe.servings,
+        )));
   }
 
-  Future<void> _upsertIngredient({
+  Future<Id> _upsertIngredient({
     required Isar isar,
     Id? id,
     required domain.Ingredient ingredient,
-  }) async {
-    await isar.writeTxn(() {
-      return isar.ingredients.put(
-        Ingredient(id: id ?? Isar.autoIncrement)
-          ..description = ingredient.description
-          ..name = ingredient.name,
-      );
+  }) {
+    return isar.writeTxn(() {
+      return isar.ingredients.put(Ingredient(
+        id: id ?? Isar.autoIncrement,
+        description: ingredient.description,
+        name: ingredient.name,
+      ));
     });
   }
 }

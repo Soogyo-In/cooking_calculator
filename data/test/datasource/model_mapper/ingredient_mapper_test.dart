@@ -6,9 +6,11 @@ void main() {
   test(
     'Data ingredient should convert to domain ingredient',
     () {
-      final ingredient = Ingredient(id: 1)
-        ..name = 'name'
-        ..description = 'description';
+      final ingredient = Ingredient(
+        id: 1,
+        name: 'name',
+        description: 'description',
+      );
 
       expect(
         ingredient.toDomainModel(),
