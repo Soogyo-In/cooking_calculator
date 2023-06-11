@@ -1,11 +1,11 @@
 import 'package:domain/domain.dart';
 
 abstract class RecipeDatasource {
-  Future<void> addRecipe(Recipe recipe);
+  Future<int> addRecipe(Recipe recipe);
 
-  Future<Recipe> getRecipe(int id);
+  Future<StoredRecipe> getRecipe(int id);
 
-  Future<List<Recipe>> getAllRecipes();
+  Future<List<StoredRecipe>> getAllRecipes();
 
   Future<void> updateRecipe({
     required int id,
@@ -14,11 +14,11 @@ abstract class RecipeDatasource {
 
   Future<void> deleteRecipe(int id);
 
-  Future<void> addIngredient(Ingredient ingredient);
+  Future<int> addIngredient(Ingredient ingredient);
 
-  Future<Ingredient> getIngredient(int id);
+  Future<StoredIngredient> getIngredient(int id);
 
-  Future<List<Ingredient>> getAllIngredients();
+  Future<List<StoredIngredient>> getAllIngredients();
 
   Future<void> updateIngredient({
     required int id,

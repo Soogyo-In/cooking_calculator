@@ -20,20 +20,23 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<domain.Recipe> getRecipe(Id id) async {
+  Future<domain.StoredRecipe> getRecipe(Id id) async {
     final isar = await Isar.open(
-      [RecipeSchema],
+      [RecipeSchema, IngredientSchema],
       directory: databasePath,
     );
     final recipe = await isar.recipes.get(id);
 
-    await isar.close();
-
-    if (recipe == null) throw DataNotFoundException();
+    if (recipe == null) {
+      await isar.close();
+      throw DataNotFoundException();
+    }
 
     final ingredients = await isar.ingredients.getAll(
       recipe.preps.map((prep) => prep.ingredientId).toList(),
     );
+
+    await isar.close();
 
     if (ingredients.contains(null)) throw DataNotFoundException();
 
@@ -56,7 +59,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
       );
     }).toList();
 
-    return domain.Recipe(
+    return domain.StoredRecipe(
+      id: recipe.id,
       directions: directions,
       name: recipe.name,
       description: recipe.description,
@@ -65,21 +69,20 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<List<domain.Recipe>> getAllRecipes() async {
+  Future<List<domain.StoredRecipe>> getAllRecipes() async {
     final isar = await Isar.open(
-      [RecipeSchema],
+      [RecipeSchema, IngredientSchema],
       directory: databasePath,
     );
     final recipes = await isar.recipes.where().findAll();
-
-    await isar.close();
-
     final ingredients = await isar.ingredients.getAll(
       recipes
           .expand((recipe) => recipe.preps)
           .map((prep) => prep.ingredientId)
           .toList(),
     );
+
+    await isar.close();
 
     if (ingredients.contains(null)) throw DataNotFoundException();
 
@@ -103,7 +106,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
         );
       }).toList();
 
-      return domain.Recipe(
+      return domain.StoredRecipe(
+        id: recipe.id,
         directions: directions,
         name: recipe.name,
         description: recipe.description,
@@ -154,22 +158,22 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<domain.Ingredient> getIngredient(Id id) async {
+  Future<domain.StoredIngredient> getIngredient(Id id) async {
     final isar = await Isar.open(
       [IngredientSchema],
       directory: databasePath,
     );
-    final ingredientData = await isar.ingredients.get(id);
+    final ingredient = await isar.ingredients.get(id);
 
     await isar.close();
 
-    if (ingredientData == null) throw DataNotFoundException();
+    if (ingredient == null) throw DataNotFoundException();
 
-    return ingredientData.toDomainModel();
+    return ingredient.toStoredModel(ingredient.id);
   }
 
   @override
-  Future<List<domain.Ingredient>> getAllIngredients() async {
+  Future<List<domain.StoredIngredient>> getAllIngredients() async {
     final isar = await Isar.open(
       [IngredientSchema],
       directory: databasePath,
@@ -179,7 +183,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
     await isar.close();
 
     return ingredients
-        .map((ingredientData) => ingredientData.toDomainModel())
+        .map((ingredient) => ingredient.toStoredModel(ingredient.id))
         .toList();
   }
 

@@ -23,6 +23,26 @@ void main() {
   );
 
   test(
+    'Data ingredient should convert to stored ingredient',
+    () {
+      final ingredient = Ingredient(
+        id: 1,
+        name: 'name',
+        description: 'description',
+      );
+
+      expect(
+        ingredient.toStoredModel(ingredient.id),
+        domain.StoredIngredient(
+          id: ingredient.id,
+          name: 'name',
+          description: 'description',
+        ),
+      );
+    },
+  );
+
+  test(
     'Domain ingredient should convert to data ingredient',
     () {
       final ingredient = domain.Ingredient(

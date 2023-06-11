@@ -3,7 +3,13 @@ part of 'model_mapper.dart';
 extension DataIngredientMapper on Ingredient {
   domain.Ingredient toDomainModel() => domain.Ingredient(
         name: name,
-        description: description ?? '',
+        description: description,
+      );
+
+  domain.StoredIngredient toStoredModel(int id) => domain.StoredIngredient(
+        id: id,
+        name: name,
+        description: description,
       );
 }
 

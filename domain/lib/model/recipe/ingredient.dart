@@ -13,3 +13,16 @@ class Ingredient extends Equatable {
   @override
   List<Object?> get props => [name, description];
 }
+
+class StoredIngredient extends Ingredient {
+  const StoredIngredient({
+    required this.id,
+    required super.name,
+    super.description = '',
+  });
+
+  final int id;
+
+  @override
+  List<Object?> get props => super.props..add(id);
+}

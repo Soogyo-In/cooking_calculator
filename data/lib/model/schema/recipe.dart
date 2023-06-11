@@ -38,5 +38,5 @@ class Recipe extends Equatable {
 
 extension RecipeExtension on Recipe {
   List<Prep> get preps =>
-      directions.expand((direction) => direction.preps ?? <Prep>[]).toList();
+      directions.expand((direction) => direction.preps).toList();
 }

@@ -5,3 +5,6 @@ pubspec.lock
 
 # Conventional directory for build output.
 build/
+
+# Isar test files
+*.isar*

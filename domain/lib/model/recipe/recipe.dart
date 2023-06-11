@@ -34,3 +34,18 @@ class Recipe extends Equatable {
         (time, direction) => time + direction.time,
       );
 }
+
+class StoredRecipe extends Recipe {
+  const StoredRecipe({
+    required this.id,
+    required super.name,
+    required super.directions,
+    super.servings = 1,
+    super.description = '',
+  });
+
+  final int id;
+
+  @override
+  List<Object?> get props => super.props..add(id);
+}
