@@ -1,13 +1,16 @@
 part of 'repository.dart';
 
 abstract class IngredientRepository {
-  Future<IndexedIngredient> addIngredient(Ingredient ingredient);
+  Future<Ingredient> addIngredient(Ingredient ingredient);
 
-  Future<IndexedIngredient> getIngredient(int id);
+  Future<Ingredient> getIngredient(int id);
 
-  Future<List<IndexedIngredient>> getAllIngredients();
+  Future<List<Ingredient>> getAllIngredients();
 
-  Future<IndexedIngredient> updateIngredient(IndexedIngredient ingredient);
+  Future<Ingredient> updateIngredient({
+    required int id,
+    required Ingredient ingredient,
+  });
 
   Future<void> deleteIngredient(int id);
 }

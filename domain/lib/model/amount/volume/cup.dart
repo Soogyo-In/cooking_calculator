@@ -1,17 +1,21 @@
 part of 'volume.dart';
 
-@freezed
-class Cup with _$Cup implements Volume {
+const cupSymbol = 'cp';
+
+final class Cup extends Volume {
+  Cup(double value)
+      : _inMilliliters = (milliliterPerCup * value).round(),
+        super(
+          symbol: cupSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = cupSymbol;
-
-  const Cup._();
-
-  const factory Cup(double value) = _Cup;
+  final int _inMilliliters;
 
   @override
   CubicCentimeter toCubicCentimeter() =>
-      CubicCentimeter(cubicCentimeterPerCup * value);
+      CubicCentimeter((milliliterPerCup * value).round());
 
   @override
   Cup toCup() => Cup(value);
@@ -23,7 +27,7 @@ class Cup with _$Cup implements Volume {
   Liter toLiter() => Liter(literPerCup * value);
 
   @override
-  Milliliter toMilliliter() => Milliliter(milliliterPerCup * value);
+  Milliliter toMilliliter() => Milliliter((milliliterPerCup * value).round());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(tablespoonPerCup * value);
@@ -41,7 +45,7 @@ class Cup with _$Cup implements Volume {
   Cup operator -(Volume other) => Cup(value - other.toCup().value);
 
   @override
-  Cup operator *(num factors) => Cup(value * factors.toDouble());
+  Cup operator *(num factor) => Cup(value * factor);
 
   @override
   Cup operator /(num divisor) => Cup(value / divisor);

@@ -1,161 +1,295 @@
 part of 'local_datasource.dart';
 
 class RecipeLocalDatasource implements RecipeDatasource {
-  @override
-  Future<IndexedRecipe> addRecipe(Recipe recipe) => _upsertRecipe(recipe);
+  RecipeLocalDatasource(this.databasePath);
+
+  final String databasePath;
 
   @override
-  Future<IndexedRecipe> getRecipe(Id id) async {
-    final isar = await Isar.open([RecipeDataSchema]);
-    final recipeData = await isar.recipeDatas.get(id);
+  Future<domain.StoredRecipe> addRecipe(domain.Recipe recipe) async {
+    final isar = await Isar.open(
+      [RecipeSchema, IngredientSchema],
+      directory: databasePath,
+    );
+
+    final id = await _upsertRecipe(isar: isar, recipe: recipe);
 
     await isar.close();
 
-    if (recipeData == null) throw DataNotFoundException();
-
-    return recipeData.toRecipe();
+    return recipe.withId(id);
   }
 
   @override
-  Future<List<IndexedRecipe>> getAllRecipes() async {
-    final isar = await Isar.open([RecipeDataSchema]);
-    final recipeDatas = await isar.recipeDatas.where().findAll();
+  Future<domain.StoredRecipe> getRecipe(Id id) async {
+    final isar = await Isar.open(
+      [RecipeSchema, IngredientSchema],
+      directory: databasePath,
+    );
+    final recipe = await isar.recipes.get(id);
+
+    if (recipe == null) {
+      await isar.close();
+      throw DataNotFoundException();
+    }
+
+    final ingredients = await isar.ingredients.getAll(
+      recipe.preps.map((prep) => prep.ingredientId).toList(),
+    );
 
     await isar.close();
 
-    return recipeDatas.map((recipeData) => recipeData.toRecipe()).toList();
+    if (ingredients.contains(null)) throw DataNotFoundException();
+
+    final ingredientById = {
+      for (final ingredient in ingredients) ingredient!.id: ingredient
+    };
+
+    final directions = recipe.directions.map((direction) {
+      final preps = direction.preps
+          .map((prep) => prep.toDomainModel(
+                ingredientById[prep.ingredientId]!.toDomainModel(),
+              ))
+          .toList();
+
+      return domain.Direction(
+        description: direction.description,
+        preps: preps,
+        temperature: direction.temperature?.toDomainModel(),
+        time: Duration(seconds: direction.timeInSeconds),
+      );
+    }).toList();
+
+    return domain.StoredRecipe(
+      id: recipe.id,
+      directions: directions,
+      name: recipe.name,
+      description: recipe.description,
+      servings: recipe.servings,
+    );
   }
 
   @override
-  Future<IndexedRecipe> updateRecipe(IndexedRecipe recipe) =>
-      _upsertRecipe(recipe);
+  Future<List<domain.StoredRecipe>> getAllRecipes() async {
+    final isar = await Isar.open(
+      [RecipeSchema, IngredientSchema],
+      directory: databasePath,
+    );
+    final recipes = await isar.recipes.where().findAll();
+    final ingredients = await isar.ingredients.getAll(
+      recipes
+          .expand((recipe) => recipe.preps)
+          .map((prep) => prep.ingredientId)
+          .toList(),
+    );
+
+    await isar.close();
+
+    if (ingredients.contains(null)) throw DataNotFoundException();
+
+    final ingredientById = {
+      for (final ingredient in ingredients) ingredient!.id: ingredient
+    };
+
+    return recipes.map((recipe) {
+      final directions = recipe.directions.map((direction) {
+        final preps = direction.preps
+            .map((prep) => prep.toDomainModel(
+                  ingredientById[prep.ingredientId]!.toDomainModel(),
+                ))
+            .toList();
+
+        return domain.Direction(
+          description: direction.description,
+          preps: preps,
+          temperature: direction.temperature?.toDomainModel(),
+          time: Duration(seconds: direction.timeInSeconds),
+        );
+      }).toList();
+
+      return domain.StoredRecipe(
+        id: recipe.id,
+        directions: directions,
+        name: recipe.name,
+        description: recipe.description,
+        servings: recipe.servings,
+      );
+    }).toList();
+  }
+
+  @override
+  Future<domain.StoredRecipe> updateRecipe({
+    required Id id,
+    required domain.Recipe recipe,
+  }) async {
+    final isar = await Isar.open(
+      [RecipeSchema, IngredientSchema],
+      directory: databasePath,
+    );
+
+    id = await _upsertRecipe(isar: isar, id: id, recipe: recipe);
+
+    await isar.close();
+
+    return recipe.withId(id);
+  }
 
   @override
   Future<void> deleteRecipe(Id id) async {
-    final isar = await Isar.open([RecipeDataSchema]);
-    await isar.writeTxn(() => isar.recipeDatas.delete(id));
+    final isar = await Isar.open(
+      [RecipeSchema],
+      directory: databasePath,
+    );
+
+    await isar.writeTxn(() => isar.recipes.delete(id));
+
     await isar.close();
   }
 
   @override
-  Future<IndexedIngredient> addIngredient(Ingredient ingredient) =>
-      _upsertIngredient(ingredient);
+  Future<domain.StoredIngredient> addIngredient(
+    domain.Ingredient ingredient,
+  ) async {
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
+    );
 
-  @override
-  Future<IndexedIngredient> getIngredient(Id id) async {
-    final isar = await Isar.open([IngredientDataSchema]);
-    final ingredientData = await isar.ingredientDatas.get(id);
+    final id = await _upsertIngredient(isar: isar, ingredient: ingredient);
 
     await isar.close();
 
-    if (ingredientData == null) throw DataNotFoundException();
-
-    return ingredientData.toIngredient();
+    return ingredient.withId(id);
   }
 
   @override
-  Future<List<IndexedIngredient>> getAllIngredients() async {
-    final isar = await Isar.open([IngredientDataSchema]);
-    final ingredientDatas = await isar.ingredientDatas.where().findAll();
+  Future<domain.StoredIngredient> getIngredient(Id id) async {
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
+    );
+    final ingredient = await isar.ingredients.get(id);
 
     await isar.close();
 
-    return ingredientDatas
-        .map((ingredientData) => ingredientData.toIngredient())
+    if (ingredient == null) throw DataNotFoundException();
+
+    return ingredient.toStoredModel(ingredient.id);
+  }
+
+  @override
+  Future<List<domain.StoredIngredient>> getAllIngredients() async {
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
+    );
+    final ingredients = await isar.ingredients.where().findAll();
+
+    await isar.close();
+
+    return ingredients
+        .map((ingredient) => ingredient.toStoredModel(ingredient.id))
         .toList();
   }
 
   @override
-  Future<IndexedIngredient> updateIngredient(IndexedIngredient ingredient) =>
-      _upsertIngredient(ingredient);
+  Future<domain.StoredIngredient> updateIngredient({
+    required Id id,
+    required domain.Ingredient ingredient,
+  }) async {
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
+    );
+
+    id = await _upsertIngredient(isar: isar, id: id, ingredient: ingredient);
+
+    await isar.close();
+
+    return ingredient.withId(id);
+  }
 
   @override
   Future<void> deleteIngredient(Id id) async {
-    final isar = await Isar.open([IngredientDataSchema]);
-    await isar.writeTxn(() => isar.ingredientDatas.delete(id));
-    await isar.close();
-  }
-
-  Future<IndexedRecipe> _upsertRecipe(Recipe recipe) async {
-    final isar = await Isar.open([RecipeDataSchema]);
-    final directionData = <DirectionData>[];
-    for (final direction in recipe.directions) {
-      final amountByIngredientId = {
-        ...direction.massByIngredientId,
-        ...direction.volumeByIngredientId,
-        ...direction.countByIngredientId,
-      };
-      final ingredientData = amountByIngredientId.entries.map(
-        (entry) {
-          final ingredientId = entry.key;
-          final amount = entry.value;
-          return IngredientAmountData()
-            ..ingredientId = ingredientId
-            ..unit = amount.toMatterUnit()
-            ..value = amount.value;
-        },
-      ).toList();
-
-      directionData.add(
-        DirectionData()
-          ..description = direction.description
-          ..ingredients = ingredientData
-          ..temperature = direction.temperature?.toTemperatureData()
-          ..timeInSeconds = direction.time.inSeconds,
-      );
-    }
-
-    final id = await isar.writeTxn(() {
-      final id = recipe.map(
-        (value) => Isar.autoIncrement,
-        indexed: (value) => value.id,
-      );
-      return isar.recipeDatas.put(
-        RecipeData(id: id)
-          ..description = recipe.description
-          ..directions = directionData
-          ..name = recipe.name
-          ..servings = recipe.servings,
-      );
-    });
-
-    await isar.close();
-
-    return recipe.map(
-      (value) => IndexedRecipe(
-        id: id,
-        name: recipe.name,
-        directions: recipe.directions,
-        description: recipe.description,
-        servings: recipe.servings,
-      ),
-      indexed: (value) => value,
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
     );
-  }
 
-  Future<IndexedIngredient> _upsertIngredient(Ingredient ingredient) async {
-    final isar = await Isar.open([IngredientDataSchema]);
-    final id = await isar.writeTxn(() {
-      final id = ingredient.map(
-        (value) => Isar.autoIncrement,
-        indexed: (value) => value.id,
-      );
-      return isar.ingredientDatas.put(
-        IngredientData(id: id)
-          ..description = ingredient.description
-          ..name = ingredient.name,
-      );
-    });
+    await isar.writeTxn(() => isar.ingredients.delete(id));
 
     await isar.close();
+  }
 
-    return ingredient.map(
-      (value) => IndexedIngredient(
+  Future<Id> _upsertRecipe({
+    required Isar isar,
+    Id id = Isar.autoIncrement,
+    required domain.Recipe recipe,
+  }) async {
+    final currentIngredients = recipe.directions
+        .expand((direction) => direction.preps)
+        .map((prep) => prep.ingredient);
+
+    final currentIngredientNames =
+        currentIngredients.map((ingredient) => ingredient.name).toList();
+    final ingredientQueryResults = await IngredientByIndex(isar.ingredients)
+        .getAllByName(currentIngredientNames);
+
+    final ingredientIdByName = Map.fromIterables(
+      currentIngredientNames,
+      ingredientQueryResults.map((ingredient) => ingredient?.id),
+    );
+
+    final ingredientsToAdd = currentIngredients
+        .where((ingrdient) => ingredientIdByName[ingrdient.name] == null)
+        .map((ingredient) => ingredient.toDataModel())
+        .toList();
+    final newIngredientIds = await isar.writeTxn(
+      () => isar.ingredients.putAll(ingredientsToAdd),
+    );
+
+    newIngredientIds
+        .zip(ingredientsToAdd.map((ingredient) => ingredient.name))
+        .forEach((pair) {
+      final ingredientId = pair.first;
+      final ingredientName = pair.second;
+      ingredientIdByName[ingredientName] = ingredientId;
+    });
+
+    final directions = recipe.directions.map((direction) {
+      final preps = direction.preps
+          .map((prep) => prep.toDataModel(
+                ingredientIdByName[prep.ingredient.name]!,
+              ))
+          .toList();
+
+      return Direction(
+        description: direction.description,
+        preps: preps,
+        temperature: direction.temperature?.toDataModel(),
+        timeInSeconds: direction.time.inSeconds,
+      );
+    }).toList();
+
+    return isar.writeTxn(() => isar.recipes.put(Recipe(
+          id: id,
+          description: recipe.description,
+          directions: directions,
+          name: recipe.name,
+          servings: recipe.servings,
+        )));
+  }
+
+  Future<Id> _upsertIngredient({
+    required Isar isar,
+    Id id = Isar.autoIncrement,
+    required domain.Ingredient ingredient,
+  }) {
+    return isar.writeTxn(() {
+      return isar.ingredients.put(Ingredient(
         id: id,
-        name: ingredient.name,
         description: ingredient.description,
-      ),
-      indexed: (value) => value,
-    );
+        name: ingredient.name,
+      ));
+    });
   }
 }

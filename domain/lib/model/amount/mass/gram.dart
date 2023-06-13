@@ -1,13 +1,17 @@
 part of 'mass.dart';
 
-@freezed
-class Gram with _$Gram implements Mass {
+const gramSymbol = 'g';
+
+final class Gram extends Mass {
+  Gram(double value)
+      : _inMilligrams = (milligramPerGram * value).round(),
+        super(
+          symbol: gramSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = gramSymbol;
-
-  const Gram._();
-
-  const factory Gram(double value) = _Gram;
+  final int _inMilligrams;
 
   @override
   Gram toGram() => Gram(value);
@@ -16,7 +20,7 @@ class Gram with _$Gram implements Mass {
   Kilogram toKilogram() => Kilogram(kilogramPerGram * value);
 
   @override
-  Milligram toMilligram() => Milligram(milligramPerGram * value);
+  Milligram toMilligram() => Milligram((milligramPerGram * value).round());
 
   @override
   Ounce toOunce() => Ounce(ouncePerGram * value);
@@ -34,7 +38,7 @@ class Gram with _$Gram implements Mass {
   Gram operator -(Mass other) => Gram(value - other.toGram().value);
 
   @override
-  Gram operator *(num factors) => Gram(value * factors.toDouble());
+  Gram operator *(num factor) => Gram(value * factor);
 
   @override
   Gram operator /(num divisor) => Gram(value / divisor);

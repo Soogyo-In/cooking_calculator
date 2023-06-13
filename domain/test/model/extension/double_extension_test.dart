@@ -1,5 +1,5 @@
-import 'package:domain/model/util/util.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:domain/model/extension/double_extenstion.dart';
+import 'package:test/test.dart';
 
 void main() {
   test(

@@ -1,17 +1,19 @@
 part of 'volume.dart';
 
-@freezed
-class Milliliter with _$Milliliter implements Volume {
+const milliliterSymbol = 'mL';
+
+final class Milliliter extends Volume {
+  Milliliter(int value)
+      : super(
+          symbol: milliliterSymbol,
+          value: value.toDouble(),
+        );
+
   @override
-  final symbol = milliliterSymbol;
-
-  const Milliliter._();
-
-  const factory Milliliter(double value) = _Milliliter;
+  int get _inMilliliters => value.toInt();
 
   @override
-  CubicCentimeter toCubicCentimeter() =>
-      CubicCentimeter(cubicCentimeterPerMilliliter * value);
+  CubicCentimeter toCubicCentimeter() => CubicCentimeter(value.toInt());
 
   @override
   Cup toCup() => Cup(cupPerMilliliter * value);
@@ -23,7 +25,7 @@ class Milliliter with _$Milliliter implements Volume {
   Liter toLiter() => Liter(literPerMilliliter * value);
 
   @override
-  Milliliter toMilliliter() => Milliliter(value);
+  Milliliter toMilliliter() => Milliliter(value.toInt());
 
   @override
   Tablespoon toTablespoon() => Tablespoon(tablespoonPerMilliliter * value);
@@ -32,20 +34,19 @@ class Milliliter with _$Milliliter implements Volume {
   Teaspoon toTeaspoon() => Teaspoon(teaspoonPerMilliliter * value);
 
   @override
-  Milliliter roundedAt(int fractionDigits) =>
-      Milliliter(value.roundAt(fractionDigits));
+  Milliliter roundedAt(int fractionDigits) => Milliliter(value.toInt());
 
   @override
   Milliliter operator +(Volume other) =>
-      Milliliter(value + other.toMilliliter().value);
+      Milliliter((value + other.toMilliliter().value).round());
 
   @override
   Milliliter operator -(Volume other) =>
-      Milliliter(value - other.toMilliliter().value);
+      Milliliter((value - other.toMilliliter().value).round());
 
   @override
-  Milliliter operator *(num factors) => Milliliter(value * factors.toDouble());
+  Milliliter operator *(num factor) => Milliliter((value * factor).round());
 
   @override
-  Milliliter operator /(num divisor) => Milliliter(value / divisor);
+  Milliliter operator /(num divisor) => Milliliter((value / divisor).round());
 }

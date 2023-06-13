@@ -1,3 +1,5 @@
+part of 'enum.dart';
+
 enum MatterUnit {
   milligram,
   gram,

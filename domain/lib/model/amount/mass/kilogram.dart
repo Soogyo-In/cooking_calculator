@@ -1,13 +1,17 @@
 part of 'mass.dart';
 
-@freezed
-class Kilogram with _$Kilogram implements Mass {
+const kilogramSymbol = 'kg';
+
+final class Kilogram extends Mass {
+  Kilogram(double value)
+      : _inMilligrams = (milligramPerKilogram * value).round(),
+        super(
+          symbol: kilogramSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = kilogramSymbol;
-
-  const Kilogram._();
-
-  const factory Kilogram(double value) = _Kilogram;
+  final int _inMilligrams;
 
   @override
   Gram toGram() => Gram(gramPerKilogram * value);
@@ -16,7 +20,7 @@ class Kilogram with _$Kilogram implements Mass {
   Kilogram toKilogram() => Kilogram(value);
 
   @override
-  Milligram toMilligram() => Milligram(milligramPerKilogram * value);
+  Milligram toMilligram() => Milligram((milligramPerKilogram * value).round());
 
   @override
   Ounce toOunce() => Ounce(ouncePerKilogram * value);
@@ -35,7 +39,7 @@ class Kilogram with _$Kilogram implements Mass {
   Kilogram operator -(Mass other) => Kilogram(value - other.toKilogram().value);
 
   @override
-  Kilogram operator *(num factors) => Kilogram(value * factors.toDouble());
+  Kilogram operator *(num factor) => Kilogram(value * factor);
 
   @override
   Kilogram operator /(num divisor) => Kilogram(value / divisor);
