@@ -33,6 +33,14 @@ class Recipe extends Equatable {
         const Duration(),
         (time, direction) => time + direction.time,
       );
+
+  StoredRecipe withId(int id) => StoredRecipe(
+        id: id,
+        name: name,
+        directions: directions,
+        description: description,
+        servings: servings,
+      );
 }
 
 class StoredRecipe extends Recipe {

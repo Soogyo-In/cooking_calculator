@@ -6,7 +6,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   final String databasePath;
 
   @override
-  Future<Id> addRecipe(domain.Recipe recipe) async {
+  Future<domain.StoredRecipe> addRecipe(domain.Recipe recipe) async {
     final isar = await Isar.open(
       [RecipeSchema, IngredientSchema],
       directory: databasePath,
@@ -16,7 +16,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     await isar.close();
 
-    return id;
+    return recipe.withId(id);
   }
 
   @override
@@ -117,7 +117,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateRecipe({
+  Future<domain.StoredRecipe> updateRecipe({
     required Id id,
     required domain.Recipe recipe,
   }) async {
@@ -126,9 +126,11 @@ class RecipeLocalDatasource implements RecipeDatasource {
       directory: databasePath,
     );
 
-    await _upsertRecipe(isar: isar, id: id, recipe: recipe);
+    id = await _upsertRecipe(isar: isar, id: id, recipe: recipe);
 
     await isar.close();
+
+    return recipe.withId(id);
   }
 
   @override
@@ -144,7 +146,9 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<Id> addIngredient(domain.Ingredient ingredient) async {
+  Future<domain.StoredIngredient> addIngredient(
+    domain.Ingredient ingredient,
+  ) async {
     final isar = await Isar.open(
       [IngredientSchema],
       directory: databasePath,
@@ -154,7 +158,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     await isar.close();
 
-    return id;
+    return ingredient.withId(id);
   }
 
   @override
@@ -188,7 +192,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<void> updateIngredient({
+  Future<domain.StoredIngredient> updateIngredient({
     required Id id,
     required domain.Ingredient ingredient,
   }) async {
@@ -197,9 +201,11 @@ class RecipeLocalDatasource implements RecipeDatasource {
       directory: databasePath,
     );
 
-    await _upsertIngredient(isar: isar, id: id, ingredient: ingredient);
+    id = await _upsertIngredient(isar: isar, id: id, ingredient: ingredient);
 
     await isar.close();
+
+    return ingredient.withId(id);
   }
 
   @override
@@ -216,7 +222,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   Future<Id> _upsertRecipe({
     required Isar isar,
-    Id? id,
+    Id id = Isar.autoIncrement,
     required domain.Recipe recipe,
   }) async {
     final currentIngredients = recipe.directions
@@ -265,7 +271,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
     }).toList();
 
     return isar.writeTxn(() => isar.recipes.put(Recipe(
-          id: id ?? Isar.autoIncrement,
+          id: id,
           description: recipe.description,
           directions: directions,
           name: recipe.name,
@@ -275,12 +281,12 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
   Future<Id> _upsertIngredient({
     required Isar isar,
-    Id? id,
+    Id id = Isar.autoIncrement,
     required domain.Ingredient ingredient,
   }) {
     return isar.writeTxn(() {
       return isar.ingredients.put(Ingredient(
-        id: id ?? Isar.autoIncrement,
+        id: id,
         description: ingredient.description,
         name: ingredient.name,
       ));

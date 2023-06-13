@@ -72,6 +72,32 @@ void main() async {
         servings: domainRecipe.servings,
       );
 
+      Future<Id> addRecipe() async {
+        final isar = await Isar.open(
+          [RecipeSchema, IngredientSchema],
+          directory: databasePath,
+        );
+        final storedRecipeId = isar.writeTxn(
+          () async {
+            await isar.ingredients.putAll(
+              domainRecipe.directions
+                  .expand((direction) => direction.preps)
+                  .map((prep) => prep.ingredient)
+                  .map((ingredient) => Ingredient(
+                        description: ingredient.description,
+                        name: ingredient.name,
+                      ))
+                  .toList(),
+            );
+            return isar.recipes.put(dataRecipe);
+          },
+        );
+
+        await isar.close();
+
+        return storedRecipeId;
+      }
+
       group(
         'Add',
         () {
@@ -88,19 +114,17 @@ void main() async {
               );
 
               test(
-                'Should return added recipe id',
+                'Should return added recipe object with id',
                 () async {
-                  final addedRecipeId =
-                      await datasource.addRecipe(domainRecipe);
+                  final storedRecipe = await datasource.addRecipe(domainRecipe);
                   final isar = await Isar.open(
                     [RecipeSchema],
                     directory: databasePath,
                   );
-                  final addedRecipe = await isar.recipes.get(addedRecipeId);
 
                   await isar.close();
 
-                  expect(addedRecipe, dataRecipe);
+                  expect(storedRecipe, domainRecipe.withId(1));
                 },
               );
             },
@@ -111,30 +135,10 @@ void main() async {
       group(
         'Read',
         () {
-          late Id addedRecipeId;
+          late Id storedRecipeId;
 
           setUp(() async {
-            final isar = await Isar.open(
-              [RecipeSchema, IngredientSchema],
-              directory: databasePath,
-            );
-            isar.writeTxn(
-              () async {
-                await isar.ingredients.putAll(
-                  domainRecipe.directions
-                      .expand((direction) => direction.preps)
-                      .map((prep) => prep.ingredient)
-                      .map((ingredient) => Ingredient(
-                            description: ingredient.description,
-                            name: ingredient.name,
-                          ))
-                      .toList(),
-                );
-                addedRecipeId = await isar.recipes.put(dataRecipe);
-              },
-            );
-
-            await isar.close();
+            storedRecipeId = await addRecipe();
           });
 
           group(
@@ -143,7 +147,7 @@ void main() async {
               test(
                 'Should Isar instance is closed',
                 () async {
-                  await datasource.getRecipe(addedRecipeId);
+                  await datasource.getRecipe(storedRecipeId);
 
                   expect(Isar.getInstance(), isNull);
                 },
@@ -153,9 +157,9 @@ void main() async {
                 'Should return read recipe object',
                 () async {
                   expect(
-                    await datasource.getRecipe(addedRecipeId),
+                    await datasource.getRecipe(storedRecipeId),
                     domain.StoredRecipe(
-                      id: addedRecipeId,
+                      id: storedRecipeId,
                       name: domainRecipe.name,
                       directions: domainRecipe.directions,
                       description: domainRecipe.description,
@@ -200,10 +204,8 @@ void main() async {
       group(
         'Read all',
         () {
-          late Id addedRecipeId;
-
           setUp(() async {
-            addedRecipeId = await datasource.addRecipe(domainRecipe);
+            await addRecipe();
           });
 
           group(
@@ -223,15 +225,7 @@ void main() async {
                 () async {
                   expect(
                     await datasource.getAllRecipes(),
-                    [
-                      domain.StoredRecipe(
-                        id: addedRecipeId,
-                        directions: domainRecipe.directions,
-                        name: domainRecipe.name,
-                        description: domainRecipe.description,
-                        servings: domainRecipe.servings,
-                      ),
-                    ],
+                    [domainRecipe.withId(1)],
                   );
                 },
               );
@@ -243,16 +237,12 @@ void main() async {
       group(
         'Update',
         () {
-          late Id recipeId;
+          late Id storedRecipeId;
           final updatedDirection = domain.Direction(
             description: 'newDescription',
             temperature: domain.Temperature.celsius(2.0),
             time: Duration(hours: 2),
             preps: [
-              domain.Prep(
-                ingredient: domain.Ingredient(name: '2'),
-                amount: domain.Count(2),
-              ),
               domain.Prep(
                 ingredient: domain.Ingredient(name: '3'),
                 amount: domain.Milligram(2),
@@ -269,29 +259,10 @@ void main() async {
             name: 'newName',
             servings: 2,
           );
-          final updatedRecipeData = Recipe(
-            id: 1,
-            description: updatedRecipe.description,
-            directions: [
-              Direction(
-                description: updatedDirection.description,
-                temperature: updatedDirection.temperature?.toDataModel(),
-                timeInSeconds: updatedDirection.time.inSeconds,
-                preps: updatedDirection.preps
-                    .mapIndexed((index, prep) => Prep(
-                          ingredientId: index + 2,
-                          unit: prep.amount.toMatterUnit(),
-                          value: prep.amount.value,
-                        ))
-                    .toList(),
-              ),
-            ],
-            name: updatedRecipe.name,
-            servings: updatedRecipe.servings,
-          );
 
           setUp(() async {
-            recipeId = await datasource.addRecipe(domainRecipe);
+            final storedRecipe = await datasource.addRecipe(domainRecipe);
+            storedRecipeId = storedRecipe.id;
           });
 
           group(
@@ -301,7 +272,7 @@ void main() async {
                 'Should Isar instance is closed',
                 () async {
                   await datasource.updateRecipe(
-                    id: recipeId,
+                    id: storedRecipeId,
                     recipe: updatedRecipe,
                   );
 
@@ -312,24 +283,15 @@ void main() async {
               test(
                 'Should return updated recipe object',
                 () async {
-                  await datasource.updateRecipe(
-                    id: recipeId,
+                  final updatedRecipeFromDataBase =
+                      await datasource.updateRecipe(
+                    id: storedRecipeId,
                     recipe: updatedRecipe,
                   );
 
-                  final isar = await Isar.open(
-                    [RecipeSchema],
-                    directory: databasePath,
-                  );
-                  final updateRecipeFromDatabase = await isar.recipes.get(
-                    recipeId,
-                  );
-
-                  await isar.close();
-
                   expect(
-                    updateRecipeFromDatabase,
-                    updatedRecipeData,
+                    updatedRecipeFromDataBase,
+                    updatedRecipe.withId(storedRecipeId),
                   );
                 },
               );
@@ -341,10 +303,10 @@ void main() async {
       group(
         'Delete',
         () {
-          late Id addedRecipeId;
+          late Id storedRecipeId;
 
           setUp(() async {
-            addedRecipeId = await datasource.addRecipe(domainRecipe);
+            storedRecipeId = await addRecipe();
           });
 
           group(
@@ -353,7 +315,7 @@ void main() async {
               test(
                 'Should Isar instance is closed',
                 () async {
-                  await datasource.deleteRecipe(addedRecipeId);
+                  await datasource.deleteRecipe(storedRecipeId);
 
                   expect(Isar.getInstance(), isNull);
                 },
@@ -371,6 +333,24 @@ void main() async {
       description: 'description',
     );
 
+    Future<Id> addIngredient() async {
+      final isar = await Isar.open(
+        [IngredientSchema],
+        directory: databasePath,
+      );
+
+      final id = isar.writeTxn(
+        () => isar.ingredients.put(Ingredient(
+          name: ingredient.name,
+          description: ingredient.description,
+        )),
+      );
+
+      await isar.close();
+
+      return id;
+    }
+
     group(
       'Add',
       () {
@@ -387,26 +367,15 @@ void main() async {
             );
 
             test(
-              'Should return added ingredient id',
+              'Should return added ingredient object with id',
               () async {
-                final id = await datasource.addIngredient(ingredient);
-
-                final isar = await Isar.open(
-                  [IngredientSchema],
-                  directory: databasePath,
+                final addedIngredient = await datasource.addIngredient(
+                  ingredient,
                 );
-
-                final addedIngredient = await isar.ingredients.get(id);
-
-                await isar.close();
 
                 expect(
                   addedIngredient,
-                  Ingredient(
-                    id: id,
-                    name: ingredient.name,
-                    description: ingredient.description,
-                  ),
+                  ingredient.withId(addedIngredient.id),
                 );
               },
             );
@@ -421,7 +390,7 @@ void main() async {
         late Id addedIngredientId;
 
         setUp(() async {
-          addedIngredientId = await datasource.addIngredient(ingredient);
+          addedIngredientId = await addIngredient();
         });
 
         group(
@@ -441,11 +410,7 @@ void main() async {
               () async {
                 expect(
                   await datasource.getIngredient(addedIngredientId),
-                  domain.StoredIngredient(
-                    id: addedIngredientId,
-                    name: ingredient.name,
-                    description: ingredient.description,
-                  ),
+                  ingredient.withId(addedIngredientId),
                 );
               },
             );
@@ -488,7 +453,7 @@ void main() async {
         late Id addedIngredientId;
 
         setUp(() async {
-          addedIngredientId = await datasource.addIngredient(ingredient);
+          addedIngredientId = await addIngredient();
         });
 
         group(
@@ -508,13 +473,7 @@ void main() async {
               () async {
                 expect(
                   await datasource.getAllIngredients(),
-                  [
-                    domain.StoredIngredient(
-                      id: addedIngredientId,
-                      name: ingredient.name,
-                      description: ingredient.description,
-                    )
-                  ],
+                  [ingredient.withId(addedIngredientId)],
                 );
               },
             );
@@ -533,7 +492,7 @@ void main() async {
         late Id ingredientId;
 
         setUp(() async {
-          ingredientId = await datasource.addIngredient(ingredient);
+          ingredientId = await addIngredient();
         });
 
         group(
@@ -554,28 +513,15 @@ void main() async {
             test(
               'Should update ingredient',
               () async {
-                await datasource.updateIngredient(
+                final updatedIngredientFromDatabase =
+                    await datasource.updateIngredient(
                   id: ingredientId,
                   ingredient: updatedIngredient,
                 );
 
-                final isar = await Isar.open(
-                  [IngredientSchema],
-                  directory: databasePath,
-                );
-
-                final updatedIngredientFromDatabase =
-                    await isar.ingredients.get(ingredientId);
-
-                await isar.close();
-
                 expect(
                   updatedIngredientFromDatabase,
-                  Ingredient(
-                    id: ingredientId,
-                    name: updatedIngredient.name,
-                    description: updatedIngredient.description,
-                  ),
+                  updatedIngredient.withId(ingredientId),
                 );
               },
             );
@@ -590,7 +536,7 @@ void main() async {
         late Id addedIngredientId;
 
         setUp(() async {
-          addedIngredientId = await datasource.addIngredient(ingredient);
+          addedIngredientId = await addIngredient();
         });
 
         group(

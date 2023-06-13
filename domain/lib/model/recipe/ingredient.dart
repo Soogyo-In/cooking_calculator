@@ -12,6 +12,12 @@ class Ingredient extends Equatable {
 
   @override
   List<Object?> get props => [name, description];
+
+  StoredIngredient withId(int id) => StoredIngredient(
+        id: id,
+        name: name,
+        description: description,
+      );
 }
 
 class StoredIngredient extends Ingredient {
