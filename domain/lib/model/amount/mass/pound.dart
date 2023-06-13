@@ -1,13 +1,17 @@
 part of 'mass.dart';
 
-@freezed
-class Pound with _$Pound implements Mass {
+const poundSymbol = 'lb';
+
+final class Pound extends Mass {
+  Pound(double value)
+      : _inMilligrams = (milligramPerPound * value).round(),
+        super(
+          symbol: poundSymbol,
+          value: value,
+        );
+
   @override
-  final symbol = poundSymbol;
-
-  const Pound._();
-
-  const factory Pound(double value) = _Pound;
+  final int _inMilligrams;
 
   @override
   Gram toGram() => Gram(gramPerPound * value);
@@ -16,7 +20,7 @@ class Pound with _$Pound implements Mass {
   Kilogram toKilogram() => Kilogram(kilogramPerPound * value);
 
   @override
-  Milligram toMilligram() => Milligram(milligramPerPound * value);
+  Milligram toMilligram() => Milligram((milligramPerPound * value).round());
 
   @override
   Ounce toOunce() => Ounce(ouncePerPound * value);
@@ -34,7 +38,7 @@ class Pound with _$Pound implements Mass {
   Pound operator -(Mass other) => Pound(value - other.toPound().value);
 
   @override
-  Pound operator *(num factors) => Pound(value * factors.toDouble());
+  Pound operator *(num factor) => Pound(value * factor);
 
   @override
   Pound operator /(num divisor) => Pound(value / divisor);

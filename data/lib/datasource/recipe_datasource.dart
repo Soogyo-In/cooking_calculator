@@ -1,23 +1,29 @@
 import 'package:domain/domain.dart';
 
 abstract class RecipeDatasource {
-  Future<Recipe> addRecipe(TransientRecipe recipe);
+  Future<StoredRecipe> addRecipe(Recipe recipe);
 
-  Future<Recipe> getRecipe(int id);
+  Future<StoredRecipe> getRecipe(int id);
 
-  Future<List<Recipe>> getAllRecipes();
+  Future<List<StoredRecipe>> getAllRecipes();
 
-  Future<Recipe> updateRecipe(Recipe recipe);
+  Future<StoredRecipe> updateRecipe({
+    required int id,
+    required Recipe recipe,
+  });
 
   Future<void> deleteRecipe(int id);
 
-  Future<Ingredient> addIngredient(TransientIngredient ingredient);
+  Future<StoredIngredient> addIngredient(Ingredient ingredient);
 
-  Future<Ingredient> getIngredient(int id);
+  Future<StoredIngredient> getIngredient(int id);
 
-  Future<List<Ingredient>> getAllIngredients();
+  Future<List<StoredIngredient>> getAllIngredients();
 
-  Future<Ingredient> updateIngredient(Ingredient ingredient);
+  Future<StoredIngredient> updateIngredient({
+    required int id,
+    required Ingredient ingredient,
+  });
 
   Future<void> deleteIngredient(int id);
 }

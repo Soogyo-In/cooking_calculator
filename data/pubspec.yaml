@@ -11,7 +11,9 @@ dependencies:
   domain:
     path: ../domain
 
+  equatable: ^2.0.5
   isar: ^3.0.5
+  ktc_dart: ^1.0.0
   path: ^1.8.0
 
 dev_dependencies:

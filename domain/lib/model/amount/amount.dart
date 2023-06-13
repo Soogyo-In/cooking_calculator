@@ -1,13 +1,18 @@
+import 'package:equatable/equatable.dart';
+
 export 'count/count.dart';
 export 'mass/mass.dart';
 export 'volume/volume.dart';
 
-abstract class Amount {
-  const Amount();
+abstract base class Amount extends Equatable implements Comparable<Amount> {
+  const Amount({
+    required this.value,
+    required this.symbol,
+  });
 
-  double get value;
+  final double value;
 
-  String get symbol;
+  final String symbol;
 
   Amount roundedAt(int fractionDigits);
 
@@ -15,9 +20,20 @@ abstract class Amount {
 
   Amount operator -(covariant Amount other);
 
-  Amount operator *(num value);
+  Amount operator *(num factor);
 
   Amount operator /(num divisor);
+
+  bool operator <(covariant Amount other);
+
+  bool operator >(covariant Amount other);
+
+  bool operator <=(covariant Amount other);
+
+  bool operator >=(covariant Amount other);
+
+  @override
+  List<Object?> get props => [value, symbol];
 }
 
 extension AmountStringifier on Amount {

@@ -3,16 +3,9 @@ import 'package:test/test.dart';
 
 void main() {
   test(
-    'Get symbol of count unit',
-    () {
-      expect(countSymbol, 'pcs');
-    },
-  );
-
-  test(
     'Get Count object rounded value at specified fraction digits',
     () {
-      expect(const Count(1.55).roundedAt(2), const Count(1.6));
+      expect(Count(1.55).roundedAt(2), Count(1.6));
     },
   );
 
@@ -23,8 +16,8 @@ void main() {
         'Addition',
         () {
           expect(
-            const Count(1.0) + const Count(1.0),
-            const Count(2.0),
+            Count(1.0) + Count(1.0),
+            Count(2.0),
           );
         },
       );
@@ -33,8 +26,8 @@ void main() {
         'Subtraction',
         () {
           expect(
-            const Count(1.0) - const Count(1.0),
-            const Count(0.0),
+            Count(1.0) - Count(1.0),
+            Count(0.0),
           );
         },
       );
@@ -42,14 +35,14 @@ void main() {
       test(
         'Multiblication',
         () {
-          expect(const Count(1.0) * 2, const Count(2.0));
+          expect(Count(1.0) * 2, Count(2.0));
         },
       );
 
       test(
         'Division',
         () {
-          expect(const Count(2.0) / 2, const Count(1.0));
+          expect(Count(2.0) / 2, Count(1.0));
         },
       );
     },

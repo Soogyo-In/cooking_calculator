@@ -1,19 +1,16 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'temperature.dart';
 
-import 'temperature.dart';
+const celsiusSymbol = '°C';
 
-part 'celsius.freezed.dart';
-
-@freezed
-class Celsius with _$Celsius implements Temperature {
-  static const symbol = '°C';
-
-  const Celsius._();
-
-  const factory Celsius(double value) = _Celsius;
+final class Celsius extends Temperature {
+  Celsius(double value)
+      : super(
+          symbol: celsiusSymbol,
+          value: value,
+        );
 
   @override
-  Celsius toCelsius() => this;
+  Celsius toCelsius() => Celsius(value);
 
   @override
   Fahrenheit toFahrenheit() => Fahrenheit(value * 9 / 5 + 32);
@@ -27,7 +24,7 @@ class Celsius with _$Celsius implements Temperature {
       Celsius(value - other.toCelsius().value);
 
   @override
-  Celsius operator *(num factors) => Celsius(value * factors.toDouble());
+  Celsius operator *(num factor) => Celsius(value * factor);
 
   @override
   Celsius operator /(num divisor) => Celsius(value / divisor);
