@@ -1,4 +1,4 @@
-import 'package:data/data.dart';
+import 'package:domain/domain.dart';
 
 abstract class AmountUnit<T extends Amount> {
   String get symbol;
@@ -22,7 +22,7 @@ enum MassUnit implements AmountUnit {
   Mass toAmount(double value) {
     switch (this) {
       case MassUnit.milligram:
-        return Milligram(value);
+        return Milligram(value.toInt());
       case MassUnit.gram:
         return Gram(value);
       case MassUnit.kilogram:
@@ -53,9 +53,9 @@ enum VolumeUnit implements AmountUnit {
   Volume toAmount(double value) {
     switch (this) {
       case VolumeUnit.cubicCentimeter:
-        return CubicCentimeter(value);
+        return CubicCentimeter(value.toInt());
       case VolumeUnit.milliliter:
-        return Milliliter(value);
+        return Milliliter(value.toInt());
       case VolumeUnit.liter:
         return Liter(value);
       case VolumeUnit.teaspoon:

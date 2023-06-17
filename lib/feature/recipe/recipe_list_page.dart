@@ -1,11 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:cooking_calulator/page/recipe/add/recipe_add_scope.dart';
-import 'package:cooking_calulator/page/recipe/recipe_page.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'add/add.dart';
+import 'edit/edit.dart';
+import 'recipe_page.dart';
 import 'recipe_provider.dart';
 
 part 'widget/recipe_list.dart';
@@ -21,12 +19,12 @@ class RecipeListPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('레시피'),
       ),
-      body: ref.watch(recipesProvider).when(
+      body: ref.watch(recipeListProvider).when(
             data: _RecipeList.new,
             error: _RecipeList.error,
             loading: _RecipeList.loading,
           ),
-      floatingActionButton: ref.watch(recipesProvider).when(
+      floatingActionButton: ref.watch(recipeListProvider).when(
             data: (data) => FloatingActionButton(
               onPressed: () => _onAddRecpieButtonPressed(context),
               child: const Icon(Icons.add),
@@ -39,7 +37,7 @@ class RecipeListPage extends ConsumerWidget {
 
   void _onAddRecpieButtonPressed(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const RecipeAddScope(),
+      builder: (context) => const EditRecipeScope(),
     ));
   }
 }

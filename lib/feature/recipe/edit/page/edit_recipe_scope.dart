@@ -2,39 +2,42 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'add.dart';
+import '../edit.dart';
+import '../provider.dart';
 
-final recipeProvider = StateProvider(
-  (ref) => const Recipe(name: '', directions: []),
-);
+class EditRecipeScope extends StatelessWidget {
+  const EditRecipeScope({
+    super.key,
+    this.id,
+    this.recipe = const Recipe(),
+  });
 
-class RecipeAddScope extends StatelessWidget {
-  const RecipeAddScope({super.key});
+  final int? id;
+
+  final Recipe recipe;
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        recipeProvider.overrideWith(
-          (ref) => const Recipe(name: '', directions: []),
-        ),
+        recipeProvider.overrideWith((ref) => recipe),
       ],
       child: Navigator(
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            case AddDirectionPage.routeName:
+            case EditDirectionPage.routeName:
               return MaterialPageRoute(
-                builder: (context) => const AddDirectionPage(),
+                builder: (context) => const EditDirectionPage(),
                 settings: settings,
               );
-            case AddIngredientPage.routeName:
+            case EditIngredientPage.routeName:
               return MaterialPageRoute(
-                builder: (context) => const AddIngredientPage(),
+                builder: (context) => const EditIngredientPage(),
                 settings: settings,
               );
-            case AddTitlePage.routeName:
+            case EditRecipePage.routeName:
               return MaterialPageRoute(
-                builder: (context) => const AddTitlePage(),
+                builder: (context) => EditRecipePage(recipe: recipe, id: id),
                 settings: settings,
               );
           }

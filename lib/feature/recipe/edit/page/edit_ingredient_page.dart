@@ -1,21 +1,19 @@
 import 'package:cooking_calulator/model/enum/amount_unit.dart';
 import 'package:cooking_calulator/widget/widget.dart';
-import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 
-class AddIngredientPage extends ConsumerStatefulWidget {
-  static const routeName = 'addRecipeIngredient';
+class EditIngredientPage extends ConsumerStatefulWidget {
+  static const routeName = 'editRecipeIngredient';
 
-  const AddIngredientPage({super.key});
+  const EditIngredientPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _AddIngredientPageState();
 }
 
-class _AddIngredientPageState extends ConsumerState<AddIngredientPage> {
+class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
   final _nameController = TextEditingController();
   List<String> _relevantNames = [];
   AmountUnit? _unit;
@@ -97,22 +95,7 @@ class _AddIngredientPageState extends ConsumerState<AddIngredientPage> {
     );
   }
 
-  void _onSaveButtonPressed() async {
-    final dataPath = await getApplicationDocumentsDirectory();
-    final datasource = ref.read(isarRecipeDatasourceProvider(dataPath.path));
-    await ref
-        .read(cachedIngredientRepositoryProvider(datasource).notifier)
-        .addIngredient(const Ingredient(name: 'name'));
-  }
+  void _onSaveButtonPressed() async {}
 
-  void _onIngredientNameTextfieldChanged(String text) {
-    if (text.isEmpty) {
-      setState(_relevantNames.clear);
-      return;
-    }
-
-    ref.read(cachedIngredientRepositoryProvider.notifier).addIngredient(
-          const Ingredient(name: 'name'),
-        );
-  }
+  void _onIngredientNameTextfieldChanged(String text) {}
 }

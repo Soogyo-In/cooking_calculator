@@ -4,7 +4,7 @@ class _RecipeListLoading extends _RecipeList {
   const _RecipeListLoading() : super(const []);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const Placeholder();
   }
 }

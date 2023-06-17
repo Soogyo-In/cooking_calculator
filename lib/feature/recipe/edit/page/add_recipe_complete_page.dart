@@ -1,17 +1,28 @@
-import 'package:cooking_calulator/page/recipe/add/add.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddTitlePage extends ConsumerStatefulWidget {
-  static const routeName = 'addRecipeTitle';
+import '../provider.dart';
+import 'page.dart';
 
-  const AddTitlePage({super.key});
+class EditRecipePage extends ConsumerStatefulWidget {
+  static const routeName = 'editRecipe';
+
+  const EditRecipePage({
+    super.key,
+    this.id,
+    required this.recipe,
+  });
+
+  final int? id;
+
+  final Recipe recipe;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AddTitlePageState();
 }
 
-class _AddTitlePageState extends ConsumerState<AddTitlePage> {
+class _AddTitlePageState extends ConsumerState<EditRecipePage> {
   String _name = '';
   String _description = '';
   int _servings = 1;
@@ -77,6 +88,6 @@ class _AddTitlePageState extends ConsumerState<AddTitlePage> {
           description: _description,
           servings: _servings,
         ));
-    Navigator.of(context).pushNamed(AddDirectionPage.routeName);
+    Navigator.of(context).pushNamed(EditDirectionPage.routeName);
   }
 }

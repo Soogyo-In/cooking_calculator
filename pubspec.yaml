@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # layersØ
+  # layers
   data:
     path: ./data
 

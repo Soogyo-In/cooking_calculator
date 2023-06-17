@@ -8,7 +8,7 @@ class _RecipeList extends ConsumerWidget {
 
   const factory _RecipeList.loading() = _RecipeListLoading;
 
-  final List<IndexedRecipe> recipes;
+  final List<StoredRecipe> recipes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,11 +17,9 @@ class _RecipeList extends ConsumerWidget {
       itemCount: recipes.length,
       itemBuilder: (context, index) {
         final recipe = recipes.elementAt(index);
-        final ingredientIdSet = {
-          ...recipe.countByIngredientId.keys,
-          ...recipe.massByIngredientId.keys,
-          ...recipe.volumeByIngredientId.keys,
-        };
+        final ingredients = recipe.directions
+            .expand((direction) => direction.preps)
+            .map((prep) => prep.ingredient);
 
         return Card(
           child: InkWell(
@@ -29,21 +27,11 @@ class _RecipeList extends ConsumerWidget {
             child: Column(
               children: [
                 Text(recipe.name),
-                ref.watch(ingredientsProvider).when(
-                      data: (data) {
-                        return Wrap(
-                          children: ingredientIdSet
-                              .map((id) => data[id].name)
-                              .whereNotNull()
-                              .map((name) => Chip(label: Text(name)))
-                              .toList(),
-                        );
-                      },
-                      error: (error, stackTrace) =>
-                          Center(child: Text(error.toString())),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                    ),
+                Wrap(
+                  children: ingredients
+                      .map((ingredient) => Chip(label: Text(ingredient.name)))
+                      .toList(),
+                ),
               ],
             ),
           ),

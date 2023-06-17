@@ -7,7 +7,7 @@ class _RecipeListError extends _RecipeList {
   final StackTrace stackTrace;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const Placeholder();
   }
 }

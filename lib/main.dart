@@ -1,6 +1,7 @@
-import 'package:cooking_calulator/page/recipe/recipe_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'feature/recipe/recipe_list_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: App()));

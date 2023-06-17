@@ -1,18 +1,20 @@
-import 'package:cooking_calulator/page/recipe/add/add.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddDirectionPage extends ConsumerStatefulWidget {
-  static const routeName = 'addRecipeDirection';
+import '../provider.dart';
+import 'page.dart';
 
-  const AddDirectionPage({super.key});
+class EditDirectionPage extends ConsumerStatefulWidget {
+  static const routeName = 'editRecipeDirection';
+
+  const EditDirectionPage({super.key});
 
   @override
-  ConsumerState<AddDirectionPage> createState() => _AddDirectionPageState();
+  ConsumerState<EditDirectionPage> createState() => _AddDirectionPageState();
 }
 
-class _AddDirectionPageState extends ConsumerState<AddDirectionPage> {
+class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
   String _description = '';
   final _ingredients = <Ingredient>[];
 
@@ -71,7 +73,7 @@ class _AddDirectionPageState extends ConsumerState<AddDirectionPage> {
               )),
           ),
         );
-    Navigator.of(context).pushNamed(AddDirectionPage.routeName);
+    Navigator.of(context).pushNamed(EditDirectionPage.routeName);
   }
 
   void _onSubmitButtonPressed() {
@@ -80,7 +82,7 @@ class _AddDirectionPageState extends ConsumerState<AddDirectionPage> {
 
   void _onAddIngredientButtonPressed() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const AddIngredientPage(),
+      builder: (context) => const EditIngredientPage(),
     ));
   }
 }
