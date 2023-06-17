@@ -1,4 +1,4 @@
-part of 'model_mapper.dart';
+part of 'mapper.dart';
 
 extension DataPrepMapper on Prep {
   domain.Prep toDomainModel(domain.Ingredient ingredient) => domain.Prep(

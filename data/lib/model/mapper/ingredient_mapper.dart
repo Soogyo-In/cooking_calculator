@@ -1,4 +1,4 @@
-part of 'model_mapper.dart';
+part of 'mapper.dart';
 
 extension DataIngredientMapper on Ingredient {
   domain.Ingredient toDomainModel() => domain.Ingredient(

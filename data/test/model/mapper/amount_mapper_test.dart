@@ -1,4 +1,4 @@
-import 'package:data/data.dart';
+import 'package:data/model/model.dart';
 import 'package:domain/model/amount/amount.dart';
 import 'package:test/test.dart';
 

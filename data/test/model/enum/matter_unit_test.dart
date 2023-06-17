@@ -1,4 +1,4 @@
-import 'package:data/data.dart';
+import 'package:data/model/model.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
