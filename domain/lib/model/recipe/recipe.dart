@@ -7,8 +7,8 @@ part 'prep.dart';
 
 class Recipe extends Equatable {
   const Recipe({
-    required this.name,
-    required this.directions,
+    this.name = '',
+    this.directions = const [],
     this.servings = 1,
     this.description = '',
   });

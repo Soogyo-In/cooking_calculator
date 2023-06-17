@@ -2,7 +2,7 @@ part of 'recipe.dart';
 
 class Ingredient extends Equatable {
   const Ingredient({
-    required this.name,
+    this.name = '',
     this.description = '',
   });
 

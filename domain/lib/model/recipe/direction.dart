@@ -2,7 +2,7 @@ part of 'recipe.dart';
 
 class Direction extends Equatable {
   const Direction({
-    required this.description,
+    this.description = '',
     this.preps = const [],
     this.time = const Duration(),
     this.temperature,
