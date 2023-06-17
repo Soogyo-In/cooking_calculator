@@ -26,7 +26,7 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
         actions: [
           IconButton(
             onPressed: _onSaveButtonPressed,
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
           ),
         ],
       ),
@@ -34,7 +34,7 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
         children: [
           TextField(
             controller: _nameController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: '재료명',
             ),
             onChanged: _onIngredientNameTextfieldChanged,
@@ -56,7 +56,7 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
               children: [
                 Expanded(
                   child: IntegerInput(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: '용량',
                     ),
                     onChanged: (text) => setState(() {
@@ -67,7 +67,7 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
                     }),
                   ),
                 ),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 DropdownButton<AmountUnit>(
                   onChanged: (value) {
                     setState(() => _unit = value);

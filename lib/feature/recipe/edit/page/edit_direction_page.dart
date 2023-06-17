@@ -2,26 +2,30 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../provider.dart';
+import '../../recipe_provider.dart';
 import 'page.dart';
 
 class EditDirectionPage extends ConsumerStatefulWidget {
   static const routeName = 'editRecipeDirection';
 
-  const EditDirectionPage({super.key});
+  const EditDirectionPage({super.key, this.direction = const Direction()});
+
+  final Direction direction;
 
   @override
   ConsumerState<EditDirectionPage> createState() => _AddDirectionPageState();
 }
 
 class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
+  List<Prep> _preps = [];
+
   String _description = '';
-  final _ingredients = <Ingredient>[];
 
   @override
   Widget build(BuildContext context) {
-    final stepCount =
-        ref.read(recipeProvider.notifier).state.directions.length + 1;
+    final recipe = ref.watch(recipeProvider);
+    final stepCount = recipe.directions.length + 1;
+    _preps = widget.direction.preps;
 
     return Scaffold(
       appBar: AppBar(title: Text('단계 $stepCount')),
@@ -30,8 +34,8 @@ class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
           children: [
             Wrap(
               spacing: 8.0,
-              children: _ingredients
-                  .map((ingredient) => Chip(label: Text(ingredient.name)))
+              children: _preps
+                  .map((prep) => Chip(label: Text(prep.ingredient.name)))
                   .toList(),
             ),
             OutlinedButton(
@@ -67,10 +71,10 @@ class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
   void _onNextButtonPressed() {
     ref.read(recipeProvider.notifier).update(
           (state) => state.copyWith(
-            directions: state.directions
-              ..add(Direction(
-                description: _description,
-              )),
+            directions: [
+              ...state.directions,
+              Direction(description: _description),
+            ],
           ),
         );
     Navigator.of(context).pushNamed(EditDirectionPage.routeName);
@@ -80,9 +84,9 @@ class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
-  void _onAddIngredientButtonPressed() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const EditIngredientPage(),
-    ));
+  void _onAddIngredientButtonPressed() async {
+    final ingredient = await Navigator.of(context).pushNamed(
+      EditIngredientPage.routeName,
+    );
   }
 }

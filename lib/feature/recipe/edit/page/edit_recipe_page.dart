@@ -2,92 +2,39 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../provider.dart';
-import 'page.dart';
+import '../../recipe_provider.dart';
+import '../edit.dart';
 
-class EditRecipePage extends ConsumerStatefulWidget {
+class EditRecipePage extends StatelessWidget {
   static const routeName = 'editRecipe';
 
-  const EditRecipePage({
+  const EditRecipePage.create({
     super.key,
-    this.id,
-    required this.recipe,
-  });
+    this.recipe = const Recipe(),
+  }) : id = null;
+
+  EditRecipePage.modify({
+    super.key,
+    required StoredRecipe this.recipe,
+  }) : id = recipe.id;
 
   final int? id;
 
   final Recipe recipe;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AddTitlePageState();
-}
-
-class _AddTitlePageState extends ConsumerState<EditRecipePage> {
-  String _name = '';
-  String _description = '';
-  int _servings = 1;
-
-  bool get _nextButtonEnabled => _name.isNotEmpty;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('레시피 추가')),
-      body: SafeArea(
-        child: Column(
-          children: [
-            TextField(
-              decoration: const InputDecoration(hintText: '이름'),
-              autofocus: true,
-              onChanged: (text) => setState(() => _name = text),
-              textInputAction: TextInputAction.next,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    if (_servings > 1) {
-                      setState(() => _servings--);
-                      return;
-                    }
-
-                    setState(() => _servings = 1);
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-                Text('$_servings 인분'),
-                IconButton(
-                  onPressed: () => setState(() => _servings++),
-                  icon: const Icon(Icons.add),
-                ),
-              ],
-            ),
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(hintText: '설명'),
-                maxLines: null,
-                expands: true,
-                onChanged: (text) => setState(() => _description = text),
-                textInputAction: TextInputAction.done,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _nextButtonEnabled ? _onNextButtonPressed : null,
-              child: const Text('다음'),
-            ),
-          ],
+    return ProviderScope(
+      overrides: [
+        recipeProvider.overrideWith((ref) => recipe),
+      ],
+      child: Scaffold(
+        appBar: AppBar(title: const Text('레시피 추가')),
+        body: const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: RecipeForm(),
         ),
       ),
     );
-  }
-
-  void _onNextButtonPressed() {
-    ref.read(recipeProvider.notifier).update((state) => state.copyWith(
-          name: _name,
-          description: _description,
-          servings: _servings,
-        ));
-    Navigator.of(context).pushNamed(EditDirectionPage.routeName);
   }
 }
