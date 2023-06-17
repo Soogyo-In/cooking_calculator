@@ -1,3 +1,3 @@
 export 'edit_direction_page.dart';
-export 'edit_ingredient_page.dart';
+export 'edit_prep_page.dart';
 export 'edit_recipe_page.dart';

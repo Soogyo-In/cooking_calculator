@@ -1,34 +1,55 @@
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../recipe_provider.dart';
 import 'page.dart';
 
-class EditDirectionPage extends ConsumerStatefulWidget {
+class EditDirectionPage extends StatefulWidget {
   static const routeName = 'editRecipeDirection';
 
-  const EditDirectionPage({super.key, this.direction = const Direction()});
+  const EditDirectionPage({
+    super.key,
+    required this.stepCount,
+    this.direction = const Direction(),
+  });
+
+  final int stepCount;
 
   final Direction direction;
 
   @override
-  ConsumerState<EditDirectionPage> createState() => _AddDirectionPageState();
+  State<EditDirectionPage> createState() => _AddDirectionPageState();
 }
 
-class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
+class _AddDirectionPageState extends State<EditDirectionPage> {
   List<Prep> _preps = [];
 
   String _description = '';
 
+  Temperature? _temperature;
+
+  Duration _time = Duration.zero;
+
+  @override
+  void initState() {
+    _preps = widget.direction.preps;
+    _description = widget.direction.description;
+    _temperature = widget.direction.temperature;
+    _time = widget.direction.time;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final recipe = ref.watch(recipeProvider);
-    final stepCount = recipe.directions.length + 1;
-    _preps = widget.direction.preps;
-
     return Scaffold(
-      appBar: AppBar(title: Text('단계 $stepCount')),
+      appBar: AppBar(
+        title: Text('단계 ${widget.stepCount}'),
+        actions: [
+          IconButton(
+            onPressed: _onSubmitButtonPressed,
+            icon: Icon(Icons.check),
+          )
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -39,7 +60,7 @@ class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
                   .toList(),
             ),
             OutlinedButton(
-              onPressed: _onAddIngredientButtonPressed,
+              onPressed: _onAddPrepButtonPressed,
               child: const Text('재료 추가'),
             ),
             Expanded(
@@ -50,43 +71,32 @@ class _AddDirectionPageState extends ConsumerState<EditDirectionPage> {
                 expands: true,
               ),
             ),
-            ButtonBar(
-              children: [
-                OutlinedButton(
-                  onPressed: _onNextButtonPressed,
-                  child: const Text('단계 추가'),
-                ),
-                ElevatedButton(
-                  onPressed: _onSubmitButtonPressed,
-                  child: const Text('완료'),
-                ),
-              ],
-            ),
           ],
         ),
       ),
     );
   }
 
-  void _onNextButtonPressed() {
-    ref.read(recipeProvider.notifier).update(
-          (state) => state.copyWith(
-            directions: [
-              ...state.directions,
-              Direction(description: _description),
-            ],
-          ),
-        );
-    Navigator.of(context).pushNamed(EditDirectionPage.routeName);
-  }
-
   void _onSubmitButtonPressed() {
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pop(Direction(
+      description: _description,
+      preps: _preps,
+      temperature: _temperature,
+      time: _time,
+    ));
   }
 
-  void _onAddIngredientButtonPressed() async {
-    final ingredient = await Navigator.of(context).pushNamed(
-      EditIngredientPage.routeName,
+  void _onAddPrepButtonPressed() async {
+    final prep = await Navigator.of(context).push<Prep>(
+      MaterialPageRoute(
+        builder: (context) => const EditPrepPage(),
+        fullscreenDialog: true,
+        settings: const RouteSettings(name: EditPrepPage.routeName),
+      ),
     );
+
+    if (prep == null) return;
+
+    _preps.add(prep);
   }
 }

@@ -67,7 +67,9 @@ class RecipeForm extends ConsumerWidget {
                   onPressed: () async {
                     final direction = await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const EditDirectionPage(),
+                        builder: (context) => EditDirectionPage(
+                          stepCount: recipe.directions.length,
+                        ),
                         fullscreenDialog: true,
                         settings: const RouteSettings(
                           name: EditDirectionPage.routeName,

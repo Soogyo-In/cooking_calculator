@@ -3,17 +3,17 @@ import 'package:cooking_calulator/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditIngredientPage extends ConsumerStatefulWidget {
-  static const routeName = 'editRecipeIngredient';
+class EditPrepPage extends ConsumerStatefulWidget {
+  static const routeName = 'editPrep';
 
-  const EditIngredientPage({super.key});
+  const EditPrepPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _AddIngredientPageState();
 }
 
-class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
+class _AddIngredientPageState extends ConsumerState<EditPrepPage> {
   final _nameController = TextEditingController();
   List<String> _relevantNames = [];
   AmountUnit? _unit;
@@ -25,8 +25,8 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
         title: const Text('재료 추가'),
         actions: [
           IconButton(
-            onPressed: _onSaveButtonPressed,
-            icon: const Icon(Icons.save),
+            onPressed: _onSubmitButtonPressed,
+            icon: const Icon(Icons.check),
           ),
         ],
       ),
@@ -95,7 +95,7 @@ class _AddIngredientPageState extends ConsumerState<EditIngredientPage> {
     );
   }
 
-  void _onSaveButtonPressed() async {}
+  void _onSubmitButtonPressed() async {}
 
   void _onIngredientNameTextfieldChanged(String text) {}
 }
