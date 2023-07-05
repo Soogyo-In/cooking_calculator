@@ -192,6 +192,30 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
+  Future<List<domain.StoredIngredient>> searchIngredients({
+    String? name,
+  }) async {
+    final isar = await Isar.open(
+      [IngredientSchema],
+      directory: databasePath,
+    );
+
+    final ingredients = await isar.ingredients
+        .where()
+        .optional(
+          name != null,
+          (q) => name == null ? q : q.nameWordsElementStartsWith(name),
+        )
+        .findAll();
+
+    await isar.close();
+
+    return ingredients
+        .map((ingredient) => ingredient.toStoredModel(ingredient.id))
+        .toList();
+  }
+
+  @override
   Future<domain.StoredIngredient> updateIngredient({
     required Id id,
     required domain.Ingredient ingredient,
@@ -292,9 +316,4 @@ class RecipeLocalDatasource implements RecipeDatasource {
       ));
     });
   }
-
-  Future<Isar> _openDatabase(List<CollectionSchema> schemas) => Isar.open(
-        schemas,
-        directory: databasePath,
-      );
 }

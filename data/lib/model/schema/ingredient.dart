@@ -18,6 +18,9 @@ class Ingredient extends Equatable {
 
   final String description;
 
+  @Index(type: IndexType.value, caseSensitive: false)
+  List<String> get nameWords => name.split(' ');
+
   @ignore
   @override
   List<Object?> get props => [

@@ -18,6 +18,8 @@ abstract class RecipeDatasource {
 
   Future<StoredIngredient> getIngredient(int id);
 
+  Future<List<StoredIngredient>> searchIngredients({String? name});
+
   Future<List<StoredIngredient>> getAllIngredients();
 
   Future<StoredIngredient> updateIngredient({
