@@ -1,101 +1,28 @@
-import 'package:cooking_calulator/model/enum/amount_unit.dart';
-import 'package:cooking_calulator/widget/widget.dart';
+import 'package:cooking_calulator/feature/recipe/edit/widget/widget.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditPrepPage extends ConsumerStatefulWidget {
-  static const routeName = 'editPrep';
+typedef EditPrepPageArguments = ({Prep? prep});
 
-  const EditPrepPage({super.key});
+class EditPrepPage extends StatelessWidget {
+  static const routeName = '/editPrep';
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AddIngredientPageState();
-}
+  const EditPrepPage({super.key, this.prep});
 
-class _AddIngredientPageState extends ConsumerState<EditPrepPage> {
-  final _nameController = TextEditingController();
-  List<String> _relevantNames = [];
-  AmountUnit? _unit;
+  final Prep? prep;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('재료 추가'),
-        actions: [
-          IconButton(
-            onPressed: _onSubmitButtonPressed,
-            icon: const Icon(Icons.check),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              hintText: '재료명',
-            ),
-            onChanged: _onIngredientNameTextfieldChanged,
-          ),
-          if (_relevantNames.isNotEmpty)
-            Column(
-              children: _relevantNames
-                  .map((name) => ListTile(
-                        onTap: () => setState(() {
-                          _nameController.text = name;
-                          _relevantNames.clear();
-                        }),
-                        title: Text(name),
-                      ))
-                  .toList(),
-            ),
-          if (_nameController.text.isNotEmpty && _relevantNames.isEmpty)
-            Row(
-              children: [
-                Expanded(
-                  child: IntegerInput(
-                    decoration: const InputDecoration(
-                      hintText: '용량',
-                    ),
-                    onChanged: (text) => setState(() {
-                      if (text.isEmpty) {
-                        _relevantNames.clear();
-                        return;
-                      }
-                    }),
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                DropdownButton<AmountUnit>(
-                  onChanged: (value) {
-                    setState(() => _unit = value);
-                  },
-                  value: _unit,
-                  items: [
-                    ...MassUnit.values.map(
-                      (unit) => DropdownMenuItem(
-                        value: unit,
-                        child: Text(unit.symbol),
-                      ),
-                    ),
-                    ...VolumeUnit.values.map(
-                      (unit) => DropdownMenuItem(
-                        value: unit,
-                        child: Text(unit.symbol),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-        ],
+      appBar: AppBar(title: const Text('재료 추가')),
+      body: EditPrepForm(
+        prep: prep,
+        onSubmitted: (prep) => _onPrepSubmitted(context, prep),
       ),
     );
   }
 
-  void _onSubmitButtonPressed() async {}
-
-  void _onIngredientNameTextfieldChanged(String text) {}
+  void _onPrepSubmitted(BuildContext context, Prep<Amount> prep) {
+    Navigator.maybeOf(context)?.maybePop(prep);
+  }
 }

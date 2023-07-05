@@ -1,3 +1,5 @@
+import 'package:cooking_calulator/feature/recipe/edit/page/edit_prep_page.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +18,21 @@ class App extends StatelessWidget {
       theme: ThemeData(useMaterial3: true),
       title: 'Cooking Calculator',
       home: const RecipeListPage(),
+      onGenerateRoute: _onGenerateRoute,
     );
+  }
+
+  Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
+    return switch (settings.name) {
+      == EditPrepPage.routeName => MaterialPageRoute<Prep>(
+          builder: (context) {
+            final arguments = settings.arguments as EditPrepPageArguments;
+            return EditPrepPage(prep: arguments.prep);
+          },
+          settings: settings,
+          fullscreenDialog: true,
+        ),
+      _ => null,
+    };
   }
 }

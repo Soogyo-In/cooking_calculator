@@ -87,12 +87,9 @@ class _AddDirectionPageState extends State<EditDirectionPage> {
   }
 
   void _onAddPrepButtonPressed() async {
-    final prep = await Navigator.of(context).push<Prep>(
-      MaterialPageRoute(
-        builder: (context) => const EditPrepPage(),
-        fullscreenDialog: true,
-        settings: const RouteSettings(name: EditPrepPage.routeName),
-      ),
+    final prep = await Navigator.of(context).pushNamed<Prep>(
+      EditPrepPage.routeName,
+      arguments: (prep: null),
     );
 
     if (prep == null) return;
