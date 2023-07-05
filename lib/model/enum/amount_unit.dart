@@ -1,4 +1,4 @@
-import 'package:domain/domain.dart';
+import 'package:data/data.dart';
 
 abstract class AmountUnit<T extends Amount> {
   String get symbol;
@@ -6,7 +6,7 @@ abstract class AmountUnit<T extends Amount> {
   T toAmount(double value);
 }
 
-enum MassUnit implements AmountUnit {
+enum MassUnit implements AmountUnit<Mass> {
   milligram(milligramSymbol),
   gram(gramSymbol),
   kilogram(kilogramSymbol),
@@ -35,7 +35,7 @@ enum MassUnit implements AmountUnit {
   }
 }
 
-enum VolumeUnit implements AmountUnit {
+enum VolumeUnit implements AmountUnit<Volume> {
   cubicCentimeter(cubicCentimeterSymbol),
   milliliter(milliliterSymbol),
   liter(literSymbol),
@@ -68,4 +68,16 @@ enum VolumeUnit implements AmountUnit {
         return Cup(value);
     }
   }
+}
+
+enum CountUnit implements AmountUnit<Count> {
+  piece(countSymbol);
+
+  @override
+  final String symbol;
+
+  const CountUnit(this.symbol);
+
+  @override
+  Count toAmount(double value) => Count(value);
 }
