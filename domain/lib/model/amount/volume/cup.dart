@@ -49,4 +49,7 @@ final class Cup extends Volume {
 
   @override
   Cup operator /(num divisor) => Cup(value / divisor);
+
+  @override
+  Cup copyWith({covariant double? value}) => Cup(value ?? this.value);
 }

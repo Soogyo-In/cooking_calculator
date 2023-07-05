@@ -42,4 +42,7 @@ final class Ounce extends Mass {
 
   @override
   Ounce operator /(num divisor) => Ounce(value / divisor);
+
+  @override
+  Ounce copyWith({covariant double? value}) => Ounce(value ?? this.value);
 }

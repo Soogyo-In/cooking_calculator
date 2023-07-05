@@ -42,4 +42,7 @@ final class Pound extends Mass {
 
   @override
   Pound operator /(num divisor) => Pound(value / divisor);
+
+  @override
+  Pound copyWith({covariant double? value}) => Pound(value ?? this.value);
 }

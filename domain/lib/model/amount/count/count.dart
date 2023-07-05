@@ -39,4 +39,7 @@ final class Count extends Amount {
 
   @override
   int compareTo(Amount other) => value.compareTo(other.value);
+
+  @override
+  Count copyWith({covariant double? value}) => Count(value ?? this.value);
 }

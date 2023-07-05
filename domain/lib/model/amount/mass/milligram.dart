@@ -43,4 +43,8 @@ final class Milligram extends Mass {
 
   @override
   Milligram operator /(num divisor) => Milligram((value / divisor).round());
+
+  @override
+  Milligram copyWith({covariant int? value}) =>
+      Milligram(value ?? this.value.toInt());
 }

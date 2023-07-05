@@ -53,4 +53,8 @@ final class Tablespoon extends Volume {
 
   @override
   Tablespoon operator /(num divisor) => Tablespoon(value / divisor);
+
+  @override
+  Tablespoon copyWith({covariant double? value}) =>
+      Tablespoon(value ?? this.value);
 }

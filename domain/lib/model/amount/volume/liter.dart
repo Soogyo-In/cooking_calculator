@@ -49,4 +49,7 @@ final class Liter extends Volume {
 
   @override
   Liter operator /(num divisor) => Liter(value / divisor);
+
+  @override
+  Liter copyWith({covariant double? value}) => Liter(value ?? this.value);
 }

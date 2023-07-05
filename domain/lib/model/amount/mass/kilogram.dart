@@ -43,4 +43,7 @@ final class Kilogram extends Mass {
 
   @override
   Kilogram operator /(num divisor) => Kilogram(value / divisor);
+
+  @override
+  Kilogram copyWith({covariant double? value}) => Kilogram(value ?? this.value);
 }

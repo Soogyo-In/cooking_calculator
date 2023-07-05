@@ -53,4 +53,8 @@ final class FluidOunce extends Volume {
 
   @override
   FluidOunce operator /(num divisor) => FluidOunce(value / divisor);
+
+  @override
+  FluidOunce copyWith({covariant double? value}) =>
+      FluidOunce(value ?? this.value);
 }

@@ -49,4 +49,8 @@ final class Milliliter extends Volume {
 
   @override
   Milliliter operator /(num divisor) => Milliliter((value / divisor).round());
+
+  @override
+  Milliliter copyWith({covariant int? value}) =>
+      Milliliter(value ?? this.value.toInt());
 }

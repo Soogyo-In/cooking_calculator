@@ -42,4 +42,7 @@ final class Gram extends Mass {
 
   @override
   Gram operator /(num divisor) => Gram(value / divisor);
+
+  @override
+  Gram copyWith({covariant double? value}) => Gram(value ?? this.value);
 }

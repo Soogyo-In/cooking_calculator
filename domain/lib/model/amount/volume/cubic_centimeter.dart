@@ -53,4 +53,8 @@ final class CubicCentimeter extends Volume {
   @override
   CubicCentimeter operator /(num divisor) =>
       CubicCentimeter((value / divisor).round());
+
+  @override
+  CubicCentimeter copyWith({covariant int? value}) =>
+      CubicCentimeter(value ?? this.value.toInt());
 }

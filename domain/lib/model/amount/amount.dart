@@ -34,6 +34,8 @@ abstract base class Amount extends Equatable implements Comparable<Amount> {
 
   @override
   List<Object?> get props => [value, symbol];
+
+  Amount copyWith({num? value});
 }
 
 extension AmountStringifier on Amount {
