@@ -31,7 +31,7 @@ class _AddDirectionPageState extends State<EditDirectionPage> {
 
   @override
   void initState() {
-    _preps = widget.direction.preps;
+    _preps = widget.direction.preps.toList();
     _description = widget.direction.description;
     _temperature = widget.direction.temperature;
     _time = widget.direction.time;
@@ -56,7 +56,20 @@ class _AddDirectionPageState extends State<EditDirectionPage> {
             Wrap(
               spacing: 8.0,
               children: _preps
-                  .map((prep) => Chip(label: Text(prep.ingredient.name)))
+                  .map((prep) => Chip(
+                        label: InkWell(
+                          onTap: () => Navigator.maybeOf(context)?.pushNamed(
+                            EditPrepPage.routeName,
+                            arguments: (prep: prep),
+                          ),
+                          child: Text(prep.ingredient.name),
+                        ),
+                        onDeleted: () {
+                          setState(() {
+                            _preps.remove(prep);
+                          });
+                        },
+                      ))
                   .toList(),
             ),
             OutlinedButton(
@@ -94,6 +107,8 @@ class _AddDirectionPageState extends State<EditDirectionPage> {
 
     if (prep == null) return;
 
-    _preps.add(prep);
+    setState(() {
+      _preps.add(prep);
+    });
   }
 }

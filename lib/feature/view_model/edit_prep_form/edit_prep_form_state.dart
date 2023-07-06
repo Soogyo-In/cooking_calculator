@@ -9,8 +9,9 @@ class EditPrepFromState with _$EditPrepFromState {
     @Default([]) List<Ingredient> ingredientSearchSuggestions,
     AmountUnit? amountUnit,
     @Default(0.0) double amountValue,
-    @Default(false) bool isValidAmountUnit,
   }) = _EditPrepFormState;
+
+  bool get isValidAmountUnit => amountUnit != null;
 
   bool get isValid => isValidAmountUnit;
 }

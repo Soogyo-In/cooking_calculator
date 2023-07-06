@@ -26,29 +26,30 @@ class EditPrepForm extends ConsumerWidget {
       ],
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          ref.listen(
-            editPrepFormViewModelProvider,
-            _onStateChange,
-          );
           final viewModel = ref.watch(editPrepFormViewModelProvider.notifier);
           final state = ref.watch(editPrepFormViewModelProvider);
 
           return Column(
             children: [
-              TextField(
+              TextFormField(
+                initialValue: state.ingredient?.name,
                 decoration: const InputDecoration(hintText: '재료명'),
                 onChanged: viewModel.updateIngredientSearchSuggestions,
-                onSubmitted: viewModel.submitIngredientName,
+                onFieldSubmitted: viewModel.submitIngredientName,
               ),
-              Expanded(
-                child: _IngredientField(
-                  onSelected: viewModel.selectIngredient,
+              _IngredientField(
+                onSelected: viewModel.selectIngredient,
+              ),
+              if (state.ingredient != null)
+                _AmountUnitField(
+                  initialValue: state.amountValue.toInt().toString(),
+                  amountUnit: state.amountUnit,
+                  onValueChanged: viewModel.changeAmountValue,
+                  onUnitChanged: viewModel.changeAmountUnit,
                 ),
-              ),
-              _AmountUnitField(onChanged: viewModel.changeAmountUnit),
               if (state.isValid)
                 TextButton(
-                  onPressed: viewModel.validateForm,
+                  onPressed: () => _onSubmitButtonPressed(state),
                   child: const Text('추가하기'),
                 ),
             ],
@@ -58,16 +59,10 @@ class EditPrepForm extends ConsumerWidget {
     );
   }
 
-  void _onStateChange(EditPrepFromState? previous, EditPrepFromState next) {
-    if (previous?.isValidAmountUnit == false && next.isValidAmountUnit) {
-      final amount = next.amountUnit?.toAmount(next.amountValue);
-      final ingredient = next.ingredient;
-      if (amount == null || ingredient == null) {
-        return;
-      }
-
-      onSubmitted?.call(Prep(amount: amount, ingredient: ingredient));
-    }
+  void _onSubmitButtonPressed(EditPrepFromState state) {
+    final amount = state.amountUnit!.toAmount(state.amountValue);
+    final ingredient = state.ingredient!;
+    onSubmitted?.call(Prep(amount: amount, ingredient: ingredient));
   }
 }
 
@@ -85,6 +80,7 @@ class _IngredientField extends ConsumerWidget {
     );
 
     return ListView(
+      shrinkWrap: true,
       children: suggestions
           .map((ingredient) => ListTile(
                 onTap: () => onSelected?.call(ingredient),
@@ -95,47 +91,53 @@ class _IngredientField extends ConsumerWidget {
   }
 }
 
-class _AmountUnitField extends ConsumerWidget {
-  const _AmountUnitField({this.onChanged});
+class _AmountUnitField extends StatelessWidget {
+  const _AmountUnitField({
+    this.initialValue,
+    this.amountUnit,
+    this.onValueChanged,
+    this.onUnitChanged,
+  });
 
-  final ValueChanged<AmountUnit?>? onChanged;
+  final String? initialValue;
+  final AmountUnit? amountUnit;
+  final ValueChanged<String>? onValueChanged;
+  final ValueChanged<AmountUnit?>? onUnitChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ingredient = ref.watch(
-      editPrepFormViewModelProvider.select((state) => state.ingredient),
-    );
-
-    return Visibility(
-      visible: ingredient != null,
-      child: Row(
-        children: [
-          Expanded(
-            child: IntegerInput(
-              decoration: const InputDecoration(
-                hintText: '용량',
-              ),
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: IntegerInput(
+            initialValue: initialValue,
+            onChanged: onValueChanged,
+            decoration: const InputDecoration(
+              hintText: '용량',
             ),
           ),
-          const SizedBox(width: 8.0),
-          _AmountUnitSelector(onChanged: onChanged),
-        ],
-      ),
+        ),
+        const SizedBox(width: 8.0),
+        _AmountUnitSelector(
+          amountUnit: amountUnit,
+          onChanged: onUnitChanged,
+        ),
+      ],
     );
   }
 }
 
-class _AmountUnitSelector extends ConsumerWidget {
-  const _AmountUnitSelector({this.onChanged});
+class _AmountUnitSelector extends StatelessWidget {
+  const _AmountUnitSelector({
+    this.amountUnit,
+    this.onChanged,
+  });
 
+  final AmountUnit? amountUnit;
   final ValueChanged<AmountUnit?>? onChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final amountUnit = ref.watch(
-      editPrepFormViewModelProvider.select((state) => state.amountUnit),
-    );
-
+  Widget build(BuildContext context) {
     return DropdownButton<AmountUnit>(
       onChanged: onChanged,
       value: amountUnit,

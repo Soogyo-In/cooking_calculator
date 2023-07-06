@@ -57,14 +57,8 @@ class EditPrepFormViewModel extends AutoDisposeNotifier<EditPrepFromState> {
     state = state.copyWith(amountUnit: unit);
   }
 
-  void changeAmountValue(double value) {
-    state = state.copyWith(amountValue: value);
-  }
-
-  void validateForm() {
-    state = state.copyWith(
-      isValidAmountUnit: state.amountUnit != null,
-    );
+  void changeAmountValue(String value) {
+    state = state.copyWith(amountValue: double.tryParse(value) ?? 0.0);
   }
 
   Future<List<Ingredient>> _mapIngredientSearchKeywordToSuggestions(

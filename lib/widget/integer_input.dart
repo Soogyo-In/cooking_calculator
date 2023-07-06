@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class IntegerInput extends TextField {
+class IntegerInput extends TextFormField {
   IntegerInput({
     super.key,
     super.decoration,
     super.maxLength,
     super.onChanged,
+    super.initialValue,
     super.controller,
   }) : super(
           keyboardType: const TextInputType.numberWithOptions(),
