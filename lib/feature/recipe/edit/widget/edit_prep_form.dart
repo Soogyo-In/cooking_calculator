@@ -5,7 +5,7 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditPrepForm extends ConsumerWidget {
+class EditPrepForm extends ConsumerStatefulWidget {
   const EditPrepForm({
     super.key,
     this.prep,
@@ -17,68 +17,87 @@ class EditPrepForm extends ConsumerWidget {
   final ValueSetter<Prep>? onSubmitted;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ProviderScope(
-      overrides: [
-        editPrepFormViewModelProvider.overrideWith(
-          () => EditPrepFormViewModel(prep: prep),
-        ),
-      ],
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final viewModel = ref.watch(editPrepFormViewModelProvider.notifier);
-          final state = ref.watch(editPrepFormViewModelProvider);
+  ConsumerState<EditPrepForm> createState() => _EditPrepFormState();
+}
 
-          return Column(
-            children: [
-              TextFormField(
-                initialValue: state.ingredient?.name,
-                decoration: const InputDecoration(hintText: '재료명'),
-                onChanged: viewModel.updateIngredientSearchSuggestions,
-                onFieldSubmitted: viewModel.submitIngredientName,
-              ),
-              _IngredientField(
-                onSelected: viewModel.selectIngredient,
-              ),
-              if (state.ingredient != null)
-                _AmountUnitField(
-                  initialValue: state.amountValue.toInt().toString(),
-                  amountUnit: state.amountUnit,
-                  onValueChanged: viewModel.changeAmountValue,
-                  onUnitChanged: viewModel.changeAmountUnit,
-                ),
-              if (state.isValid)
-                TextButton(
-                  onPressed: () => _onSubmitButtonPressed(state),
-                  child: const Text('추가하기'),
-                ),
-            ],
-          );
-        },
-      ),
+class _EditPrepFormState extends ConsumerState<EditPrepForm> {
+  late final AutoDisposeFamilyNotifierProvider<EditPrepFormViewModel,
+      EditPrepFromState, Prep?> _viewModelProvider;
+
+  final _ingredientSearchKeywordEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _viewModelProvider = editPrepFormViewModelProvider(widget.prep);
+    _ingredientSearchKeywordEditingController.text =
+        widget.prep?.ingredient.name ?? '';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = ref.read(_viewModelProvider.notifier);
+    final state = ref.watch(_viewModelProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextFormField(
+          controller: _ingredientSearchKeywordEditingController,
+          decoration: const InputDecoration(hintText: '재료명'),
+          onChanged: viewModel.updateIngredientSearchSuggestions,
+          onFieldSubmitted: viewModel.submitIngredientName,
+          onTapOutside: _onIngredientSearchFormFieldTapOutside,
+        ),
+        _IngredientSearchBox(
+          suggestions: state.ingredientSearchSuggestions,
+          onSelected: viewModel.selectIngredient,
+        ),
+        if (state.ingredient != null)
+          _AmountUnitField(
+            initialValue: state.amountValue.toInt().toString(),
+            amountUnit: state.amountUnit,
+            onValueChanged: viewModel.changeAmountValue,
+            onUnitChanged: viewModel.changeAmountUnit,
+          ),
+        if (state.isValid)
+          TextButton(
+            onPressed: _onSubmitButtonPressed,
+            child: const Text('추가하기'),
+          ),
+      ],
     );
   }
 
-  void _onSubmitButtonPressed(EditPrepFromState state) {
-    final amount = state.amountUnit!.toAmount(state.amountValue);
-    final ingredient = state.ingredient!;
-    onSubmitted?.call(Prep(amount: amount, ingredient: ingredient));
+  void _onSubmitButtonPressed() {
+    final state = ref.read(_viewModelProvider);
+    final amount = state.amountUnit?.toAmount(state.amountValue);
+    final ingredient = state.ingredient;
+    if (amount == null || ingredient == null) return;
+
+    widget.onSubmitted?.call(Prep(amount: amount, ingredient: ingredient));
+  }
+
+  void _onIngredientSearchFormFieldTapOutside(PointerDownEvent event) {
+    FocusScope.of(context).unfocus();
+    _ingredientSearchKeywordEditingController.text =
+        ref.read(_viewModelProvider).ingredient?.name ?? '';
   }
 }
 
-class _IngredientField extends ConsumerWidget {
-  const _IngredientField({this.onSelected});
+class _IngredientSearchBox extends ConsumerWidget {
+  const _IngredientSearchBox({
+    this.suggestions = const [],
+    this.onSelected,
+  });
+
+  final List<Ingredient> suggestions;
 
   final ValueChanged<Ingredient>? onSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final suggestions = ref.watch(
-      editPrepFormViewModelProvider.select(
-        (state) => state.ingredientSearchSuggestions,
-      ),
-    );
-
     return ListView(
       shrinkWrap: true,
       children: suggestions
@@ -118,9 +137,11 @@ class _AmountUnitField extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8.0),
-        _AmountUnitSelector(
-          amountUnit: amountUnit,
-          onChanged: onUnitChanged,
+        Expanded(
+          child: _AmountUnitSelector(
+            amountUnit: amountUnit,
+            onChanged: onUnitChanged,
+          ),
         ),
       ],
     );
@@ -138,7 +159,7 @@ class _AmountUnitSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<AmountUnit>(
+    return DropdownButtonFormField<AmountUnit>(
       onChanged: onChanged,
       value: amountUnit,
       items: [

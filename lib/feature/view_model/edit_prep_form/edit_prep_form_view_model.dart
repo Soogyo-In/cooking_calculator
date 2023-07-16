@@ -9,35 +9,34 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'edit_prep_form_state.dart';
 part 'edit_prep_form_view_model.freezed.dart';
 
-final editPrepFormViewModelProvider =
-    NotifierProvider.autoDispose<EditPrepFormViewModel, EditPrepFromState>(
-  () => EditPrepFormViewModel(),
+final editPrepFormViewModelProvider = NotifierProvider.autoDispose
+    .family<EditPrepFormViewModel, EditPrepFromState, Prep?>(
+  EditPrepFormViewModel.new,
 );
 
-class EditPrepFormViewModel extends AutoDisposeNotifier<EditPrepFromState> {
-  EditPrepFormViewModel({Prep<Amount>? prep}) : _prep = prep {
-    ingredientSuggestionsSubsciprtion = _searchKeywordStreamController.stream
+class EditPrepFormViewModel
+    extends AutoDisposeFamilyNotifier<EditPrepFromState, Prep?> {
+  EditPrepFormViewModel() {
+    _ingredientSuggestionsSubsciprtion = _searchKeywordStreamController.stream
         .asyncMap(_mapIngredientSearchKeywordToSuggestions)
         .listen(_onIngredientSuggestions);
   }
 
-  final Prep? _prep;
-
   final _searchKeywordStreamController = StreamController<String>();
 
-  StreamSubscription? ingredientSuggestionsSubsciprtion;
+  StreamSubscription? _ingredientSuggestionsSubsciprtion;
 
   @override
-  EditPrepFromState build() {
+  EditPrepFromState build(Prep? arg) {
     ref.onDispose(() {
-      ingredientSuggestionsSubsciprtion?.cancel();
+      _ingredientSuggestionsSubsciprtion?.cancel();
       _searchKeywordStreamController.close();
     });
 
     return EditPrepFromState(
-      amountUnit: _prep?.amount.unit,
-      amountValue: _prep?.amount.value ?? 0.0,
-      ingredient: _prep?.ingredient,
+      amountUnit: arg?.amount.unit,
+      amountValue: arg?.amount.value ?? 0.0,
+      ingredient: arg?.ingredient,
     );
   }
 

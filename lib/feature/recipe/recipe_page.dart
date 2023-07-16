@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/model/amount/amount.dart';
+import 'package:cooking_calulator/model/mapper/amount_mapper.dart';
 import 'package:cooking_calulator/model/enum/enum.dart';
 import 'package:cooking_calulator/widget/widget.dart';
 import 'package:data/data.dart';

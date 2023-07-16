@@ -13,5 +13,5 @@ class EditPrepFromState with _$EditPrepFromState {
 
   bool get isValidAmountUnit => amountUnit != null;
 
-  bool get isValid => isValidAmountUnit;
+  bool get isValid => isValidAmountUnit && ingredient != null;
 }
