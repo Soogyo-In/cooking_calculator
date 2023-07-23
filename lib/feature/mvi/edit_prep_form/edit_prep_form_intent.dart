@@ -1,22 +1,8 @@
-import 'dart:async';
+part of 'edit_prep_form_mvi.dart';
 
-import 'package:cooking_calulator/model/model.dart';
-import 'package:cooking_calulator/provider/provider.dart';
-import 'package:data/data.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'edit_prep_form_state.dart';
-part 'edit_prep_form_view_model.freezed.dart';
-
-final editPrepFormViewModelProvider = NotifierProvider.autoDispose
-    .family<EditPrepFormViewModel, EditPrepFromState, Prep?>(
-  EditPrepFormViewModel.new,
-);
-
-class EditPrepFormViewModel
-    extends AutoDisposeFamilyNotifier<EditPrepFromState, Prep?> {
-  EditPrepFormViewModel() {
+class EditPrepFormIntent
+    extends AutoDisposeFamilyNotifier<EditPrepFormState, Prep?> {
+  EditPrepFormIntent() {
     _ingredientSuggestionsSubsciprtion = _searchKeywordStreamController.stream
         .asyncMap(_mapIngredientSearchKeywordToSuggestions)
         .listen(_onIngredientSuggestions);
@@ -27,13 +13,13 @@ class EditPrepFormViewModel
   StreamSubscription? _ingredientSuggestionsSubsciprtion;
 
   @override
-  EditPrepFromState build(Prep? arg) {
+  EditPrepFormState build(Prep? arg) {
     ref.onDispose(() {
       _ingredientSuggestionsSubsciprtion?.cancel();
       _searchKeywordStreamController.close();
     });
 
-    return EditPrepFromState(
+    return EditPrepFormState(
       amountUnit: arg?.amount.unit,
       amountValue: arg?.amount.value ?? 0.0,
       ingredient: arg?.ingredient,
@@ -44,8 +30,21 @@ class EditPrepFormViewModel
     _searchKeywordStreamController.add(keyword);
   }
 
-  void submitIngredientName(String name) {
-    state = state.copyWith(ingredient: Ingredient(name: name));
+  Future<void> submitIngredientName(String name) async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final datasource = await ref.read(recipeLocalDatasourceProvider.future);
+      final ingredients = await datasource.searchIngredients(name: name);
+
+      state = state.copyWith(
+        isLoading: false,
+        ingredient: ingredients.firstOrNull ?? Ingredient(name: name),
+      );
+    } catch (error) {
+      state = state.copyWith(isLoading: false);
+      _onError(error);
+    }
   }
 
   void selectIngredient(Ingredient ingredient) {
@@ -57,7 +56,16 @@ class EditPrepFormViewModel
   }
 
   void changeAmountValue(String value) {
-    state = state.copyWith(amountValue: double.tryParse(value) ?? 0.0);
+    try {
+      if (value.isEmpty) {
+        state = state.copyWith(amountValue: 0.0);
+        return;
+      }
+
+      state = state.copyWith(amountValue: double.parse(value));
+    } on FormatException catch (error) {
+      _onError(error);
+    }
   }
 
   Future<List<Ingredient>> _mapIngredientSearchKeywordToSuggestions(
@@ -69,5 +77,13 @@ class EditPrepFormViewModel
 
   void _onIngredientSuggestions(List<Ingredient> suggestions) {
     state = state.copyWith(ingredientSearchSuggestions: suggestions);
+  }
+
+  void _onError(Object error) {
+    ref
+        .read(editPrepFormEffectProvider.notifier)
+        .update((state) => EditPrepFormEffect.showErrorSnackBar(
+              error.toString(),
+            ));
   }
 }

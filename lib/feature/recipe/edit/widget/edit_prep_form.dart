@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/feature/view_model/edit_prep_form/edit_prep_form_view_model.dart';
+import 'package:cooking_calulator/feature/mvi/edit_prep_form/edit_prep_form_mvi.dart';
 import 'package:cooking_calulator/model/enum/amount_unit.dart';
 import 'package:cooking_calulator/widget/widget.dart';
 import 'package:data/data.dart';
@@ -21,14 +21,14 @@ class EditPrepForm extends ConsumerStatefulWidget {
 }
 
 class _EditPrepFormState extends ConsumerState<EditPrepForm> {
-  late final AutoDisposeFamilyNotifierProvider<EditPrepFormViewModel,
-      EditPrepFromState, Prep?> _viewModelProvider;
+  late final AutoDisposeFamilyNotifierProvider<EditPrepFormIntent,
+      EditPrepFormState, Prep?> _intentProvider;
 
   final _ingredientSearchKeywordEditingController = TextEditingController();
 
   @override
   void initState() {
-    _viewModelProvider = editPrepFormViewModelProvider(widget.prep);
+    _intentProvider = editPrepFormIntentProvider(widget.prep);
     _ingredientSearchKeywordEditingController.text =
         widget.prep?.ingredient.name ?? '';
     super.initState();
@@ -36,8 +36,18 @@ class _EditPrepFormState extends ConsumerState<EditPrepForm> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.read(_viewModelProvider.notifier);
-    final state = ref.watch(_viewModelProvider);
+    final intent = ref.read(_intentProvider.notifier);
+    final state = ref.watch(_intentProvider);
+    ref.listen(
+      editPrepFormEffectProvider,
+      (previous, next) {
+        if (next is ShowErrorSnackBar) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(next.message)),
+          );
+        }
+      },
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,20 +56,20 @@ class _EditPrepFormState extends ConsumerState<EditPrepForm> {
         TextFormField(
           controller: _ingredientSearchKeywordEditingController,
           decoration: const InputDecoration(hintText: '재료명'),
-          onChanged: viewModel.updateIngredientSearchSuggestions,
-          onFieldSubmitted: viewModel.submitIngredientName,
+          onChanged: intent.updateIngredientSearchSuggestions,
+          onFieldSubmitted: intent.submitIngredientName,
           onTapOutside: _onIngredientSearchFormFieldTapOutside,
         ),
         _IngredientSearchBox(
           suggestions: state.ingredientSearchSuggestions,
-          onSelected: viewModel.selectIngredient,
+          onSelected: intent.selectIngredient,
         ),
         if (state.ingredient != null)
           _AmountUnitField(
             initialValue: state.amountValue.toInt().toString(),
             amountUnit: state.amountUnit,
-            onValueChanged: viewModel.changeAmountValue,
-            onUnitChanged: viewModel.changeAmountUnit,
+            onValueChanged: intent.changeAmountValue,
+            onUnitChanged: intent.changeAmountUnit,
           ),
         if (state.isValid)
           TextButton(
@@ -71,7 +81,7 @@ class _EditPrepFormState extends ConsumerState<EditPrepForm> {
   }
 
   void _onSubmitButtonPressed() {
-    final state = ref.read(_viewModelProvider);
+    final state = ref.read(_intentProvider);
     final amount = state.amountUnit?.toAmount(state.amountValue);
     final ingredient = state.ingredient;
     if (amount == null || ingredient == null) return;
@@ -82,7 +92,7 @@ class _EditPrepFormState extends ConsumerState<EditPrepForm> {
   void _onIngredientSearchFormFieldTapOutside(PointerDownEvent event) {
     FocusScope.of(context).unfocus();
     _ingredientSearchKeywordEditingController.text =
-        ref.read(_viewModelProvider).ingredient?.name ?? '';
+        ref.read(_intentProvider).ingredient?.name ?? '';
   }
 }
 

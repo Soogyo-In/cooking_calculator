@@ -1,14 +1,15 @@
-part of 'edit_prep_form_view_model.dart';
+part of 'edit_prep_form_mvi.dart';
 
 @freezed
-class EditPrepFromState with _$EditPrepFromState {
-  const EditPrepFromState._();
+class EditPrepFormState with _$EditPrepFormState {
+  const EditPrepFormState._();
 
-  const factory EditPrepFromState({
+  const factory EditPrepFormState({
     Ingredient? ingredient,
     @Default([]) List<Ingredient> ingredientSearchSuggestions,
     AmountUnit? amountUnit,
     @Default(0.0) double amountValue,
+    @Default(false) bool isLoading,
   }) = _EditPrepFormState;
 
   bool get isValidAmountUnit => amountUnit != null;
