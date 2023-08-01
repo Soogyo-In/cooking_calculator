@@ -15,7 +15,7 @@ class EditPrepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('재료 추가')),
+      appBar: AppBar(title: Text(prep == null ? '재료 추가' : '재료 수정')),
       body: PrepForm(
         prep: prep,
         onSubmitted: (prep) => _onPrepSubmitted(context, prep),

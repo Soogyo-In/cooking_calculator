@@ -21,14 +21,15 @@ class PrepForm extends ConsumerStatefulWidget {
 }
 
 class _PrepFormState extends ConsumerState<PrepForm> {
-  late final AutoDisposeFamilyNotifierProvider<EditPrepFormIntent,
-      EditPrepFormState, Prep?> _intentProvider;
+  late final AutoDisposeFamilyNotifierProvider<
+      EditPrepFormIntent,
+      EditPrepFormState,
+      Prep?> _intentProvider = editPrepFormIntentProvider(widget.prep);
 
   final _ingredientSearchKeywordEditingController = TextEditingController();
 
   @override
   void initState() {
-    _intentProvider = editPrepFormIntentProvider(widget.prep);
     _ingredientSearchKeywordEditingController.text =
         widget.prep?.ingredient.name ?? '';
     super.initState();
@@ -74,7 +75,7 @@ class _PrepFormState extends ConsumerState<PrepForm> {
         if (state.isValid)
           TextButton(
             onPressed: _onSubmitButtonPressed,
-            child: const Text('추가하기'),
+            child: Text(widget.prep == null ? '추가하기' : '수정하기'),
           ),
       ],
     );
