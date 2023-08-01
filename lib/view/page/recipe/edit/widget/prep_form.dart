@@ -5,8 +5,8 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditPrepForm extends ConsumerStatefulWidget {
-  const EditPrepForm({
+class PrepForm extends ConsumerStatefulWidget {
+  const PrepForm({
     super.key,
     this.prep,
     this.onSubmitted,
@@ -17,10 +17,10 @@ class EditPrepForm extends ConsumerStatefulWidget {
   final ValueSetter<Prep>? onSubmitted;
 
   @override
-  ConsumerState<EditPrepForm> createState() => _EditPrepFormState();
+  ConsumerState<PrepForm> createState() => _PrepFormState();
 }
 
-class _EditPrepFormState extends ConsumerState<EditPrepForm> {
+class _PrepFormState extends ConsumerState<PrepForm> {
   late final AutoDisposeFamilyNotifierProvider<EditPrepFormIntent,
       EditPrepFormState, Prep?> _intentProvider;
 
