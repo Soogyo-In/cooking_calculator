@@ -1,4 +1,4 @@
-part of 'edit_prep_form_mvi.dart';
+part of 'edit_prep_form_feature.dart';
 
 class EditPrepFormIntent
     extends AutoDisposeFamilyNotifier<EditPrepFormState, Prep?> {

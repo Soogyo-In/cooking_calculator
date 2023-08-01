@@ -8,7 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'edit_prep_form_effect.dart';
 part 'edit_prep_form_intent.dart';
-part 'edit_prep_form_mvi.freezed.dart';
+part 'edit_prep_form_feature.freezed.dart';
 part 'edit_prep_form_state.dart';
 
 final editPrepFormIntentProvider = NotifierProvider.autoDispose

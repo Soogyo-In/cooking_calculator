@@ -2,7 +2,7 @@ import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/enum/enum.dart';
+import '../../model/enum/enum.dart';
 
 final _fromMassUnitProvider = StateProvider((ref) => MassUnit.milligram);
 final _toMassUnitProvider = StateProvider((ref) => MassUnit.milligram);

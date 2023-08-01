@@ -1,6 +1,6 @@
-import 'package:cooking_calulator/feature/mvi/edit_prep_form/edit_prep_form_mvi.dart';
+import 'package:cooking_calulator/feature/feature.dart';
 import 'package:cooking_calulator/model/enum/amount_unit.dart';
-import 'package:cooking_calulator/widget/widget.dart';
+import 'package:cooking_calulator/view/widget/widget.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

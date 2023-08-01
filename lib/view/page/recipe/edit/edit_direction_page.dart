@@ -1,7 +1,7 @@
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 
-import 'page.dart';
+import 'edit.dart';
 
 class EditDirectionPage extends StatefulWidget {
   static const routeName = 'editRecipeDirection';

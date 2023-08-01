@@ -1,9 +1,7 @@
+import 'package:cooking_calulator/view/view.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../recipe_provider.dart';
-import '../edit.dart';
 
 class EditRecipePage extends StatelessWidget {
   static const routeName = 'editRecipe';

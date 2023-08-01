@@ -1,4 +1,4 @@
-part of 'edit_direction_form_mvi.dart';
+part of 'edit_direction_form_feature.dart';
 
 @freezed
 class EditDirectionFormState with _$EditDirectionFormState {

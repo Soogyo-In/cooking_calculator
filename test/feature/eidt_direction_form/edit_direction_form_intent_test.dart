@@ -1,4 +1,4 @@
-import 'package:cooking_calulator/feature/mvi/edit_direction_form/edit_direction_form_mvi.dart';
+import 'package:cooking_calulator/feature/feature.dart';
 import 'package:data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
