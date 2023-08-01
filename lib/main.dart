@@ -25,8 +25,8 @@ class App extends StatelessWidget {
     return switch (settings.name) {
       == EditPrepPage.routeName => MaterialPageRoute<Prep>(
           builder: (context) {
-            final arguments = settings.arguments as EditPrepPageArguments;
-            return EditPrepPage(prep: arguments.prep);
+            final arguments = settings.arguments as EditPrepPageArguments?;
+            return EditPrepPage(prep: arguments?.prep);
           },
           settings: settings,
           fullscreenDialog: true,

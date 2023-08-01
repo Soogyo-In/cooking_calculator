@@ -3,112 +3,28 @@ import 'package:flutter/material.dart';
 
 import 'edit.dart';
 
-class EditDirectionPage extends StatefulWidget {
-  static const routeName = 'editRecipeDirection';
+class EditDirectionPage extends StatelessWidget {
+  static const routeName = '/editDirection';
 
   const EditDirectionPage({
     super.key,
-    required this.stepCount,
-    this.direction = const Direction(),
+    this.direction,
   });
 
-  final int stepCount;
-
-  final Direction direction;
-
-  @override
-  State<EditDirectionPage> createState() => _AddDirectionPageState();
-}
-
-class _AddDirectionPageState extends State<EditDirectionPage> {
-  List<Prep> _preps = [];
-
-  String _description = '';
-
-  Temperature? _temperature;
-
-  Duration _time = Duration.zero;
-
-  @override
-  void initState() {
-    _preps = widget.direction.preps.toList();
-    _description = widget.direction.description;
-    _temperature = widget.direction.temperature;
-    _time = widget.direction.time;
-    super.initState();
-  }
+  final Direction? direction;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('단계 ${widget.stepCount}'),
-        actions: [
-          IconButton(
-            onPressed: _onSubmitButtonPressed,
-            icon: Icon(Icons.check),
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Wrap(
-              spacing: 8.0,
-              children: _preps
-                  .map((prep) => Chip(
-                        label: InkWell(
-                          onTap: () => Navigator.maybeOf(context)?.pushNamed(
-                            EditPrepPage.routeName,
-                            arguments: (prep: prep),
-                          ),
-                          child: Text(prep.ingredient.name),
-                        ),
-                        onDeleted: () {
-                          setState(() {
-                            _preps.remove(prep);
-                          });
-                        },
-                      ))
-                  .toList(),
-            ),
-            OutlinedButton(
-              onPressed: _onAddPrepButtonPressed,
-              child: const Text('재료 추가'),
-            ),
-            Expanded(
-              child: TextField(
-                onChanged: (text) => setState(() => _description = text),
-                decoration: const InputDecoration(hintText: '설명'),
-                maxLines: null,
-                expands: true,
-              ),
-            ),
-          ],
-        ),
+      appBar: AppBar(title: Text(direction == null ? '절차 추가' : '절차 수정')),
+      body: DirectionForm(
+        direction: direction,
+        onSubmitted: (direction) => _onPrepSubmitted(context, direction),
       ),
     );
   }
 
-  void _onSubmitButtonPressed() {
-    Navigator.of(context).pop(Direction(
-      description: _description,
-      preps: _preps,
-      temperature: _temperature,
-      time: _time,
-    ));
-  }
-
-  void _onAddPrepButtonPressed() async {
-    final prep = await Navigator.of(context).pushNamed<Prep>(
-      EditPrepPage.routeName,
-      arguments: (prep: null),
-    );
-
-    if (prep == null) return;
-
-    setState(() {
-      _preps.add(prep);
-    });
+  void _onPrepSubmitted(BuildContext context, Direction direction) {
+    Navigator.maybeOf(context)?.maybePop(direction);
   }
 }
