@@ -65,6 +65,8 @@ class EditRecipeFormIntent
   }
 
   void setServings(int servings) {
+    if (servings < 1) servings = 1;
+
     state = state.copyWith(servings: servings);
   }
 }

@@ -486,7 +486,7 @@ void main() {
   );
 
   test(
-    '몇 인분인지 설정한다.',
+    '제조량을 설정한다.',
     () {
       final provider = editRecipeFormIntentProvider(null);
       container.listen(
@@ -501,6 +501,26 @@ void main() {
         listener(
           const EditRecipeFormState(),
           const EditRecipeFormState(servings: servings),
+        ),
+      ).called(1);
+    },
+  );
+
+  test(
+    '제조량이 1 보다 작다면 1 로 설정된다.',
+    () {
+      final provider = editRecipeFormIntentProvider(null);
+      container.listen(
+        provider,
+        listener.call,
+      );
+
+      container.read(provider.notifier).setServings(0);
+
+      verify(
+        listener(
+          const EditRecipeFormState(),
+          const EditRecipeFormState(servings: 1),
         ),
       ).called(1);
     },
