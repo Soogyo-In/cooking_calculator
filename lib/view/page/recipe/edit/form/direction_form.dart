@@ -48,14 +48,11 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
           onPressed: _onAddPrepButtonPressed,
           child: const Text('재료 추가'),
         ),
-        Expanded(
-          child: TextFormField(
-            initialValue: widget.direction?.description,
-            onChanged: intent.setDescription,
-            decoration: const InputDecoration(hintText: '설명'),
-            maxLines: null,
-            expands: true,
-          ),
+        TextFormField(
+          initialValue: widget.direction?.description,
+          onChanged: intent.setDescription,
+          decoration: const InputDecoration(hintText: '설명'),
+          maxLines: null,
         ),
         if (state.isValid)
           TextButton(

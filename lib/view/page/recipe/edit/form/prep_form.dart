@@ -59,7 +59,6 @@ class _PrepFormState extends ConsumerState<PrepForm> {
           decoration: const InputDecoration(hintText: '재료명'),
           onChanged: intent.updateIngredientSearchSuggestions,
           onFieldSubmitted: intent.submitIngredientName,
-          onTapOutside: _onIngredientSearchFormFieldTapOutside,
         ),
         _IngredientSearchBox(
           suggestions: state.ingredientSearchSuggestions,
@@ -87,12 +86,6 @@ class _PrepFormState extends ConsumerState<PrepForm> {
     if (prep == null) return;
 
     widget.onSubmitted?.call(prep);
-  }
-
-  void _onIngredientSearchFormFieldTapOutside(PointerDownEvent event) {
-    FocusScope.of(context).unfocus();
-    _ingredientSearchKeywordEditingController.text =
-        ref.read(_intentProvider).ingredient?.name ?? '';
   }
 }
 

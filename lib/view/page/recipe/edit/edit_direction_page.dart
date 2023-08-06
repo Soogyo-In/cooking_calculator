@@ -19,9 +19,12 @@ class EditDirectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(direction == null ? '절차 추가' : '절차 수정')),
-      body: DirectionForm(
-        direction: direction,
-        onSubmitted: (direction) => _onDirectionSubmitted(context, direction),
+      body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: DirectionForm(
+          direction: direction,
+          onSubmitted: (direction) => _onDirectionSubmitted(context, direction),
+        ),
       ),
     );
   }
