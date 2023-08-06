@@ -123,7 +123,7 @@ void main() {
 
       container.read(provider.notifier).changePrep(
             previous: direction.preps.first,
-            changed: newPrep,
+            next: newPrep,
           );
 
       verify(

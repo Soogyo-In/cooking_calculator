@@ -18,13 +18,9 @@ class EditDirectionFormIntent
     state = state.copyWith(description: description);
   }
 
-  void changePrep({required Prep previous, required Prep changed}) {
+  void changePrep({required Prep previous, required Prep next}) {
     state = state.copyWith(
-      preps: state.preps
-          .map(
-            (prep) => prep == previous ? changed : prep,
-          )
-          .toList(),
+      preps: state.preps.map((prep) => prep == previous ? next : prep).toList(),
     );
   }
 

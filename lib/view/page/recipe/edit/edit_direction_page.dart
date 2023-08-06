@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'edit.dart';
 
+typedef EditDirectionPageArguments = ({Direction? direction});
+
 class EditDirectionPage extends StatelessWidget {
   static const routeName = '/editDirection';
 

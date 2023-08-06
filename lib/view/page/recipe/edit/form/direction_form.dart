@@ -50,6 +50,7 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
         ),
         Expanded(
           child: TextFormField(
+            initialValue: widget.direction?.description,
             onChanged: intent.setDescription,
             decoration: const InputDecoration(hintText: '설명'),
             maxLines: null,
@@ -75,7 +76,7 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
 
     ref.read(_intentProvider.notifier).changePrep(
           previous: prep,
-          changed: editedPrep,
+          next: editedPrep,
         );
   }
 

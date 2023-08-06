@@ -35,7 +35,7 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
     return Column(
       children: [
         TextFormField(
-          initialValue: state.name,
+          initialValue: widget.recipe?.name,
           decoration: const InputDecoration(labelText: '이름'),
           autofocus: true,
           onChanged: intent.setName,
@@ -56,7 +56,7 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
           ],
         ),
         TextFormField(
-          initialValue: state.description,
+          initialValue: widget.recipe?.description,
           decoration: const InputDecoration(labelText: '설명'),
           maxLines: 3,
           onChanged: intent.setDescription,
@@ -68,15 +68,21 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
           children: state.directions
               .map((direction) => Row(
                     key: ValueKey(direction),
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         direction.description,
                       ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => _onEditDirectionButtonPressed(
+                          direction,
+                        ),
+                        icon: const Icon(Icons.edit),
+                      ),
                       IconButton(
                         onPressed: () => intent.removeDirection(direction),
                         icon: const Icon(Icons.delete),
-                      )
+                      ),
                     ],
                   ))
               .toList(),
@@ -85,7 +91,6 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
           onPressed: _onAddDirectionButtonPressed,
           child: const Text('절차 추가'),
         ),
-        const Spacer(),
         if (state.isValid)
           ElevatedButton(
             onPressed: _onSubmitButtonPressed,
@@ -93,6 +98,21 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
           ),
       ],
     );
+  }
+
+  void _onEditDirectionButtonPressed(Direction direction) async {
+    final editedDirection =
+        await Navigator.maybeOf(context)?.pushNamed<Direction>(
+      EditDirectionPage.routeName,
+      arguments: (direction: direction),
+    );
+
+    if (editedDirection == null) return;
+
+    ref.read(_intentProvider.notifier).changeDirection(
+          previous: direction,
+          next: editedDirection,
+        );
   }
 
   void _onAddDirectionButtonPressed() async {

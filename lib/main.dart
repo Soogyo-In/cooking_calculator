@@ -31,6 +31,14 @@ class App extends StatelessWidget {
           settings: settings,
           fullscreenDialog: true,
         ),
+      == EditDirectionPage.routeName => MaterialPageRoute<Direction>(
+          builder: (context) {
+            final arguments = settings.arguments as EditDirectionPageArguments?;
+            return EditDirectionPage(direction: arguments?.direction);
+          },
+          settings: settings,
+          fullscreenDialog: true,
+        ),
       _ => null,
     };
   }

@@ -129,7 +129,7 @@ void main() {
 
       container.read(provider.notifier).changeDirection(
             previous: recipe.directions.first,
-            changed: direction3,
+            next: direction3,
           );
 
       verify(

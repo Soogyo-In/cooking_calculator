@@ -22,15 +22,10 @@ class EditRecipeFormIntent
     state = state.copyWith(description: description);
   }
 
-  void changeDirection({
-    required Direction previous,
-    required Direction changed,
-  }) {
+  void changeDirection({required Direction previous, required Direction next}) {
     state = state.copyWith(
       directions: state.directions
-          .map(
-            (direction) => direction == previous ? changed : direction,
-          )
+          .map((direction) => direction == previous ? next : direction)
           .toList(),
     );
   }
