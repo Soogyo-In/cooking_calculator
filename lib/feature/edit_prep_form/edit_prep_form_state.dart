@@ -15,4 +15,15 @@ class EditPrepFormState with _$EditPrepFormState {
   bool get isValidAmountUnit => amountUnit != null;
 
   bool get isValid => isValidAmountUnit && ingredient != null;
+
+  Amount? get amount => amountUnit?.toAmount(amountValue);
+
+  Prep? get prep {
+    final amount = this.amount;
+    final ingredient = this.ingredient;
+
+    if (amount == null || ingredient == null) return null;
+
+    return Prep(amount: amount, ingredient: ingredient);
+  }
 }

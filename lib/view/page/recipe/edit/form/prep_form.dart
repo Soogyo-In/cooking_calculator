@@ -82,12 +82,11 @@ class _PrepFormState extends ConsumerState<PrepForm> {
   }
 
   void _onSubmitButtonPressed() {
-    final state = ref.read(_intentProvider);
-    final amount = state.amountUnit?.toAmount(state.amountValue);
-    final ingredient = state.ingredient;
-    if (amount == null || ingredient == null) return;
+    final prep = ref.read(_intentProvider).prep;
 
-    widget.onSubmitted?.call(Prep(amount: amount, ingredient: ingredient));
+    if (prep == null) return;
+
+    widget.onSubmitted?.call(prep);
   }
 
   void _onIngredientSearchFormFieldTapOutside(PointerDownEvent event) {
