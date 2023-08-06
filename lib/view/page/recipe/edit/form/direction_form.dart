@@ -27,19 +27,16 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
     widget.direction,
   );
 
-  final _descriptionFormFieldKey = GlobalKey<FormFieldState<String>>();
-
   @override
   Widget build(BuildContext context) {
     final intent = ref.read(_intentProvider.notifier);
     final state = ref.watch(_intentProvider);
-    final preps = state.preps;
 
     return Column(
       children: [
         Wrap(
           spacing: 8.0,
-          children: preps
+          children: state.preps
               .map((prep) => PrepChip(
                     prep: prep,
                     onDeleted: intent.removePrep,
@@ -53,13 +50,17 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
         ),
         Expanded(
           child: TextFormField(
-            key: _descriptionFormFieldKey,
-            onEditingComplete: _onDescriptionEditingComplete,
+            onChanged: intent.setDescription,
             decoration: const InputDecoration(hintText: '설명'),
             maxLines: null,
             expands: true,
           ),
         ),
+        if (state.isValid)
+          TextButton(
+            onPressed: _onSubmitButtonPressed,
+            child: Text(widget.direction == null ? '추가하기' : '수정하기'),
+          ),
       ],
     );
   }
@@ -88,13 +89,8 @@ class _DirectionFormState extends ConsumerState<DirectionForm> {
     ref.read(_intentProvider.notifier).addPrep(prep);
   }
 
-  void _onDescriptionEditingComplete() {
-    final description = _descriptionFormFieldKey.currentState?.value ?? '';
-    ref.read(_intentProvider.notifier).setDescription(description);
-  }
-
-  void _onPrepDeleted(Prep prep) {
-    ref.read(_intentProvider.notifier).removePrep(prep);
+  void _onSubmitButtonPressed() {
+    Navigator.maybeOf(context)?.pop(ref.watch(_intentProvider).direction);
   }
 }
 

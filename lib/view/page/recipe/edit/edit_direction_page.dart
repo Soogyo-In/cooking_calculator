@@ -19,12 +19,12 @@ class EditDirectionPage extends StatelessWidget {
       appBar: AppBar(title: Text(direction == null ? '절차 추가' : '절차 수정')),
       body: DirectionForm(
         direction: direction,
-        onSubmitted: (direction) => _onPrepSubmitted(context, direction),
+        onSubmitted: (direction) => _onDirectionSubmitted(context, direction),
       ),
     );
   }
 
-  void _onPrepSubmitted(BuildContext context, Direction direction) {
+  void _onDirectionSubmitted(BuildContext context, Direction direction) {
     Navigator.maybeOf(context)?.maybePop(direction);
   }
 }
