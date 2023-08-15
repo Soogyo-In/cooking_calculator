@@ -51,3 +51,7 @@ app.*.map.json
 
 # code coverage files
 coverage
+
+# Isar test files
+default.isar 
+default.isar.lock 

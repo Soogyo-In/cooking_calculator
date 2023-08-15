@@ -10,6 +10,10 @@ class EditRecipeIntent extends AutoDisposeNotifier<EditRecipeState> {
 
       final datasource = await ref.read(recipeLocalDatasourceProvider.future);
       await datasource.addRecipe(recipe);
+
+      ref
+          .read(editRecipeEffectProvider.notifier)
+          .update((state) => const EditRecipeEffect.navigateBack());
     } catch (exception) {
       ref.read(editRecipeEffectProvider.notifier).update(
             (state) => EditRecipeEffect.showErrorSnackBar(
@@ -27,6 +31,10 @@ class EditRecipeIntent extends AutoDisposeNotifier<EditRecipeState> {
 
       final datasource = await ref.read(recipeLocalDatasourceProvider.future);
       await datasource.updateRecipe(id: id, recipe: recipe);
+
+      ref
+          .read(editRecipeEffectProvider.notifier)
+          .update((state) => const EditRecipeEffect.navigateBack());
     } catch (exception) {
       ref.read(editRecipeEffectProvider.notifier).update(
             (state) => EditRecipeEffect.showErrorSnackBar(exception.toString()),
@@ -42,6 +50,10 @@ class EditRecipeIntent extends AutoDisposeNotifier<EditRecipeState> {
 
       final datasource = await ref.read(recipeLocalDatasourceProvider.future);
       await datasource.deleteRecipe(id);
+
+      ref
+          .read(editRecipeEffectProvider.notifier)
+          .update((state) => const EditRecipeEffect.navigateBack());
     } catch (exception) {
       ref.read(editRecipeEffectProvider.notifier).update(
             (state) => EditRecipeEffect.showErrorSnackBar(exception.toString()),

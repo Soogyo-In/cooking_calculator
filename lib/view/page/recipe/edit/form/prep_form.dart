@@ -37,18 +37,10 @@ class _PrepFormState extends ConsumerState<PrepForm> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<EditPrepFormEffect?>(editPrepFormEffectProvider, _onEffect);
+
     final intent = ref.read(_intentProvider.notifier);
     final state = ref.watch(_intentProvider);
-    ref.listen(
-      editPrepFormEffectProvider,
-      (previous, next) {
-        if (next is ShowErrorSnackBar) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(next.message)),
-          );
-        }
-      },
-    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,6 +70,15 @@ class _PrepFormState extends ConsumerState<PrepForm> {
           ),
       ],
     );
+  }
+
+  void _onEffect(EditPrepFormEffect? previous, EditPrepFormEffect? next) {
+    switch (next) {
+      case EditPrepFormShowErrorSnackBar():
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.message)),
+        );
+    }
   }
 
   void _onSubmitButtonPressed() {

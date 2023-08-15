@@ -1,6 +1,6 @@
 part of '../recipe_list_page.dart';
 
-class _RecipeList extends ConsumerWidget {
+class _RecipeList extends ConsumerStatefulWidget {
   const _RecipeList(this.recipes);
 
   const factory _RecipeList.error(Object error, StackTrace stackTrace) =
@@ -11,12 +11,17 @@ class _RecipeList extends ConsumerWidget {
   final List<StoredRecipe> recipes;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_RecipeList> createState() => _RecipeListState();
+}
+
+class _RecipeListState extends ConsumerState<_RecipeList> {
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: recipes.length,
+      itemCount: widget.recipes.length,
       itemBuilder: (context, index) {
-        final recipe = recipes.elementAt(index);
+        final recipe = widget.recipes.elementAt(index);
         final ingredients = recipe.directions
             .expand((direction) => direction.preps)
             .map((prep) => prep.ingredient);
@@ -24,13 +29,24 @@ class _RecipeList extends ConsumerWidget {
         return Card(
           child: InkWell(
             onTap: () => _onRecipeCardTapped(context, recipe),
-            child: Column(
+            child: Row(
               children: [
-                Text(recipe.name),
-                Wrap(
-                  children: ingredients
-                      .map((ingredient) => Chip(label: Text(ingredient.name)))
-                      .toList(),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(recipe.name),
+                      Wrap(
+                        children: ingredients
+                            .map((ingredient) =>
+                                Chip(label: Text(ingredient.name)))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => _onEditButtonPressed(recipe),
+                  icon: const Icon(Icons.edit),
                 ),
               ],
             ),
@@ -45,5 +61,12 @@ class _RecipeList extends ConsumerWidget {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => RecipePage(recipe: recipe),
     ));
+  }
+
+  void _onEditButtonPressed(StoredRecipe recipe) {
+    Navigator.maybeOf(context)?.pushNamed(
+      EditRecipePage.routeName,
+      arguments: (recipe: recipe),
+    );
   }
 }

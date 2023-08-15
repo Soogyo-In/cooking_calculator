@@ -34,9 +34,15 @@ void main() {
       overrides: [
         recipeLocalDatasourceProvider.overrideWith((ref) => datasource),
       ],
-    )..listen(
+    )
+      ..listen<EditRecipeState>(
         editRecipeIntentProvider,
         stateListener.call,
+        fireImmediately: true,
+      )
+      ..listen<EditRecipeEffect?>(
+        editRecipeEffectProvider,
+        effectListener.call,
         fireImmediately: true,
       );
   });
@@ -72,6 +78,10 @@ void main() {
         stateListener(
           const EditRecipeState(isLoading: false),
           const EditRecipeState(isLoading: true),
+        ),
+        effectListener(
+          null,
+          const EditRecipeEffect.navigateBack(),
         ),
         stateListener(
           const EditRecipeState(isLoading: true),
@@ -112,6 +122,10 @@ void main() {
           const EditRecipeState(isLoading: false),
           const EditRecipeState(isLoading: true),
         ),
+        effectListener(
+          null,
+          const EditRecipeEffect.navigateBack(),
+        ),
         stateListener(
           const EditRecipeState(isLoading: true),
           const EditRecipeState(isLoading: false),
@@ -147,6 +161,10 @@ void main() {
         stateListener(
           const EditRecipeState(isLoading: false),
           const EditRecipeState(isLoading: true),
+        ),
+        effectListener(
+          null,
+          const EditRecipeEffect.navigateBack(),
         ),
         stateListener(
           const EditRecipeState(isLoading: true),

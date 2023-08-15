@@ -23,10 +23,10 @@ class App extends StatelessWidget {
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     return switch (settings.name) {
-      == EditPrepPage.routeName => MaterialPageRoute<Prep>(
+      == EditRecipePage.routeName => MaterialPageRoute<Direction>(
           builder: (context) {
-            final arguments = settings.arguments as EditPrepPageArguments?;
-            return EditPrepPage(prep: arguments?.prep);
+            final arguments = settings.arguments as EditRecipePageArguments?;
+            return EditRecipePage(recipe: arguments?.recipe);
           },
           settings: settings,
           fullscreenDialog: true,
@@ -35,6 +35,14 @@ class App extends StatelessWidget {
           builder: (context) {
             final arguments = settings.arguments as EditDirectionPageArguments?;
             return EditDirectionPage(direction: arguments?.direction);
+          },
+          settings: settings,
+          fullscreenDialog: true,
+        ),
+      == EditPrepPage.routeName => MaterialPageRoute<Prep>(
+          builder: (context) {
+            final arguments = settings.arguments as EditPrepPageArguments?;
+            return EditPrepPage(prep: arguments?.prep);
           },
           settings: settings,
           fullscreenDialog: true,

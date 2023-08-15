@@ -36,8 +36,6 @@ class RecipeListPage extends ConsumerWidget {
   }
 
   void _onAddRecpieButtonPressed(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const EditRecipePage.create(),
-    ));
+    Navigator.of(context).pushNamed(EditRecipePage.routeName);
   }
 }
