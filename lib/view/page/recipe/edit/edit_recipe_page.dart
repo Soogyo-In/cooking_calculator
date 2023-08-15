@@ -1,8 +1,10 @@
+import 'package:cooking_calulator/provider/provider.dart';
 import 'package:cooking_calulator/view/view.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditRecipePage extends StatelessWidget {
+class EditRecipePage extends ConsumerWidget {
   static const routeName = 'editRecipe';
 
   const EditRecipePage.create({
@@ -13,7 +15,7 @@ class EditRecipePage extends StatelessWidget {
   final Recipe? recipe;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('레시피 추가')),
       body: Padding(
