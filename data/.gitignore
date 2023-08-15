@@ -7,4 +7,5 @@ pubspec.lock
 build/
 
 # Isar test files
-*.isar*
+default.isar
+default.isar.lock
