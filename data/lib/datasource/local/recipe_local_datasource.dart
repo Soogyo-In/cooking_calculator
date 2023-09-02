@@ -312,19 +312,19 @@ class RecipeLocalDatasource implements RecipeDatasource {
       () => isar.ingredients.putAll(ingredientsToAdd),
     );
 
-    newIngredientIds
-        .zip(ingredientsToAdd.map((ingredient) => ingredient.name))
-        .forEach((pair) {
-      final ingredientId = pair.first;
-      final ingredientName = pair.second;
-      ingredientIdByName[ingredientName] = ingredientId;
-    });
+    ingredientIdByName.addAll(Map.fromIterables(
+      ingredientsToAdd.map((ingredient) => ingredient.name),
+      newIngredientIds,
+    ));
 
     final directions = recipe.directions.map((direction) {
       final preps = direction.preps
-          .map((prep) => prep.toDataModel(
-                ingredientIdByName[prep.ingredient.name]!,
-              ))
+          .map((prep) {
+            final ingredient = ingredientIdByName[prep.ingredient.name];
+            if (ingredient == null) return null;
+            return prep.toDataModel(ingredient);
+          })
+          .nonNulls
           .toList();
 
       return Direction(

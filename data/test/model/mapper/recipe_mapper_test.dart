@@ -1,5 +1,6 @@
 import 'package:data/model/model.dart';
 import 'package:domain/domain.dart' as domain;
+import 'package:isar/isar.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -96,9 +97,8 @@ void main() {
           );
 
           expect(
-            recipe.toDataModel(id: recipe.id, ingredientIds: [1]),
+            recipe.toDataModel(),
             Recipe(
-              id: recipe.id,
               name: recipe.name,
               description: recipe.description,
               servings: recipe.servings,
@@ -109,7 +109,7 @@ void main() {
                   cookingTimeInSeconds: direction.cookingTime.inSeconds,
                   preps: [
                     Prep(
-                      ingredientId: ingredient.id,
+                      ingredientId: Isar.autoIncrement,
                       unit: MatterUnit.count,
                       value: 1,
                     ),

@@ -1,5 +1,6 @@
 import 'package:data/model/model.dart';
 import 'package:domain/domain.dart' as domain;
+import 'package:isar/isar.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -30,11 +31,15 @@ void main() {
         name: 'name',
         description: 'description',
       );
-      final dataIgredient = ingredient.toDataModel(id: 0);
 
-      expect(dataIgredient.id, 0);
-      expect(dataIgredient.name, ingredient.name);
-      expect(dataIgredient.description, ingredient.description);
+      expect(
+        ingredient.toDataModel(),
+        Ingredient(
+          id: Isar.autoIncrement,
+          name: ingredient.name,
+          description: ingredient.description,
+        ),
+      );
     },
   );
 }

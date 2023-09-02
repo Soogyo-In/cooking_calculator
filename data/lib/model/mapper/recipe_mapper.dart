@@ -35,23 +35,18 @@ extension DataRecipeMapper on Recipe {
 }
 
 extension DomainRecipeMapper on domain.Recipe {
-  Recipe toDataModel({
-    Id id = Isar.autoIncrement,
-    Iterable<Id> ingredientIds = const [],
-  }) {
+  Recipe toDataModel() {
     return Recipe(
-      id: id,
+      id: Isar.autoIncrement,
       name: name,
       description: description,
       directions: directions
           .map((direction) => Direction(
                 cookingTimeInSeconds: direction.cookingTime.inSeconds,
                 description: direction.description,
-                preps: direction.preps.zip(ingredientIds).map((pair) {
-                  final ingredient = pair.first;
-                  final id = pair.second;
-                  return ingredient.toDataModel(id);
-                }).toList(),
+                preps: direction.preps
+                    .map((prep) => prep.toDataModel(Isar.autoIncrement))
+                    .toList(),
                 cookingTemperature: direction.cookingTemperature?.toDataModel(),
               ))
           .toList(),
