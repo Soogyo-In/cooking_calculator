@@ -30,8 +30,8 @@ void main() async {
     () {
       final domainDirection = domain.Direction(
         description: 'description',
-        temperature: domain.Temperature.celsius(1.0),
-        time: Duration(hours: 1),
+        cookingTemperature: domain.Temperature.celsius(1.0),
+        cookingTime: Duration(hours: 1),
         preps: [
           domain.Prep(
             ingredient: domain.StoredIngredient(id: 1, name: '1'),
@@ -67,8 +67,9 @@ void main() async {
                       value: prep.amount.value,
                     ))
                 .toList(),
-            temperature: domainDirection.temperature?.toDataModel(),
-            timeInSeconds: domainDirection.time.inSeconds,
+            cookingTemperature:
+                domainDirection.cookingTemperature?.toDataModel(),
+            cookingTimeInSeconds: domainDirection.cookingTime.inSeconds,
           ),
         ],
         name: domainRecipe.name,
@@ -243,8 +244,8 @@ void main() async {
           late Id storedRecipeId;
           final updatedDirection = domain.Direction(
             description: 'newDescription',
-            temperature: domain.Temperature.celsius(2.0),
-            time: Duration(hours: 2),
+            cookingTemperature: domain.Temperature.celsius(2.0),
+            cookingTime: Duration(hours: 2),
             preps: [
               domain.Prep(
                 ingredient: domain.Ingredient(name: '3'),

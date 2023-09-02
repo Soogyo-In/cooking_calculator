@@ -11,16 +11,16 @@ void main() {
       directions: [
         Direction(
           description: 'step 1',
-          time: const Duration(minutes: 1),
+          cookingTime: const Duration(minutes: 1),
         ),
         Direction(
           description: 'step 2',
-          time: const Duration(days: 1),
+          cookingTime: const Duration(days: 1),
         ),
         Direction(
           description: 'step 3',
-          time: Duration(minutes: 25),
-          temperature: Temperature.celsius(170.0),
+          cookingTime: Duration(minutes: 25),
+          cookingTemperature: Temperature.celsius(170.0),
         ),
       ],
     );

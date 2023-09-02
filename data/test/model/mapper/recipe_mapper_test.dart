@@ -18,8 +18,8 @@ void main() {
           final direction = Direction(
             description: 'description',
             preps: [prep],
-            temperature: temperature,
-            timeInSeconds: 0,
+            cookingTemperature: temperature,
+            cookingTimeInSeconds: 0,
           );
           final recipe = Recipe(
             id: 1,
@@ -54,8 +54,9 @@ void main() {
                       ),
                     ),
                   ],
-                  temperature: domain.Celsius(temperature.value),
-                  time: Duration(seconds: direction.timeInSeconds),
+                  cookingTemperature: domain.Celsius(temperature.value),
+                  cookingTime:
+                      Duration(seconds: direction.cookingTimeInSeconds),
                 ),
               ],
             ),
@@ -82,8 +83,8 @@ void main() {
           );
           final direction = domain.Direction(
             description: 'description',
-            temperature: domain.Celsius(0),
-            time: Duration(seconds: 0),
+            cookingTemperature: domain.Celsius(0),
+            cookingTime: Duration(seconds: 0),
             preps: [prep],
           );
           final recipe = domain.StoredRecipe(
@@ -104,8 +105,8 @@ void main() {
               directions: [
                 Direction(
                   description: direction.description,
-                  temperature: Temperature(),
-                  timeInSeconds: direction.time.inSeconds,
+                  cookingTemperature: Temperature(),
+                  cookingTimeInSeconds: direction.cookingTime.inSeconds,
                   preps: [
                     Prep(
                       ingredientId: ingredient.id,

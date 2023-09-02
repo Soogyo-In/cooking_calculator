@@ -30,7 +30,7 @@ void main() {
         ),
       ),
     ],
-    temperature: Temperature.celsius(0),
+    cookingTemperature: Temperature.celsius(0),
   );
   final newPrep = Prep(
     amount: Kilogram(1.0),
@@ -81,8 +81,8 @@ void main() {
               EditDirectionFormState(
                 description: direction.description,
                 preps: direction.preps,
-                temperature: direction.temperature,
-                time: direction.time,
+                temperature: direction.cookingTemperature,
+                time: direction.cookingTime,
               ),
             ),
           ).called(1);
@@ -131,8 +131,8 @@ void main() {
           EditDirectionFormState(
             description: direction.description,
             preps: direction.preps,
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
           EditDirectionFormState(
             description: direction.description,
@@ -140,8 +140,8 @@ void main() {
               newPrep,
               direction.preps.last,
             ],
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
         ),
       ).called(1);
@@ -164,8 +164,8 @@ void main() {
           EditDirectionFormState(
             description: direction.description,
             preps: direction.preps,
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
           EditDirectionFormState(
             description: direction.description,
@@ -173,8 +173,8 @@ void main() {
               ...direction.preps,
               newPrep,
             ],
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
         ),
       ).called(1);
@@ -197,14 +197,14 @@ void main() {
           EditDirectionFormState(
             description: direction.description,
             preps: direction.preps,
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
           EditDirectionFormState(
             description: direction.description,
             preps: [direction.preps.last],
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
         ),
       ).called(1);
@@ -248,13 +248,13 @@ void main() {
           EditDirectionFormState(
             description: direction.description,
             preps: direction.preps,
-            temperature: direction.temperature,
-            time: direction.time,
+            temperature: direction.cookingTemperature,
+            time: direction.cookingTime,
           ),
           EditDirectionFormState(
             description: direction.description,
             preps: direction.preps,
-            time: direction.time,
+            time: direction.cookingTime,
           ),
         ),
       ).called(1);

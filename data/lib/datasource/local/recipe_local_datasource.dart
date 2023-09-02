@@ -52,8 +52,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
       return domain.Direction(
         description: direction.description,
         preps: preps,
-        temperature: direction.temperature?.toDomainModel(),
-        time: Duration(seconds: direction.timeInSeconds),
+        cookingTemperature: direction.cookingTemperature?.toDomainModel(),
+        cookingTime: Duration(seconds: direction.cookingTimeInSeconds),
       );
     }).toList();
 
@@ -146,8 +146,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
         return domain.Direction(
           description: direction.description,
           preps: preps,
-          temperature: direction.temperature?.toDomainModel(),
-          time: Duration(seconds: direction.timeInSeconds),
+          cookingTemperature: direction.cookingTemperature?.toDomainModel(),
+          cookingTime: Duration(seconds: direction.cookingTimeInSeconds),
         );
       }).toList();
 
@@ -330,8 +330,8 @@ class RecipeLocalDatasource implements RecipeDatasource {
       return Direction(
         description: direction.description,
         preps: preps,
-        temperature: direction.temperature?.toDataModel(),
-        timeInSeconds: direction.time.inSeconds,
+        cookingTemperature: direction.cookingTemperature?.toDataModel(),
+        cookingTimeInSeconds: direction.cookingTime.inSeconds,
       );
     }).toList();
 

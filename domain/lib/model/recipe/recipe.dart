@@ -31,7 +31,7 @@ class Recipe extends Equatable {
 
   Duration get time => directions.fold(
         const Duration(),
-        (time, direction) => time + direction.time,
+        (time, direction) => time + direction.cookingTime,
       );
 }
 

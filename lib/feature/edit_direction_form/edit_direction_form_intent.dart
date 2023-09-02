@@ -9,8 +9,8 @@ class EditDirectionFormIntent
         : EditDirectionFormState(
             description: arg.description,
             preps: arg.preps,
-            temperature: arg.temperature,
-            time: arg.time,
+            temperature: arg.cookingTemperature,
+            time: arg.cookingTime,
           );
   }
 

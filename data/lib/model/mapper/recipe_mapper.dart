@@ -21,9 +21,10 @@ extension DataRecipeMapper on Recipe {
                     })
                     .nonNulls
                     .toList(),
-                temperature: direction.temperature?.toDomainModel(),
-                time: Duration(
-                  seconds: direction.timeInSeconds,
+                cookingTemperature:
+                    direction.cookingTemperature?.toDomainModel(),
+                cookingTime: Duration(
+                  seconds: direction.cookingTimeInSeconds,
                 ),
               ))
           .toList(),
@@ -44,14 +45,14 @@ extension DomainRecipeMapper on domain.Recipe {
       description: description,
       directions: directions
           .map((direction) => Direction(
-                timeInSeconds: direction.time.inSeconds,
+                cookingTimeInSeconds: direction.cookingTime.inSeconds,
                 description: direction.description,
                 preps: direction.preps.zip(ingredientIds).map((pair) {
                   final ingredient = pair.first;
                   final id = pair.second;
                   return ingredient.toDataModel(id);
                 }).toList(),
-                temperature: direction.temperature?.toDataModel(),
+                cookingTemperature: direction.cookingTemperature?.toDataModel(),
               ))
           .toList(),
     );

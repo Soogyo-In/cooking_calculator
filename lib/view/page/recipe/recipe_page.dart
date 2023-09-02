@@ -188,9 +188,9 @@ class _DirectionDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _PrepList(direction.preps),
-        if (direction.time != Duration.zero) ...[
+        if (direction.cookingTime != Duration.zero) ...[
           const SizedBox(height: 8.0),
-          TimeText(time: direction.time),
+          TimeText(time: direction.cookingTime),
         ],
         const SizedBox(height: 8.0),
         Text(direction.description),

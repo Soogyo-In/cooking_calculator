@@ -4,23 +4,23 @@ class Direction extends Equatable {
   const Direction({
     this.description = '',
     this.preps = const [],
-    this.time = const Duration(),
-    this.temperature,
+    this.cookingTime = const Duration(),
+    this.cookingTemperature,
   });
 
   final String description;
 
   final List<Prep> preps;
 
-  final Duration time;
+  final Duration cookingTime;
 
-  final Temperature? temperature;
+  final Temperature? cookingTemperature;
 
   @override
   List<Object?> get props => [
         description,
         preps,
-        time,
-        temperature,
+        cookingTime,
+        cookingTemperature,
       ];
 }

@@ -16,7 +16,7 @@ class EditDirectionFormState with _$EditDirectionFormState {
   Direction get direction => Direction(
         description: description,
         preps: preps,
-        temperature: temperature,
-        time: time,
+        cookingTemperature: temperature,
+        cookingTime: time,
       );
 }

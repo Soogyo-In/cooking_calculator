@@ -31,7 +31,7 @@ class Recipe extends Equatable {
   List<String> get nameWords => name.split(' ');
 
   int get cookingTimeInSeconds =>
-      directions.map((direction) => direction.timeInSeconds).fold(
+      directions.map((direction) => direction.cookingTimeInSeconds).fold(
             0,
             (total, cookingTimeInSeconds) => total + cookingTimeInSeconds,
           );
