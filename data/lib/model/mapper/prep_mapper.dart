@@ -1,9 +1,9 @@
 part of 'mapper.dart';
 
 extension DataPrepMapper on Prep {
-  domain.Prep toDomainModel(domain.Ingredient ingredient) => domain.Prep(
+  domain.Prep toDomainModel(Ingredient ingredient) => domain.Prep(
         amount: toAmount(),
-        ingredient: ingredient,
+        ingredient: ingredient.toDomainModel(),
       );
 
   domain.Amount toAmount() {

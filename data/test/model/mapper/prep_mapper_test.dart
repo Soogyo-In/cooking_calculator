@@ -13,7 +13,8 @@ void main() {
             unit: MatterUnit.count,
             value: 0,
           );
-          final ingredient = domain.Ingredient(
+          final ingredient = Ingredient(
+            id: 1,
             name: 'name',
             description: 'description',
           );
@@ -21,7 +22,11 @@ void main() {
           expect(
             prep.toDomainModel(ingredient),
             domain.Prep<domain.Amount>(
-              ingredient: ingredient,
+              ingredient: domain.StoredIngredient(
+                id: ingredient.id,
+                name: ingredient.name,
+                description: ingredient.description,
+              ),
               amount: domain.Count(0),
             ),
           );

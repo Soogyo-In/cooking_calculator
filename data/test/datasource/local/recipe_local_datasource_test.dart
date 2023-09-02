@@ -34,15 +34,15 @@ void main() async {
         time: Duration(hours: 1),
         preps: [
           domain.Prep(
-            ingredient: domain.Ingredient(name: '1'),
+            ingredient: domain.StoredIngredient(id: 1, name: '1'),
             amount: domain.Count(1.0),
           ),
           domain.Prep(
-            ingredient: domain.Ingredient(name: '2'),
+            ingredient: domain.StoredIngredient(id: 2, name: '2'),
             amount: domain.Gram(1.0),
           ),
           domain.Prep(
-            ingredient: domain.Ingredient(name: '3'),
+            ingredient: domain.StoredIngredient(id: 3, name: '3'),
             amount: domain.Liter(1.0),
           ),
         ],

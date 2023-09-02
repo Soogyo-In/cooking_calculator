@@ -14,29 +14,10 @@ void main() {
 
       expect(
         ingredient.toDomainModel(),
-        domain.Ingredient(
-          name: 'name',
-          description: 'description',
-        ),
-      );
-    },
-  );
-
-  test(
-    'Data ingredient should convert to stored ingredient',
-    () {
-      final ingredient = Ingredient(
-        id: 1,
-        name: 'name',
-        description: 'description',
-      );
-
-      expect(
-        ingredient.toStoredModel(ingredient.id),
         domain.StoredIngredient(
           id: ingredient.id,
-          name: 'name',
-          description: 'description',
+          name: ingredient.name,
+          description: ingredient.description,
         ),
       );
     },

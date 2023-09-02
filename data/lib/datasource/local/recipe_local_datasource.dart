@@ -46,9 +46,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     final directions = recipe.directions.map((direction) {
       final preps = direction.preps
-          .map((prep) => prep.toDomainModel(
-                ingredientById[prep.ingredientId]!.toDomainModel(),
-              ))
+          .map((prep) => prep.toDomainModel(ingredientById[prep.ingredientId]!))
           .toList();
 
       return domain.Direction(
@@ -66,6 +64,53 @@ class RecipeLocalDatasource implements RecipeDatasource {
       description: recipe.description,
       servings: recipe.servings,
     );
+  }
+
+  @override
+  Future<List<domain.StoredRecipe>> searchRecipes({
+    int page = 0,
+    int size = 0,
+    String name = '',
+    List<Id> ingredientIds = const [],
+    Duration? cookingTime,
+  }) async {
+    final isar = await Isar.open(
+      [RecipeSchema, IngredientSchema],
+      directory: databasePath,
+    );
+
+    final recipes = await isar.recipes
+        .where()
+        .optional(
+          cookingTime != null,
+          (q) => q.filter().cookingTimeInSecondsLessThan(
+                cookingTime!.inSeconds,
+                include: true,
+              ),
+        )
+        .optional(ingredientIds.isNotEmpty, (q) {
+          var ingredientFilter = q.ingredientIdsElementEqualTo(
+            ingredientIds.first,
+          );
+          for (final ingredientId in ingredientIds.skip(1)) {
+            ingredientFilter = ingredientFilter.ingredientIdsElementEqualTo(
+              ingredientId,
+            );
+          }
+          return ingredientFilter;
+        })
+        .optional(name.isNotEmpty, (q) => q.nameWordsElementStartsWith(name))
+        .offset(page * size)
+        .limit(size)
+        .findAll();
+    final ingredients = await isar.ingredients
+        .getAll(recipes.expand((recipe) => recipe.ingredientIds).toList());
+
+    await isar.close();
+
+    return recipes
+        .map((recipe) => recipe.toDomainModel(ingredients.nonNulls))
+        .toList();
   }
 
   @override
@@ -94,7 +139,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
       final directions = recipe.directions.map((direction) {
         final preps = direction.preps
             .map((prep) => prep.toDomainModel(
-                  ingredientById[prep.ingredientId]!.toDomainModel(),
+                  ingredientById[prep.ingredientId]!,
                 ))
             .toList();
 
@@ -173,7 +218,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     if (ingredient == null) throw DataNotFoundException();
 
-    return ingredient.toStoredModel(ingredient.id);
+    return ingredient.toDomainModel();
   }
 
   @override
@@ -186,9 +231,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     await isar.close();
 
-    return ingredients
-        .map((ingredient) => ingredient.toStoredModel(ingredient.id))
-        .toList();
+    return ingredients.map((ingredient) => ingredient.toDomainModel()).toList();
   }
 
   @override
@@ -210,9 +253,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     await isar.close();
 
-    return ingredients
-        .map((ingredient) => ingredient.toStoredModel(ingredient.id))
-        .toList();
+    return ingredients.map((ingredient) => ingredient.toDomainModel()).toList();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
+import 'package:ktc_dart/ktc_dart.dart';
 
 import 'schema.dart';
 
@@ -17,6 +18,7 @@ class Recipe extends Equatable {
 
   final Id id;
 
+  @Index(unique: true, caseSensitive: false)
   final String name;
 
   final List<Direction> directions;
@@ -24,6 +26,25 @@ class Recipe extends Equatable {
   final byte servings;
 
   final String description;
+
+  @Index(type: IndexType.value, caseSensitive: false)
+  List<String> get nameWords => name.split(' ');
+
+  int get cookingTimeInSeconds =>
+      directions.map((direction) => direction.timeInSeconds).fold(
+            0,
+            (total, cookingTimeInSeconds) => total + cookingTimeInSeconds,
+          );
+
+  List<int> get ingredientIds => directions
+      .expand((direction) => direction.preps)
+      .map((prep) => prep.ingredientId)
+      .fold(
+        <int>[],
+        (total, ingredientId) => total..add(ingredientId),
+      )
+      .distinct
+      .toList();
 
   @ignore
   @override

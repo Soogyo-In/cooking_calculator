@@ -1,12 +1,7 @@
 part of 'mapper.dart';
 
 extension DataIngredientMapper on Ingredient {
-  domain.Ingredient toDomainModel() => domain.Ingredient(
-        name: name,
-        description: description,
-      );
-
-  domain.StoredIngredient toStoredModel(int id) => domain.StoredIngredient(
+  domain.StoredIngredient toDomainModel() => domain.StoredIngredient(
         id: id,
         name: name,
         description: description,
@@ -14,8 +9,8 @@ extension DataIngredientMapper on Ingredient {
 }
 
 extension DomainIngredientMapper on domain.Ingredient {
-  Ingredient toDataModel({Id? id}) => Ingredient(
-        id: id ?? Isar.autoIncrement,
+  Ingredient toDataModel({Id id = Isar.autoIncrement}) => Ingredient(
+        id: id,
         description: description,
         name: name,
       );
