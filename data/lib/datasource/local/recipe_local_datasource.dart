@@ -101,7 +101,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
         })
         .optional(name.isNotEmpty, (q) => q.nameWordsElementStartsWith(name))
         .offset(page * size)
-        .limit(size)
+        .optional(size > 0, (q) => q.limit(size))
         .findAll();
     final ingredients = await isar.ingredients
         .getAll(recipes.expand((recipe) => recipe.ingredientIds).toList());

@@ -5,6 +5,14 @@ abstract class RecipeDatasource {
 
   Future<StoredRecipe> getRecipe(int id);
 
+  Future<List<StoredRecipe>> searchRecipes({
+    int page = 0,
+    int size = 0,
+    String name = '',
+    List<int> ingredientIds = const [],
+    Duration? cookingTime,
+  });
+
   Future<List<StoredRecipe>> getAllRecipes();
 
   Future<StoredRecipe> updateRecipe({

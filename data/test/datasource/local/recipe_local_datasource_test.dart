@@ -7,6 +7,8 @@ import 'package:isar/isar.dart';
 import 'package:ktc_dart/ktc_dart.dart';
 import 'package:test/test.dart';
 
+part 'resources.dart';
+
 void main() async {
   const databasePath = './';
   late RecipeLocalDatasource datasource;
@@ -323,6 +325,114 @@ void main() async {
 
                   expect(Isar.getInstance(), isNull);
                 },
+              );
+            },
+          );
+        },
+      );
+
+      group(
+        '검색',
+        () {
+          setUp(() async {
+            final isar = await Isar.open(
+              [RecipeSchema, IngredientSchema],
+              directory: databasePath,
+            );
+            await isar.writeTxn(() async {
+              await isar.ingredients.putAll(_ingredientSchemas);
+              await isar.recipes.putAll(_recipeSchemas);
+            });
+            await isar.close();
+          });
+
+          tearDown(() async {
+            final isar = await Isar.open(
+              [RecipeSchema, IngredientSchema],
+              directory: databasePath,
+            );
+            await isar.writeTxn(isar.clear);
+            await isar.close();
+          });
+
+          test(
+            '페이징',
+            () async {
+              expect(
+                await datasource.searchRecipes(page: 1, size: 2),
+                [_storedRecipes[2], _storedRecipes[3]],
+              );
+            },
+          );
+
+          test(
+            '이름 검색',
+            () async {
+              expect(
+                await datasource.searchRecipes(name: 'recipe'),
+                _storedRecipes,
+              );
+              expect(
+                await datasource.searchRecipes(name: 'recipe2'),
+                [_storedRecipes[2], _storedRecipes[3]],
+              );
+              expect(
+                await datasource.searchRecipes(name: 'recipe22'),
+                [_storedRecipes[3]],
+              );
+            },
+          );
+
+          test(
+            '재료 필터',
+            () async {
+              expect(
+                await datasource.searchRecipes(ingredientIds: [1]),
+                [_storedRecipes[0], _storedRecipes[1], _storedRecipes[2]],
+              );
+              expect(
+                await datasource.searchRecipes(ingredientIds: [1, 3]),
+                [_storedRecipes[2]],
+              );
+            },
+          );
+
+          test(
+            '조리시간 필터',
+            () async {
+              expect(
+                await datasource.searchRecipes(
+                  cookingTime: Duration(hours: 3),
+                ),
+                _storedRecipes,
+              );
+              expect(
+                await datasource.searchRecipes(
+                  cookingTime: Duration(hours: 2),
+                ),
+                [_storedRecipes[1], _storedRecipes[2], _storedRecipes[3]],
+              );
+              expect(
+                await datasource.searchRecipes(
+                  cookingTime: Duration(hours: 1),
+                ),
+                [_storedRecipes[2], _storedRecipes[3]],
+              );
+            },
+          );
+
+          test(
+            '이름으로 검색하여 재료, 요리시간으로 필터링 된 데이터를 페이징하여 제공한다.',
+            () async {
+              expect(
+                await datasource.searchRecipes(
+                  name: 'recipe',
+                  cookingTime: Duration(hours: 2),
+                  ingredientIds: [3],
+                  size: 1,
+                  page: 1,
+                ),
+                [_storedRecipes[3]],
               );
             },
           );
