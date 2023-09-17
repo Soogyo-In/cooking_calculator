@@ -356,7 +356,7 @@ void main() async {
           });
 
           test(
-            '페이징',
+            '레시피 목록을 pageable 하게 조회한다.',
             () async {
               expect(
                 await datasource.searchRecipes(page: 1, size: 2),
@@ -366,7 +366,7 @@ void main() async {
           );
 
           test(
-            '이름 검색',
+            '설정된 문자열로 시작하는 이름으로 레시피들을 검색한다.',
             () async {
               expect(
                 await datasource.searchRecipes(name: 'recipe'),
@@ -384,7 +384,7 @@ void main() async {
           );
 
           test(
-            '재료 필터',
+            '설정된 재료 id 를 포함하는 레시피들을 검색한다.',
             () async {
               expect(
                 await datasource.searchRecipes(ingredientIds: [1]),
@@ -398,7 +398,7 @@ void main() async {
           );
 
           test(
-            '조리시간 필터',
+            '설정된 조리시간 이하의 레시피들을 검색한다.',
             () async {
               expect(
                 await datasource.searchRecipes(
@@ -422,7 +422,7 @@ void main() async {
           );
 
           test(
-            '이름으로 검색하여 재료, 요리시간으로 필터링 된 데이터를 페이징하여 제공한다.',
+            '설정된 조리시간 이하의 레시피 중 설정된 재료들을 포함하며 설정된 문자열로 시작하는 이름을 가진 레시피들을 pagable 하게 검색한다.',
             () async {
               expect(
                 await datasource.searchRecipes(

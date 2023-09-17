@@ -2,10 +2,21 @@ import 'package:data/data.dart';
 import 'package:isar/isar.dart';
 
 class ErrorRecipeLocalDatasource extends RecipeLocalDatasource {
-  ErrorRecipeLocalDatasource(super.databasePath);
+  ErrorRecipeLocalDatasource() : super('./');
 
   @override
   Future<List<StoredIngredient>> searchIngredients({String? name}) {
+    throw Exception();
+  }
+
+  @override
+  Future<List<StoredRecipe>> searchRecipes({
+    int page = 0,
+    int size = 0,
+    String name = '',
+    List<Id> ingredientIds = const [],
+    Duration? cookingTime,
+  }) {
     throw Exception();
   }
 

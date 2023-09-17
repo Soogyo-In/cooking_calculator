@@ -178,7 +178,7 @@ void main() {
     '실패 케이스',
     () {
       setUp(() {
-        datasource = ErrorRecipeLocalDatasource(databasePath);
+        datasource = ErrorRecipeLocalDatasource();
         container = ProviderContainer(
           overrides: [
             recipeLocalDatasourceProvider.overrideWith((ref) => datasource),

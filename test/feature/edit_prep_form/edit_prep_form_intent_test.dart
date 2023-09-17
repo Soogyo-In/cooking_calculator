@@ -192,7 +192,7 @@ void main() {
           container = ProviderContainer(
             overrides: [
               recipeLocalDatasourceProvider.overrideWith(
-                (ref) => ErrorRecipeLocalDatasource(databasePath),
+                (ref) => ErrorRecipeLocalDatasource(),
               ),
             ],
           );
