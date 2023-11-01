@@ -32,10 +32,10 @@ class SearchRecipesIntent extends AutoDisposeNotifier<SearchRecipesState> {
     );
   }
 
-  Future<void> setIngredientIds(List<int> ingredientIds) async {
+  Future<void> setIngredients(List<StoredIngredient> ingredients) async {
     await _stateTransaction(
       process: Future(() async {
-        state = state.copyWith(isLoading: true, ingredientIds: ingredientIds);
+        state = state.copyWith(isLoading: true, ingredients: ingredients);
         state = state.copyWith(
           isLoading: false,
           recipes: await _searchRecipes(state),
@@ -58,11 +58,17 @@ class SearchRecipesIntent extends AutoDisposeNotifier<SearchRecipesState> {
     );
   }
 
+  Future<List<Ingredient>> searchIngredientsByName(String name) async {
+    final datasource = await ref.read(recipeLocalDatasourceProvider.future);
+    return datasource.searchIngredients(name);
+  }
+
   Future<List<StoredRecipe>> _searchRecipes(SearchRecipesState state) async {
     final datasource = await ref.read(recipeLocalDatasourceProvider.future);
     return datasource.searchRecipes(
       cookingTime: state.cookingTime,
-      ingredientIds: state.ingredientIds,
+      ingredientIds:
+          state.ingredients.map((ingredient) => ingredient.id).toList(),
       name: state.name,
       page: state.page,
       size: state.size,

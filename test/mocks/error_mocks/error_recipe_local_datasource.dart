@@ -5,7 +5,7 @@ class ErrorRecipeLocalDatasource extends RecipeLocalDatasource {
   ErrorRecipeLocalDatasource() : super('./');
 
   @override
-  Future<List<StoredIngredient>> searchIngredients({String? name}) {
+  Future<List<StoredIngredient>> searchIngredients(String name) {
     throw Exception();
   }
 

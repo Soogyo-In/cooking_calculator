@@ -8,7 +8,7 @@ class SearchRecipesState with _$SearchRecipesState {
     @Default(0) final int page,
     @Default(0) final int size,
     @Default('') final String name,
-    @Default([]) final List<int> ingredientIds,
+    @Default([]) final List<StoredIngredient> ingredients,
     final Duration? cookingTime,
   }) = _SearchRecipesState;
 }

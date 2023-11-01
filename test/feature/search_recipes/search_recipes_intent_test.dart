@@ -156,45 +156,59 @@ void main() {
     () async {
       await container
           .read(searchRecipesIntentProvider.notifier)
-          .setIngredientIds([1]);
-      await container
-          .read(searchRecipesIntentProvider.notifier)
-          .setIngredientIds([1, 3]);
+          .setIngredients([const StoredIngredient(id: 1)]);
+      await container.read(searchRecipesIntentProvider.notifier).setIngredients(
+          [const StoredIngredient(id: 1), const StoredIngredient(id: 3)]);
 
       verifyInOrder([
         stateListener(
           const SearchRecipesState(),
-          const SearchRecipesState(isLoading: true, ingredientIds: [1]),
+          const SearchRecipesState(
+            isLoading: true,
+            ingredients: [StoredIngredient(id: 1)],
+          ),
         ),
         stateListener(
-          const SearchRecipesState(isLoading: true, ingredientIds: [1]),
+          const SearchRecipesState(
+            isLoading: true,
+            ingredients: [StoredIngredient(id: 1)],
+          ),
           SearchRecipesState(
             isLoading: false,
-            ingredientIds: [1],
+            ingredients: [const StoredIngredient(id: 1)],
             recipes: [_storedRecipes[0], _storedRecipes[1], _storedRecipes[2]],
           ),
         ),
         stateListener(
           SearchRecipesState(
             isLoading: false,
-            ingredientIds: [1],
+            ingredients: [const StoredIngredient(id: 1)],
             recipes: [_storedRecipes[0], _storedRecipes[1], _storedRecipes[2]],
           ),
           SearchRecipesState(
             isLoading: true,
-            ingredientIds: [1, 3],
+            ingredients: [
+              const StoredIngredient(id: 1),
+              const StoredIngredient(id: 3)
+            ],
             recipes: [_storedRecipes[0], _storedRecipes[1], _storedRecipes[2]],
           ),
         ),
         stateListener(
           SearchRecipesState(
             isLoading: true,
-            ingredientIds: [1, 3],
+            ingredients: [
+              const StoredIngredient(id: 1),
+              const StoredIngredient(id: 3)
+            ],
             recipes: [_storedRecipes[0], _storedRecipes[1], _storedRecipes[2]],
           ),
           SearchRecipesState(
             isLoading: false,
-            ingredientIds: [1, 3],
+            ingredients: [
+              const StoredIngredient(id: 1),
+              const StoredIngredient(id: 3)
+            ],
             recipes: [_storedRecipes[2]],
           ),
         ),
@@ -291,14 +305,14 @@ void main() {
     () async {
       const name = 'recipe';
       const cookingTime = Duration(hours: 2);
-      const ingredientIds = [3];
+      const ingredients = [StoredIngredient(id: 3)];
       const size = 1;
       const page = 1;
 
       final provider = container.read(searchRecipesIntentProvider.notifier);
       await provider.setName(name);
       await provider.setCookingTime(cookingTime);
-      await provider.setIngredientIds(ingredientIds);
+      await provider.setIngredients(ingredients);
       await provider.setPage(size: size, page: page);
 
       expect(
@@ -306,7 +320,7 @@ void main() {
         SearchRecipesState(
           name: name,
           cookingTime: cookingTime,
-          ingredientIds: ingredientIds,
+          ingredients: ingredients,
           size: size,
           page: page,
           recipes: [_storedRecipes[3]],
@@ -388,14 +402,20 @@ void main() {
         () async {
           await container
               .read(searchRecipesIntentProvider.notifier)
-              .setIngredientIds([1]);
+              .setIngredients([const StoredIngredient(id: 1)]);
           verifyInOrder([
             stateListener(
               const SearchRecipesState(),
-              const SearchRecipesState(isLoading: true, ingredientIds: [1]),
+              const SearchRecipesState(
+                isLoading: true,
+                ingredients: [StoredIngredient(id: 1)],
+              ),
             ),
             stateListener(
-              const SearchRecipesState(isLoading: true, ingredientIds: [1]),
+              const SearchRecipesState(
+                isLoading: true,
+                ingredients: [StoredIngredient(id: 1)],
+              ),
               const SearchRecipesState(),
             ),
             effectListener(

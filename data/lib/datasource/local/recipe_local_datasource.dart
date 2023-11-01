@@ -235,9 +235,9 @@ class RecipeLocalDatasource implements RecipeDatasource {
   }
 
   @override
-  Future<List<domain.StoredIngredient>> searchIngredients({
-    String? name,
-  }) async {
+  Future<List<domain.StoredIngredient>> searchIngredients(String name) async {
+    if (name.isEmpty) return [];
+
     final isar = await Isar.open(
       [IngredientSchema],
       directory: databasePath,
@@ -245,10 +245,7 @@ class RecipeLocalDatasource implements RecipeDatasource {
 
     final ingredients = await isar.ingredients
         .where()
-        .optional(
-          name != null,
-          (q) => name == null ? q : q.nameWordsElementStartsWith(name),
-        )
+        .nameWordsElementStartsWith(name)
         .findAll();
 
     await isar.close();

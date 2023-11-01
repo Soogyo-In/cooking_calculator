@@ -35,7 +35,7 @@ class EditPrepFormIntent
       state = state.copyWith(isLoading: true);
 
       final datasource = await ref.read(recipeLocalDatasourceProvider.future);
-      final ingredients = await datasource.searchIngredients(name: name);
+      final ingredients = await datasource.searchIngredients(name);
 
       state = state.copyWith(
         isLoading: false,
@@ -72,7 +72,7 @@ class EditPrepFormIntent
     String keyword,
   ) async {
     final datasource = await ref.watch(recipeLocalDatasourceProvider.future);
-    return datasource.searchIngredients(name: keyword);
+    return datasource.searchIngredients(keyword);
   }
 
   void _onIngredientSuggestions(List<Ingredient> suggestions) {
