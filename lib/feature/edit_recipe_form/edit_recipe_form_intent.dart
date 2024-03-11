@@ -59,6 +59,11 @@ class EditRecipeFormIntent
         directions: state.directions.toList()..remove(direction));
   }
 
+  void setServingUnit(ServingUnit? unit) {
+    if (unit == null) return;
+    state = state.copyWith(servingUnit: unit);
+  }
+
   void setServings(int servings) {
     if (servings < 1) servings = 1;
 

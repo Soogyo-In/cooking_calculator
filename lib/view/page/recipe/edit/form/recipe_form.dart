@@ -1,4 +1,5 @@
 import 'package:cooking_calulator/feature/feature.dart';
+import 'package:cooking_calulator/localization/localization.dart';
 import 'package:cooking_calulator/view/view.dart';
 import 'package:data/data.dart';
 import 'package:flutter/material.dart';
@@ -34,26 +35,42 @@ class _RecipeFormState extends ConsumerState<RecipeForm> {
 
     return Column(
       children: [
-        TextFormField(
-          initialValue: widget.recipe?.name,
-          decoration: const InputDecoration(labelText: '이름'),
-          autofocus: true,
-          onChanged: intent.setName,
-          textInputAction: TextInputAction.next,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              onPressed: () => intent.setServings(state.servings - 1),
-              icon: const Icon(Icons.remove),
-            ),
-            Text('${state.servings} 인분'),
-            IconButton(
-              onPressed: () => intent.setServings(state.servings + 1),
-              icon: const Icon(Icons.add),
-            ),
-          ],
+        SizedBox(
+          height: 80.0,
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: widget.recipe?.name,
+                  decoration: const InputDecoration(labelText: '이름'),
+                  autofocus: true,
+                  onChanged: intent.setName,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              SizedBox(
+                width: 40.0,
+                child: TextFormField(
+                  decoration: const InputDecoration(labelText: '총량'),
+                  autofocus: true,
+                  onChanged: intent.setName,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              DropdownButton<ServingUnit>(
+                value: state.servingUnit,
+                items: ServingUnit.values
+                    .map((unit) => DropdownMenuItem(
+                          value: unit,
+                          child: Text(unit.translated),
+                        ))
+                    .toList(),
+                onChanged: intent.setServingUnit,
+              ),
+            ],
+          ),
         ),
         TextFormField(
           initialValue: widget.recipe?.description,

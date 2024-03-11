@@ -8,6 +8,7 @@ class EditRecipeFormState with _$EditRecipeFormState {
     @Default('') String name,
     @Default('') String description,
     @Default([]) List<Direction> directions,
+    @Default(ServingUnit.portion) ServingUnit servingUnit,
     @Default(1) int servings,
   }) = _EditRecipeFormState;
 
@@ -17,6 +18,7 @@ class EditRecipeFormState with _$EditRecipeFormState {
         description: description,
         directions: directions,
         name: name,
+        servingUnit: servingUnit,
         servings: servings,
       );
 }
