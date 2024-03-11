@@ -29,6 +29,7 @@ extension DataRecipeMapper on Recipe {
               ))
           .toList(),
       name: name,
+      servingUnit: servingUnit.toDomainModel(),
       servings: servings,
     );
   }
@@ -40,6 +41,8 @@ extension DomainRecipeMapper on domain.Recipe {
       id: Isar.autoIncrement,
       name: name,
       description: description,
+      servingUnit: servingUnit.toDataModel(),
+      servings: servings,
       directions: directions
           .map((direction) => Direction(
                 cookingTimeInSeconds: direction.cookingTime.inSeconds,

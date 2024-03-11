@@ -12,6 +12,7 @@ class Recipe extends Equatable {
     this.id = Isar.autoIncrement,
     required this.name,
     this.directions = const [],
+    this.servingUnit = ServingUnit.portion,
     this.servings = 1,
     this.description = '',
   });
@@ -22,6 +23,9 @@ class Recipe extends Equatable {
   final String name;
 
   final List<Direction> directions;
+
+  @enumerated
+  final ServingUnit servingUnit;
 
   final byte servings;
 
@@ -52,6 +56,7 @@ class Recipe extends Equatable {
         id,
         name,
         directions,
+        servingUnit,
         servings,
         description,
       ];
